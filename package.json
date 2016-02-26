@@ -1,6 +1,6 @@
 {
   "name": "mysql-plus",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A wrapper around felixge's MySQL driver that provides a framework for defining tables and making basic queries.",
   "author": "Nathan Woltman <nwoltman@outlook.com>",
   "license": "MIT",
