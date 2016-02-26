@@ -1,0 +1,11 @@
+{
+  "env": {
+    "mocha": true
+  },
+  "rules": {
+    "global-require": 0,
+    "max-nested-callbacks": 0,
+    "max-len": 0,
+    "prefer-arrow-callback": 0
+  }
+}

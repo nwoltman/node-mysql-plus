@@ -1,0 +1,21 @@
+dist: trusty
+sudo: required
+addons:
+  apt:
+    packages:
+      - mysql-server-5.6
+      - mysql-client-core-5.6
+      - mysql-client-5.6
+language: node_js
+node_js:
+  - '4'
+  - '5'
+services:
+  - mysql
+deploy:
+  provider: npm
+  email: nwoltman@outlook.com
+  on:
+    tags: true
+  api_key:
+    secure: oZ8+ZbYS3gNheR/ZPbxiVuXbJUX9IsvjjPO+RzSIKTpw1r75z+1W1NnsZwmDaBknnH+wdguQ7ZEfqeBIT+CbmnfPHlBAxu3oEkkIU1pzAb5UsVeZN9DFuGFHk4+UHqDHIgUtl4q04Hdwn5EhhDTyKFM0aR1WSsBYlNLJCvVnn+Wf/ayoiRlB6s28GcDCtc7r/jwcIAg8PfDnMdUYlUA1MvzmX4eP+2EVpsl4wY9jxBrt3Mdv5Iz3R+qFVj/cn/dVRU6vZvyjbL/E2XFtB/yHetgmGlhNmfE+VbpY6zW+apPtaNr2SkPkutIm+tLUUHR7g+M1jWXkVjTEvnxsYOJiPATHR/wy60S7iEmLcKTF3eI3YSRHEW+NR8krBf7egjxvO1T6B8QDjDCjWb4OeGGsbSYnPuoe5HefkAk/EiBu0bVSdN+2RDhc3OzHDcHTmDTMLCMSEM/mH7hJ5WU8DM7q4C5qkitcMxWp11L3aA1Pq2BXUbrj5Tytgn6bAIe1gEbINH4sIXqoVopZiBnXqtGzRSzroX4pAJrcTJVowBRulokvNfSMQdEt+DKONaUI+v3vG32gzDZL2/c0zUCppiNvGZ5f5WeliuKKrW3ngCBOK5xlQifEzi62dEj+tmlgqZdtHFzcUOfR0RzFOVxP/VBKENSoL8xnKQRLZFixotO35aY=

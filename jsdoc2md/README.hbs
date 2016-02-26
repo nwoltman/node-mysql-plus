@@ -1,0 +1,382 @@
+# mysql-plus
+
+A wrapper around [felixge's MySQL driver](https://www.npmjs.com/package/mysql) that provides a framework for defining tables and making basic queries.
+
+[![NPM Version](https://img.shields.io/npm/v/mysql-plus.svg)](https://www.npmjs.com/package/mysql-plus)
+[![Build Status](https://travis-ci.org/woollybogger/node-mysql-plus.svg?branch=master)](https://travis-ci.org/woollybogger/node-mysql-plus)
+[![Coverage Status](https://coveralls.io/repos/github/woollybogger/node-mysql-plus/badge.svg?branch=master)](https://coveralls.io/github/woollybogger/node-mysql-plus?branch=master)
+[![Dependency Status](https://david-dm.org/woollybogger/mysql-plus.svg)](https://david-dm.org/woollybogger/node-mysql-plus)
+[![devDependency Status](https://david-dm.org/woollybogger/node-mysql-plus/dev-status.svg)](https://david-dm.org/woollybogger/pro-array#info=devDependencies)
+
+This module is fully* compatible with the popular [mysql](https://www.npmjs.com/package/mysql) module so it can be safely dropped in as a replacement before using any of its additional features.
+
+<sup>*</sup> This module uses ES2015 syntax so it is only compatible with Node v4 or higher.
+
+## Table of Contents
+
++ [Installation](#installation)
++ [Usage Example](#usage-example)
++ [API](#api)
++ [Roadmap](#roadmap)
+
+## Installation
+
+```sh
+npm install mysql-plus --save
+```
+
+## Usage Example
+
+#### db.js
+
+```js
+// Both mysql and pool are 100% compatible with the mysql module
+const mysql = require('mysql-plus');
+const pool = mysql.createPool(config);
+
+module.exports = pool;
+```
+
+#### User.js
+
+```js
+const db = require('./db');
+
+const UserTable = db.defineTable('user', {
+  columns: {
+    id: db.Type.bigint().unsigned().notNull().primaryKey().autoIncrement(),
+    email: db.Type.varchar(255).notNull().unique(),
+    name: db.Type.varchar(63).notNull().index(),
+    newsletterSubscriber: db.Type.bool().default(1),
+    level: db.Type.int().unsigned().default(0),
+  },
+  indexes: [
+    'level',
+    ['newsletterSubscriber', 'level'],
+  ],
+  foreignKeys: {
+    level: 'statsTable.level',
+  },
+  autoIncrement: 5000000000,
+});
+
+const User = {
+  createAndSelectExample() {
+    UserTable.insert({email: 'newuser@email.com', name: 'newuser'}, (err, result) => {
+      if (err) throw err;
+
+      UserTable.select('*', 'WHERE `id` = ' + result.insertId, (err, rows) => {
+        if (err) throw err;
+        console.log(rows);
+        /*
+          [{
+            id: 5000000001,
+            email: 'newuser@email.com',
+            name: 'newuser',
+            newsletterSubscriber: 1,
+            level: 0
+          }]
+        */
+      })
+    });
+  }
+};
+
+module.exports = User;
+```
+
+#### app.js (Express example)
+
+```js
+const db = require('./db');
+const express = require('express');
+const app = express();
+
+db.sync(err => {
+  if (err) throw err;
+  app.listen(/*...*/);
+});
+```
+
+
+# API
+
+{{>main}}
+
+## Migration Strategies
+
+The possible migration strategies are as follows:
+
++ `safe` - default in a production environment (`NODE_ENV === 'production'`)
++ `alter` - default in a development environment
++ `drop`
+
+In addition to being the default in a production environment, the `safe` strategy is the only allowed strategy in production. This means that if `alter` or `drop` are used anywhere to configure your connections or tables, they will be ignored and `safe` will be used instead. However, if you really want to use `alter` in production, you may set the `allowAlterInProduction` option to `true` in your [Pool configuration](#new-poolplusconfig).
+
+#### safe
+
+Only allows newly-defined tables to be created. Existing tables are never altered or dropped.
+
+#### alter
+
+Specifies that newly-defined tables will be created, existing tables that are no longer defined will be dropped, and existing tables that have a different definition from what is found in the database will be migrated with minimal data-loss.
+
+**Note:** The migration cannot always retain data. Currently, the only known example is that renaming a column will not preserve its data (and it's possible that there are others). For this reason, and the fact that there is no reasonable way to test how well the migration will work on a live production database, using the `alter` strategy in production is discouraged.
+
+#### drop
+
+All defined tables will be dropped and recreated.
+
+
+## Defining Table Schemas
+
+A schema is defined by a JavaScript object with certain properties. For `mysql-plus`, the schema properties can be broke down into four main types:
+
++ [Columns](#columns)
++ [Keys](#keys)
++ [Foreign Keys](#foreign-keys)
++ [Table Options](#table-options)
+
+### Columns
+
+Columns are defined using the `column` property which is an object where the keys are column names and the values are [`ColumnDefinitions`](#columndefinition) of a certain [type](#column-types).
+
+**Example:**
+```js
+{
+  columns: {
+    id: pool.Type.bigint().unsigned().notNull().primaryKey().autoIncrement(),
+    email: pool.Type.varchar(255).notNull().unique(),
+    points: pool.Type.int().unsigned().default(0),
+  }
+}
+```
+
+See the [Column Types](#column-types) section for all possible column types and attributes that you can define.
+
+### Keys
+
+There are three properties that can be used to define different types of keys:
+
++ [`primaryKey`](#primarykey)
++ [`uniqueKeys`](#uniquekeys)
++ [`indexes`](#indexes)
+
+Note that [column definitions](#columndefinition) allow you to define these keys directly on the column. If you use that method of defining a key for a column, you should not define the key again using one of these properties.
+
+#### `primaryKey` : `string|string[]`
+
+Used to define the table's primary key. Its value is the name of one or more columns that make up the primary key.
+
+**Example:**
+```js
+// Single column primary key
+{
+  primaryKey: 'id',
+}
+
+// Multi-column primary key
+{
+  primaryKey: ['userID', 'videoID'],
+}
+```
+
+#### `uniqueKeys` : `Array.<string|string[]>`
+
+Used to define the table's unique keys. Its value is an array where the elements are the names of one or more columns that make up a unique key.
+
+**Example:**
+```js
+{
+  uniqueKeys: [
+    'email',    // Single column unique key
+    ['a', 'b'], // Multi-column unique key
+  ],
+}
+```
+
+#### `indexes` : `Array.<string|string[]>`
+
+Used to define the table's indexes. Its value is an array where the elements are the names of one or more columns that make up an index.
+
+**Example:**
+```js
+{
+  indexes: [
+    'points',   // Single column index
+    ['a', 'b'], // Multi-column index
+  ],
+}
+```
+
+### Foreign Keys
+
+Foreign keys are defined using the `foreignKeys` property, which is an object that maps column names to a reference table column. The reference table column can be specified with either an object or a string of the form `<table name>.<column name>`. If an object, the following properties may be set: `table` (required), `column` (required), `onDelete`, `onUpdate`.
+
+**Example:**
+```js
+{
+  foreignKeys: {
+    // String with shorthand reference
+    id: 'otherTable.id', // shorthand for {table: 'otherTable', column: 'id'}
+
+    // Object reference with ON DELETE and ON UPDATE attributes
+    userID: {
+      table: 'user',
+      column: 'id',
+      onDelete: 'CASCADE',
+      onUpdate: 'NO ACTION',
+    },
+
+    // Multi-column foreign key (uses comma-separated column names)
+    'thingOne, thingTwo': {
+      table: 'thing_table',
+      column: ['one', 'two'],
+    },
+  },
+}
+```
+
+**Note:** Foreign keys aren't actually keys, but "constraints". When defining a foreign key constraint, the column(s) that make up the constraint should also be a key.
+
+**Example:** Keys required for the example above
+```js
+{
+  primaryKey: 'id',
+  uniqueKeys: [
+    'userID',
+  ],
+  indexes: [
+    ['thingOne', 'thingTwo'],
+  ],
+}
+```
+
+### Table Options
+
+These schema properties configure table-level options. The options currently supported are as follows:
+
++ `engine` - Specify the storage engine for the table (such as InnoDB or MyISAM)
++ `autoIncrement` - The initial AUTO_INCREMENT value for the table
++ `charset` - Specify a default character set for the table
++ `collate` - Specify a default collation for the table
++ `compression` - The compression algorithm used for page level compression (MySQL 5.7 + InnoDB only)
++ `rowFormat` - Defines the physical format in which the rows are stored
+
+**Example:**
+```js
+{
+  engine: 'MyISAM',
+  autoIncrement: 5000000000
+  charset: 'utf8',
+  collate: 'utf8_unicode_ci',
+  compression: 'LZ4',
+  rowFormat: 'COMPACT',
+}
+```
+
+## Column Types
+
+[`mysql.Type`](#module_mysql-plus) and [`pool.Type`](#PoolPlus+Type) both expose the following methods:
+
++ `tinyint(m)`
++ `smallint(m)`
++ `mediumint(m)`
++ `int(m)`
++ `integer(m)`
++ `bigint(m)`
++ `float(m, d)`
++ `double(m, d)`
++ `decimal(m, d)`
++ `dec(m, d)`
++ `numeric(m, d)`
++ `fixed(m, d)`
++ `bit(m)`
++ `bool()`
++ `boolean()`
++ `date()`
++ `datetime(m)`
++ `timestamp(m)`
++ `time(m)`
++ `year()`
++ `char(m)`
++ `varchar(m)`
++ `text(m)`
++ `tinytext()`
++ `mediumtext()`
++ `longtext()`
++ `binary(m)`
++ `varbinary(m)`
++ `blob(m)`
++ `tinyblob()`
++ `mediumblob()`
++ `longblob()`
++ `enum(...values)`
++ `set(...values)`
+
+All of these methods return a `ColumnDefinition` class.
+
+#### ColumnDefinition
+
+This class is what is used to define the column's attributes. These attributes can be set using the following methods:
+
++ `notNull()` - Adds the `NOT NULL` attribute
++ `default(value)` - Sets the column's `DEFAULT` value
++ `primaryKey()` - Declares the column to be the table's primary key
++ `unique()` - Declares the column as a unique index
++ `index()` - Declares the column as an index
+
+All ColumnDefinition methods return the ColumnDefinition, so they are chainable.
+
+Additionally, certain column types have type-specific methods. These are as follows:
+
+#### NumericColumnDefinition
+
++ `unsigned()` - Adds the `unsigned` attribute
++ `zerofill()` - Adds the `zerofill` attribute
++ `autoIncrement()` - Adds the `AUTO_INCREMENT` attribute
+
+Compatible types:
+
++ `tinyint`
++ `smallint`
++ `mediumint`
++ `int`
++ `integer`
++ `bigint`
++ `float`
++ `double`
++ `decimal`
++ `dec`
++ `numeric`
++ `fixed`
+
+#### TextColumnDefinition
+
++ `charset(value)` - Sets the column's character set
++ `collate(value)` - Sets the column's collation
+
+Compatible types:
+
++ `char`
++ `varchar`
++ `text`
++ `tinytext`
++ `mediumtext`
++ `longtext`
++ `enum`
++ `set`
+
+#### UpdatableTimeColumnDefinition
+
++ `onUpdateCurrentTimestamp()` - Adds the `ON UPDATE CURRENT_TIMESTAMP` attribute
+
+Compatible types:
+
++ `datetime`
++ `timestamp`
+
+
+# Roadmap
+
++ Prepared statments
