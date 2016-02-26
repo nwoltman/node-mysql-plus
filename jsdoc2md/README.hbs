@@ -10,7 +10,7 @@ A wrapper around [felixge's MySQL driver](https://www.npmjs.com/package/mysql) t
 
 This module is fully* compatible with the popular [mysql](https://www.npmjs.com/package/mysql) module so it can be safely dropped in as a replacement before using any of its additional features.
 
-* This module uses ES2015 syntax so it is only compatible with Node v4 or higher.
+*This module uses ES2015 syntax so it is only compatible with Node v4 or higher.
 
 ## Table of Contents
 
