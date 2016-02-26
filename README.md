@@ -5,8 +5,8 @@ A wrapper around [felixge's MySQL driver](https://www.npmjs.com/package/mysql) t
 [![NPM Version](https://img.shields.io/npm/v/mysql-plus.svg)](https://www.npmjs.com/package/mysql-plus)
 [![Build Status](https://travis-ci.org/woollybogger/node-mysql-plus.svg?branch=master)](https://travis-ci.org/woollybogger/node-mysql-plus)
 [![Coverage Status](https://coveralls.io/repos/github/woollybogger/node-mysql-plus/badge.svg?branch=master)](https://coveralls.io/github/woollybogger/node-mysql-plus?branch=master)
-[![Dependency Status](https://david-dm.org/woollybogger/mysql-plus.svg)](https://david-dm.org/woollybogger/node-mysql-plus)
-[![devDependency Status](https://david-dm.org/woollybogger/node-mysql-plus/dev-status.svg)](https://david-dm.org/woollybogger/pro-array#info=devDependencies)
+[![Dependency Status](https://david-dm.org/woollybogger/node-mysql-plus.svg)](https://david-dm.org/woollybogger/node-mysql-plus)
+[![devDependency Status](https://david-dm.org/woollybogger/node-mysql-plus/dev-status.svg)](https://david-dm.org/woollybogger/node-mysql-plus#info=devDependencies)
 
 This module is fully* compatible with the popular [mysql](https://www.npmjs.com/package/mysql) module so it can be safely dropped in as a replacement before using any of its additional features.
 
