@@ -582,7 +582,7 @@ All defined tables will be dropped and recreated.
 
 ## Defining Table Schemas
 
-A schema is defined by a JavaScript object with certain properties. For `mysql-plus`, the schema properties can be broke down into four main types:
+A schema is defined by a JavaScript object with certain properties. For `mysql-plus`, the schema properties can be broken down into four main types:
 
 + [Columns](#columns)
 + [Keys](#keys)
@@ -591,7 +591,7 @@ A schema is defined by a JavaScript object with certain properties. For `mysql-p
 
 ### Columns
 
-Columns are defined using the `column` property which is an object where the keys are column names and the values are [`ColumnDefinitions`](#columndefinition) of a certain [type](#column-types).
+Columns are defined using the `column` property which is an object where the keys are column names and the values are [column definitions](#columndefinition) of a certain [type](#column-types).
 
 **Example:**
 ```js
@@ -668,9 +668,15 @@ Foreign keys are defined using the `foreignKeys` property, which is an object th
 **Example:**
 ```js
 {
+  columns: {
+    id: /* ... */,
+    userID: /* ... */,
+    thingOne: /* ... */,
+    thingTwo: /* ... */,
+  },
   foreignKeys: {
     // String with shorthand reference
-    id: 'otherTable.id', // shorthand for {table: 'otherTable', column: 'id'}
+    id: 'other_table.id', // shorthand for {table: 'other_table', column: 'id'}
 
     // Object reference with ON DELETE and ON UPDATE attributes
     userID: {
@@ -689,7 +695,7 @@ Foreign keys are defined using the `foreignKeys` property, which is an object th
 }
 ```
 
-**Note:** Foreign keys aren't actually keys, but "constraints". When defining a foreign key constraint, the column(s) that make up the constraint should also be a key.
+**Note:** Foreign keys aren't actually keys, but "constraints". When defining foreign key constraints, the columns that make up the constraints should also be keys.
 
 **Example:** Keys required for the example above
 ```js
@@ -720,12 +726,14 @@ These schema properties configure table-level options. The options currently sup
 {
   engine: 'MyISAM',
   autoIncrement: 5000000000
-  charset: 'utf8',
-  collate: 'utf8_unicode_ci',
+  charset: 'utf8mb4',
+  collate: 'utf8mb4_unicode_ci',
   compression: 'LZ4',
   rowFormat: 'COMPACT',
 }
 ```
+
+**Note:** After explicitly defining a table option in your schema, if you remove it from your schema and resync your table definitions, the table option will not change in the database. If you want to go back to the default value for the table option, you'll need to explicitly define it on your schema and resync the table (or manually change it on the command line), and then you may remove it from your schema.
 
 ## Column Types
 
@@ -778,7 +786,7 @@ This class is what is used to define the column's attributes. These attributes c
 + `unique()` - Declares the column as a unique index
 + `index()` - Declares the column as an index
 
-All ColumnDefinition methods return the ColumnDefinition, so they are chainable.
+All `ColumnDefinition` methods return the `ColumnDefinition`, so they are chainable.
 
 Additionally, certain column types have type-specific methods. These are as follows:
 
@@ -831,4 +839,5 @@ Compatible types:
 
 # Roadmap
 
-+ Prepared statments
++ Prepared statements
++ Travis CI tests with MySQL 5.7 (waiting on [this issue](https://github.com/travis-ci/travis-ci/issues/5122))
