@@ -10,7 +10,7 @@ A wrapper around [felixge's MySQL driver](https://www.npmjs.com/package/mysql) t
 
 This module is fully* compatible with the popular [mysql](https://www.npmjs.com/package/mysql) module so it can be safely dropped in as a replacement before using any of its additional features.
 
-<sup>*</sup> This module uses ES2015 syntax so it is only compatible with Node v4 or higher.
+* This module uses ES2015 syntax so it is only compatible with Node v4 or higher.
 
 ## Table of Contents
 
@@ -217,7 +217,7 @@ Defines a table to be created or updated in the database.
 | --- | --- | --- |
 | name | <code>string</code> | The name of the table. |
 | schema | <code>Object</code> | An object that defines the table's schema.     See the [Defining Table Schemas](#defining-table-schemas) section. |
-| [migrationStrategy] | <code>string</code> | One of `safe`, `alter`, or `drop`. This will override     the `migrationStrategy` value from the [`config`](mysql-plus~createPool)     (but is still subject to the same restrictions in production environments). |
+| [migrationStrategy] | <code>string</code> | One of `safe`, `alter`, or `drop`. This will override     the `migrationStrategy` value from the [`config`](#module_mysql-plus..createPool)     (but is still subject to the same restrictions in production environments). |
 
 **Returns**: <code>[MySQLTable](#MySQLTable)</code> - A `MySQLTable` instance that lets you perform operations on the table.  
 **See**: [Defining Table Schemas](#defining-table-schemas)  
@@ -260,7 +260,7 @@ pool.sync(function(err) {
 <a name="PoolPlus+Type"></a>
 ### poolPlus.Type
 A namespace that provides the column type methods used to define columns.
-The exact same thing as [`mysql.Type`](mysql-plus~Type).
+The exact same thing as [`mysql.Type`](#module_mysql-plus..Type).
 Just here for convenience.
 
 **See**: [Column Types](#column-types)  
@@ -563,7 +563,7 @@ The possible migration strategies are as follows:
 + `alter` - default in a development environment
 + `drop`
 
-In addition to being the default in a production environment, the `safe` strategy is the only allowed strategy in production. This means that if `alter` or `drop` are used anywhere to configure your connections or tables, they will be ignored and `safe` will be used instead. However, if you really want to use `alter` in production, you may set the `allowAlterInProduction` option to `true` in your [Pool configuration](#new-poolplusconfig).
+In addition to being the default in a production environment, the `safe` strategy is the only allowed strategy in production. This means that if `alter` or `drop` are used anywhere to configure your connections or tables, they will be ignored and `safe` will be used instead. However, if you really want to use `alter` in production, you may set the `allowAlterInProduction` option to `true` in your [Pool configuration](#mysql-pluscreatepoolconfig--poolplus).
 
 #### safe
 
@@ -610,9 +610,9 @@ See the [Column Types](#column-types) section for all possible column types and 
 
 There are three properties that can be used to define different types of keys:
 
-+ [`primaryKey`](#primarykey)
-+ [`uniqueKeys`](#uniquekeys)
-+ [`indexes`](#indexes)
++ [`primaryKey`](#primarykey--stringstring)
++ [`uniqueKeys`](#uniquekeys--arraystringstring)
++ [`indexes`](#indexes--arraystringstring)
 
 Note that [column definitions](#columndefinition) allow you to define these keys directly on the column. If you use that method of defining a key for a column, you should not define the key again using one of these properties.
 
@@ -709,7 +709,7 @@ Foreign keys are defined using the `foreignKeys` property, which is an object th
 These schema properties configure table-level options. The options currently supported are as follows:
 
 + `engine` - Specify the storage engine for the table (such as InnoDB or MyISAM)
-+ `autoIncrement` - The initial AUTO_INCREMENT value for the table
++ `autoIncrement` - The initial `AUTO_INCREMENT` value for the table
 + `charset` - Specify a default character set for the table
 + `collate` - Specify a default collation for the table
 + `compression` - The compression algorithm used for page level compression (MySQL 5.7 + InnoDB only)
@@ -729,7 +729,7 @@ These schema properties configure table-level options. The options currently sup
 
 ## Column Types
 
-[`mysql.Type`](#module_mysql-plus) and [`pool.Type`](#PoolPlus+Type) both expose the following methods:
+[`mysql.Type`](#module_mysql-plus..Type) and [`pool.Type`](#PoolPlus+Type) both expose the following methods:
 
 + `tinyint(m)`
 + `smallint(m)`
