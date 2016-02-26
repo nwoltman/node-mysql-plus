@@ -30,9 +30,11 @@ module.exports = function(grunt) {
                 changelog.replace(/^# CHANGELOG\s+/, '\n');
     fs.writeFileSync('CHANGELOG.md', changelog);
     grunt.log.ok('Added changes to the changelog.');
+    execSync('git commit -am "Update CHANGELOG"');
+    grunt.log.ok('Committed the changelog.');
 
     // Update package version
-    const stdout = execSync(`npm version ${releaseType} -m "v%s" --force`);
-    grunt.log.ok('Updated package version and created tagged commit.\n' + stdout);
+    const stdout = execSync(`npm version ${releaseType} -m "v%s"`);
+    grunt.log.ok('Updated package version and created tagged commit:\n' + stdout);
   });
 };
