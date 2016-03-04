@@ -43,5 +43,20 @@
   },
   "files": [
     "lib"
+  ],
+  "keywords": [
+    "mysql",
+    "plus",
+    "database",
+    "auto",
+    "automatic",
+    "migration",
+    "schema",
+    "table",
+    "define",
+    "sql",
+    "query",
+    "prepared",
+    "statements"
   ]
 }
