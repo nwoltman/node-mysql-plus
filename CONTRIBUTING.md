@@ -19,12 +19,12 @@ Once you're sure you want to write code, follow these steps:
 
 ### Fork
 
-Fork the project [on GitHub](https://github.com/woollybogger/node-mysql-plus.git), then check out your copy:
+Fork the project [on GitHub](https://github.com/nwoltman/node-mysql-plus.git), then check out your copy:
 
 ```sh
 git clone https://github.com/<username>/node-mysql-plus.git
 cd mysql-plus
-git remote add upstream https://github.com/woollybogger/node-mysql-plus.git
+git remote add upstream https://github.com/nwoltman/node-mysql-plus.git
 ```
 
 ### Setup
@@ -137,4 +137,4 @@ $ git rebase upstream/master
 $ git push origin my-branch-name
 ```
 
-Then go to [GitHub](https://github.com/woollybogger/node-mysql-plus) and create a pull request.
+Then go to [GitHub](https://github.com/nwoltman/node-mysql-plus) and create a pull request.

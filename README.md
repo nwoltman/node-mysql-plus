@@ -3,10 +3,10 @@
 A wrapper around [felixge's MySQL driver](https://www.npmjs.com/package/mysql) that provides a framework for defining tables and making basic queries.
 
 [![NPM Version](https://img.shields.io/npm/v/mysql-plus.svg)](https://www.npmjs.com/package/mysql-plus)
-[![Build Status](https://travis-ci.org/woollybogger/node-mysql-plus.svg?branch=master)](https://travis-ci.org/woollybogger/node-mysql-plus)
-[![Coverage Status](https://coveralls.io/repos/github/woollybogger/node-mysql-plus/badge.svg?branch=master)](https://coveralls.io/github/woollybogger/node-mysql-plus?branch=master)
-[![Dependency Status](https://david-dm.org/woollybogger/node-mysql-plus.svg)](https://david-dm.org/woollybogger/node-mysql-plus)
-[![devDependency Status](https://david-dm.org/woollybogger/node-mysql-plus/dev-status.svg)](https://david-dm.org/woollybogger/node-mysql-plus#info=devDependencies)
+[![Build Status](https://travis-ci.org/nwoltman/node-mysql-plus.svg?branch=master)](https://travis-ci.org/nwoltman/node-mysql-plus)
+[![Coverage Status](https://coveralls.io/repos/github/nwoltman/node-mysql-plus/badge.svg?branch=master)](https://coveralls.io/github/nwoltman/node-mysql-plus?branch=master)
+[![Dependency Status](https://david-dm.org/nwoltman/node-mysql-plus.svg)](https://david-dm.org/nwoltman/node-mysql-plus)
+[![devDependency Status](https://david-dm.org/nwoltman/node-mysql-plus/dev-status.svg)](https://david-dm.org/nwoltman/node-mysql-plus#info=devDependencies)
 
 This module is fully* compatible with the popular [mysql](https://www.npmjs.com/package/mysql) module so it can be safely dropped in as a replacement before using any of its additional features.
 
@@ -128,6 +128,7 @@ db.sync(err => {
 ---
 
 <a name="module_mysql-plus"></a>
+
 ## mysql-plus ⇐ <code>mysql</code>
 This module.
 
@@ -142,6 +143,7 @@ This module.
 ---
 
 <a name="module_mysql-plus..createPool"></a>
+
 ### mysql-plus~createPool(config) ⇒ <code>[PoolPlus](#PoolPlus)</code>
 Just like the original [`mysql.createPool()`](https://github.com/felixge/node-mysql#pooling-connections)
 method except it returns a [`PoolPlus`](#PoolPlus) instance and accepts more options.
@@ -174,6 +176,7 @@ pool.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
 ---
 
 <a name="module_mysql-plus..Type"></a>
+
 ### mysql-plus~Type
 A namespace that provides the column type methods used to define columns.
 
@@ -194,6 +197,7 @@ const UserTable = pool.defineTable('user', {
 ---
 
 <a name="PoolPlus"></a>
+
 ## PoolPlus ⇐ <code>Pool</code>
 A class that extends the `mysql` module's `Pool` class with the ability to define tables.
 
@@ -209,6 +213,7 @@ A class that extends the `mysql` module's `Pool` class with the ability to defin
 ---
 
 <a name="PoolPlus+defineTable"></a>
+
 ### poolPlus.defineTable(name, schema, [migrationStrategy]) ⇒ <code>[MySQLTable](#MySQLTable)</code>
 Defines a table to be created or updated in the database.
 
@@ -236,6 +241,7 @@ const UserTable = pool.defineTable('user', {
 ---
 
 <a name="PoolPlus+sync"></a>
+
 ### poolPlus.sync(cb) ⇒ <code>void</code>
 Syncs the defined tables to the database by creating new tables and dropping
 or migrating existing tables (depending on the migration setting). Generally
@@ -258,6 +264,7 @@ pool.sync(function(err) {
 ---
 
 <a name="PoolPlus+Type"></a>
+
 ### poolPlus.Type
 A namespace that provides the column type methods used to define columns.
 The exact same thing as [`mysql.Type`](#module_mysql-plus..Type).
@@ -280,6 +287,7 @@ const UserTable = pool.defineTable('user', {
 ---
 
 <a name="MySQLTable"></a>
+
 ## MySQLTable
 A class that provides convenient methods for performing queries.
 
@@ -304,6 +312,7 @@ A class that provides convenient methods for performing queries.
 ---
 
 <a name="MySQLTable+tableName"></a>
+
 ### mySQLTable.tableName : <code>string</code>
 The table's name (as passed to [`poolPlus.defineTable()`](#PoolPlus+defineTable)).
 
@@ -311,6 +320,7 @@ The table's name (as passed to [`poolPlus.defineTable()`](#PoolPlus+defineTable)
 ---
 
 <a name="MySQLTable+schema"></a>
+
 ### mySQLTable.schema : <code>string</code>
 The table's schema (as passed to [`poolPlus.defineTable()`](#PoolPlus+defineTable)).
 
@@ -318,6 +328,7 @@ The table's schema (as passed to [`poolPlus.defineTable()`](#PoolPlus+defineTabl
 ---
 
 <a name="MySQLTable+pool"></a>
+
 ### mySQLTable.pool : <code>[PoolPlus](#PoolPlus)</code>
 The `PoolPlus` instance that created this table.
 
@@ -325,6 +336,7 @@ The `PoolPlus` instance that created this table.
 ---
 
 <a name="MySQLTable+select"></a>
+
 ### mySQLTable.select(columns, [sqlString], [values], cb) ⇒ <code>void</code>
 Selects data from the table.
 
@@ -377,6 +389,7 @@ UserTable.select('*', 'WHERE ?', values, (err, results) => {
 ---
 
 <a name="MySQLTable+insert"></a>
+
 ### mySQLTable.insert(data, [sqlString], [values], cb) ⇒ <code>void</code>
 Inserts data into a new row in the table.
 
@@ -411,6 +424,7 @@ UserTable.insert(data, onDuplicateKeySQL, data.points, (err, result) => {
 ---
 
 <a name="MySQLTable+insertIgnore"></a>
+
 ### mySQLTable.insertIgnore(data, cb) ⇒ <code>void</code>
 Inserts data into a new row in the table. The row is not
 inserted if it would result in a duplicate key error.
@@ -436,6 +450,7 @@ UserTable.insert({email: 'email@example.com', name: 'John Doe'}, (err, result) =
 ---
 
 <a name="MySQLTable+replace"></a>
+
 ### mySQLTable.replace(data, cb) ⇒ <code>void</code>
 Replaces a row in the table with new data.
 
@@ -458,6 +473,7 @@ UserTable.replace({id: 5, email: 'newemail@example.com', name: 'Jane Doe'}, (err
 ---
 
 <a name="MySQLTable+update"></a>
+
 ### mySQLTable.update(data, [sqlString], [values], cb) ⇒ <code>void</code>
 Updates data in the table.
 
@@ -500,6 +516,7 @@ UserTable.update("`word` = CONCAT('prefix', `word`)", (err, result) => {
 ---
 
 <a name="MySQLTable+delete"></a>
+
 ### mySQLTable.delete([sqlString], [values], cb) ⇒ <code>void</code>
 Deletes data from the table.
 
@@ -533,6 +550,7 @@ UserTable.delete((err, result) => {
 ---
 
 <a name="MySQLTable+query"></a>
+
 ### mySQLTable.query() ⇒ <code>void</code>
 Exactly the same as [`pool.query()`](https://github.com/felixge/node-mysql#performing-queries).
 
@@ -540,6 +558,7 @@ Exactly the same as [`pool.query()`](https://github.com/felixge/node-mysql#perfo
 ---
 
 <a name="MySQLTable..queryCallback"></a>
+
 ### MySQLTable~queryCallback : <code>function</code>
 A function called with the results of a query.
 

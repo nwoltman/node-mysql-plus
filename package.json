@@ -10,12 +10,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/woollybogger/node-mysql-plus.git"
+    "url": "https://github.com/nwoltman/node-mysql-plus.git"
   },
   "bugs": {
-    "url": "https://github.com/woollybogger/node-mysql-plus/issues"
+    "url": "https://github.com/nwoltman/node-mysql-plus/issues"
   },
-  "homepage": "https://github.com/woollybogger/node-mysql-plus#readme",
+  "homepage": "https://github.com/nwoltman/node-mysql-plus#readme",
   "dependencies": {
     "array-equal": "^1.0.0",
     "es6-callback-manager": "^2.0.0",
