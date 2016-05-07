@@ -11,6 +11,6 @@ module.exports = function(grunt) {
     }
 
     const stdout = execSync(`npm version ${releaseType} -m "v%s"`);
-    grunt.log.ok('Updated package version and created tagged commit:\n' + stdout);
+    grunt.log.ok('Updated package version and created tagged commit: ' + stdout);
   });
 };
