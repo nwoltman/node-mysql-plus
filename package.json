@@ -1,7 +1,7 @@
 {
   "name": "mysql-plus",
   "version": "0.1.2",
-  "description": "A wrapper around felixge's MySQL driver that provides a framework for defining tables and making basic queries.",
+  "description": "MySQL client for Node.js with methods for defining tables with auto-migration and making basic queries",
   "author": "Nathan Woltman <nwoltman@outlook.com>",
   "license": "MIT",
   "main": "lib/MySQLPlus.js",
@@ -55,8 +55,6 @@
     "table",
     "define",
     "sql",
-    "query",
-    "prepared",
-    "statements"
+    "query"
   ]
 }

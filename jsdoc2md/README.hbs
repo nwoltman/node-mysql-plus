@@ -1,6 +1,6 @@
 # mysql-plus
 
-A wrapper around [felixge's MySQL driver](https://www.npmjs.com/package/mysql) that provides a framework for defining tables and making basic queries.
+A MySQL client for Node.js with methods for defining tables with auto-migration and making basic queries.
 
 [![NPM Version](https://img.shields.io/npm/v/mysql-plus.svg)](https://www.npmjs.com/package/mysql-plus)
 [![Build Status](https://travis-ci.org/nwoltman/node-mysql-plus.svg?branch=master)](https://travis-ci.org/nwoltman/node-mysql-plus)
@@ -8,9 +8,9 @@ A wrapper around [felixge's MySQL driver](https://www.npmjs.com/package/mysql) t
 [![Dependency Status](https://david-dm.org/nwoltman/node-mysql-plus.svg)](https://david-dm.org/nwoltman/node-mysql-plus)
 [![devDependency Status](https://david-dm.org/nwoltman/node-mysql-plus/dev-status.svg)](https://david-dm.org/nwoltman/node-mysql-plus#info=devDependencies)
 
-This module is fully* compatible with the popular [mysql](https://www.npmjs.com/package/mysql) module so it can be safely dropped in as a replacement before using any of its additional features.
+This module fully is compatible with the popular [mysql](https://www.npmjs.com/package/mysql) module so it can be safely dropped in as a replacement before using any of its additional features.
 
-*This module uses ES2015 syntax so it is only compatible with Node v4 or higher.
+> Requires Node v4 or higher
 
 ## Table of Contents
 
