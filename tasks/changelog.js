@@ -13,7 +13,7 @@ module.exports = function(grunt) {
       grunt.fail.fatal('Invalid release type: ' + releaseType);
     }
 
-    const repoUrl = pkg.repository.url;
+    const repoUrl = pkg.repository.url.slice(0, -4); // Slice off '.git'
     const getCommitLog = `git --no-pager log v${curVersion}... --pretty=format:"+ %s ([view](${repoUrl}/commit/%H))"`;
     const commitLog = execSync(getCommitLog).toString();
     const changes = commitLog.replace(/^\+ Merge.*[\r\n]*/gm, ''); // Filter out merge commits
