@@ -467,7 +467,7 @@ describe('ColumnDefinitions', () => {
       cd.$toSQL().should.equal("set('a', 'b', 'c')");
     });
 
-    it('should throw if now allowed values are provided when creating the column definition', () => {
+    it('should throw if no values are provided when creating the column definition', () => {
       should.throws(() => ColumnDefinitions.enum(), /provide at least one possible enum value/);
       should.throws(() => ColumnDefinitions.set(), /provide at least one possible set value/);
     });
