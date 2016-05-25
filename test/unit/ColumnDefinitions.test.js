@@ -205,8 +205,8 @@ describe('ColumnDefinitions', () => {
     cd = ColumnDefinitions.char();
     cd.$toSQL().should.equal('char');
 
-    cd = ColumnDefinitions.varchar();
-    cd.$toSQL().should.equal('varchar');
+    cd = ColumnDefinitions.varchar(1);
+    cd.$toSQL().should.equal('varchar(1)');
 
     cd = ColumnDefinitions.text();
     cd.$toSQL().should.equal('text');
@@ -223,8 +223,8 @@ describe('ColumnDefinitions', () => {
     cd = ColumnDefinitions.binary();
     cd.$toSQL().should.equal('binary');
 
-    cd = ColumnDefinitions.varbinary();
-    cd.$toSQL().should.equal('varbinary');
+    cd = ColumnDefinitions.varbinary(1);
+    cd.$toSQL().should.equal('varbinary(1)');
 
     cd = ColumnDefinitions.blob();
     cd.$toSQL().should.equal('blob');
@@ -437,14 +437,14 @@ describe('ColumnDefinitions', () => {
     it('should provide string-specific definition methods', () => {
       var cd;
 
-      cd = ColumnDefinitions.varchar().charset('utf8');
-      cd.$toSQL().should.equal('varchar CHARACTER SET utf8');
+      cd = ColumnDefinitions.char().charset('utf8');
+      cd.$toSQL().should.equal('char CHARACTER SET utf8');
 
-      cd = ColumnDefinitions.varchar().collate('utf8_general_ci');
-      cd.$toSQL().should.equal('varchar COLLATE utf8_general_ci');
+      cd = ColumnDefinitions.char().collate('utf8_general_ci');
+      cd.$toSQL().should.equal('char COLLATE utf8_general_ci');
 
-      cd = ColumnDefinitions.varchar().charset('utf8').collate('utf8_general_ci');
-      cd.$toSQL().should.equal('varchar CHARACTER SET utf8 COLLATE utf8_general_ci');
+      cd = ColumnDefinitions.char().charset('utf8').collate('utf8_general_ci');
+      cd.$toSQL().should.equal('char CHARACTER SET utf8 COLLATE utf8_general_ci');
     });
 
   });
@@ -460,6 +460,21 @@ describe('ColumnDefinitions', () => {
 
       cd = ColumnDefinitions.timestamp().onUpdateCurrentTimestamp();
       cd.$toSQL().should.equal('timestamp ON UPDATE CURRENT_TIMESTAMP');
+    });
+
+  });
+
+
+  describe('varchar and varbinary', () => {
+
+    it('should throw if no `m` value is provided when creating the column definition', () => {
+      should.throws(() => ColumnDefinitions.varchar(), /You must specify the `m` argument for varchar/);
+      should.throws(() => ColumnDefinitions.varbinary(), /You must specify the `m` argument for varbinary/);
+    });
+
+    it('should accept 0 as a valid `m` value', () => {
+      ColumnDefinitions.varchar(0).$toSQL().should.equal('varchar(0)');
+      ColumnDefinitions.varbinary(0).$toSQL().should.equal('varbinary(0)');
     });
 
   });
