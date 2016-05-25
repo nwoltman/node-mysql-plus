@@ -386,6 +386,25 @@ describe('MySQLPlus', function() {
     '  `id` int(11) DEFAULT NULL\n' +
     ') ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_bin';
 
+  const textTableName = 'text_table';
+  const textTableSchema = {
+    columns: {
+      a: Type.char(1),
+      b: Type.char(1).charset('utf8mb4'),
+      c: Type.char(1).charset('utf8mb4').collate('utf8mb4_unicode_ci'),
+      d: Type.char(1).collate('utf8mb4_unicode_ci'),
+    },
+    charset: 'utf8mb4',
+    collate: 'utf8mb4_unicode_ci',
+  };
+  const textTableExpectedSQL =
+    'CREATE TABLE `text_table` (\n' +
+    '  `a` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n' +
+    '  `b` char(1) CHARACTER SET utf8mb4 DEFAULT NULL,\n' +
+    '  `c` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n' +
+    '  `d` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL\n' +
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci';
+
 
   describe('when creating new tables', () => {
 
@@ -401,6 +420,7 @@ describe('MySQLPlus', function() {
       pool.defineTable(indexesTableName, indexesTableSchema);
       pool.defineTable(foreignKeysTableName, foreignKeysTableSchema);
       pool.defineTable(optionsTableName, optionsTableSchema);
+      pool.defineTable(textTableName, textTableSchema);
       pool.sync(done);
     });
 
@@ -473,6 +493,13 @@ describe('MySQLPlus', function() {
         result[0]['Create Table'].should.equal(optionsTableExpectedSQL);
         cb9();
       });
+
+      const cb10 = cbManager.registerCallback();
+      pool.query(`SHOW CREATE TABLE \`${textTableName}\``, (err, result) => {
+        if (err) throw err;
+        result[0]['Create Table'].should.equal(textTableExpectedSQL);
+        cb10();
+      });
     });
 
   });
@@ -493,6 +520,7 @@ describe('MySQLPlus', function() {
       pool.defineTable(indexesTableName, indexesTableSchema);
       pool.defineTable(foreignKeysTableName, foreignKeysTableSchema);
       pool.defineTable(optionsTableName, optionsTableSchema);
+      pool.defineTable(textTableName, textTableSchema);
       pool.sync(done);
     });
 
@@ -570,6 +598,13 @@ describe('MySQLPlus', function() {
         result[0]['Create Table'].should.equal(optionsTableExpectedSQL);
         cb9();
       });
+
+      const cb10 = cbManager.registerCallback();
+      pool.query(`SHOW CREATE TABLE \`${textTableName}\``, (err, result) => {
+        if (err) throw err;
+        result[0]['Create Table'].should.equal(textTableExpectedSQL);
+        cb10();
+      });
     });
 
   });
@@ -590,6 +625,7 @@ describe('MySQLPlus', function() {
       pool.defineTable(indexesTableName, indexesTableSchema);
       pool.defineTable(foreignKeysTableName, foreignKeysTableSchema);
       pool.defineTable(optionsTableName, optionsTableSchema);
+      pool.defineTable(textTableName, textTableSchema);
       pool.sync(done);
     });
 
@@ -661,6 +697,13 @@ describe('MySQLPlus', function() {
         if (err) throw err;
         result[0]['Create Table'].should.equal(optionsTableExpectedSQL);
         cb9();
+      });
+
+      const cb10 = cbManager.registerCallback();
+      pool.query(`SHOW CREATE TABLE \`${textTableName}\``, (err, result) => {
+        if (err) throw err;
+        result[0]['Create Table'].should.equal(textTableExpectedSQL);
+        cb10();
       });
     });
 

@@ -58,13 +58,29 @@ describe('ColumnDefinitions', () => {
     b = ColumnDefinitions.int().unsigned().zerofill().notNull().default(2).autoIncrement();
     a.$equals(b).should.be.false();
 
-    a = ColumnDefinitions.char().charset('utf8').collate('meh').notNull().default('a');
-    b = ColumnDefinitions.char().charset('utf8').collate('meh').notNull().default('a');
-    a.$equals(b).should.be.true();
+    a = ColumnDefinitions.char().charset('utf8').collate('utf8_bin').notNull().default('a');
+    b = ColumnDefinitions.char().charset('utf8').collate('utf8_bin').notNull().default('a');
+    a.$equals(b, {}).should.be.true();
 
     a = ColumnDefinitions.char().charset('utf8');
-    b = ColumnDefinitions.char().charset('utf8').collate('meh');
-    a.$equals(b).should.be.false();
+    b = ColumnDefinitions.char().charset('utf8').collate('utf8_bin');
+    a.$equals(b, {}).should.be.false();
+
+    a = ColumnDefinitions.char().charset('utf8');
+    b = ColumnDefinitions.char().charset('ascii');
+    a.$equals(b, {}).should.be.false();
+
+    a = ColumnDefinitions.char().charset('utf8');
+    b = ColumnDefinitions.char();
+    a.$equals(b, {charset: 'utf8'}).should.be.true();
+
+    a = ColumnDefinitions.char();
+    b = ColumnDefinitions.char().collate('utf8mb4_unicode_ci');
+    a.$equals(b, {collate: 'utf8mb4_unicode_ci'}).should.be.true();
+
+    a = ColumnDefinitions.char().charset('utf8');
+    b = ColumnDefinitions.char().collate('utf8_bin');
+    a.$equals(b, {charset: 'utf8'}).should.be.false();
 
     a = ColumnDefinitions.datetime().onUpdateCurrentTimestamp();
     b = ColumnDefinitions.datetime();
