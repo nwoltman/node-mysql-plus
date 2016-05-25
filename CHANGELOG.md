@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.2.0 (2016-05-25)
++ lib: Require the m argument for varchar and varbinary ([`0564137`](https://github.com/nwoltman/node-mysql-plus/commit/0564137180f44ced3faf9ccfe6e18859e39bf59c))
+
 ## 0.1.4 (2016-05-25)
 + Prevent unnecessary charset and collation migrations ([`86cbd4d`](https://github.com/nwoltman/node-mysql-plus/commit/86cbd4db5e6a5dd1b91d01c5cd0b3bd03347d0f0))
 
