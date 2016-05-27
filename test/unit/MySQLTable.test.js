@@ -199,6 +199,33 @@ describe('MySQLTable', () => {
       });
     });
 
+    it('should accept a string for the `data` parameter', done => {
+      testTable.update("`email` = 'updated3@email.com'", 'WHERE `id` = ?', 5, (err, result) => {
+        if (err) throw err;
+        result.affectedRows.should.equal(1);
+        result.changedRows.should.equal(1);
+        done();
+      });
+    });
+
+    it('should accept a string for the `data` parameter without using the `sqlString` parameter', done => {
+      testTable.update("`email` = 'updated4@email.com' WHERE `id` = ?", 5, (err, result) => {
+        if (err) throw err;
+        result.affectedRows.should.equal(1);
+        result.changedRows.should.equal(1);
+        done();
+      });
+    });
+
+    it('should accept a string for the `data` parameter without using the `sqlString` or `values` parameters', done => {
+      testTable.update("`email` = 'updated5@email.com' WHERE `id` = 5", (err, result) => {
+        if (err) throw err;
+        result.affectedRows.should.equal(1);
+        result.changedRows.should.equal(1);
+        done();
+      });
+    });
+
   });
 
 
