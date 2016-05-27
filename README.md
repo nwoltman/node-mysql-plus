@@ -440,7 +440,7 @@ value (if there is one) may be incremented anyway due to a bug in MySQL.
 
 **Example**:
 ```js
-UserTable.insert({email: 'email@example.com', name: 'John Doe'}, (err, result) => {
+UserTable.insertIgnore({email: 'email@example.com', name: 'John Doe'}, (err, result) => {
   if (err) throw err;
   // data inserted! (maybe)
 }
