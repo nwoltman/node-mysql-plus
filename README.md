@@ -348,7 +348,7 @@ any user-input values in the `sqlString` parameter.
 | --- | --- | --- |
 | columns | <code>string</code> &#124; <code>Array.&lt;string&gt;</code> | The name of a column or an array of columns to select.     <br> The special value `*` can be used to select all columns. |
 | [sqlString] | <code>string</code> | SQL to be appended to the query after the `FROM table` clause. |
-| [values] | <code>Array</code> &#124; <code>\*</code> | A value or an array of values to replace placeholders in `sqlString`.     <br> If passing a single value, it cannot be `null` or `undefined`. |
+| [values] | <code>Array</code> | Values to replace the placeholders in `sqlString`. |
 | cb | <code>function</code> | A callback that gets called with the results of the query. |
 
 **Example**: Select all columns
@@ -378,7 +378,7 @@ UserTable.select(['email', 'name'], 'WHERE `points` > 10000', (err, results) => 
 
 **Example**: Select with equality conditions
 ```js
-const values = {id: 5};
+const values = [{id: 5}];
 UserTable.select('*', 'WHERE ?', values, (err, results) => {
   if (err) throw err;
   console.log(results); // -> [{id: 5, email: 'email@example.com', name: 'John Doe'}]
@@ -398,7 +398,7 @@ Inserts data into a new row in the table.
 | --- | --- | --- |
 | data | <code>Object</code> | An object of (column name)-(data value) pairs. |
 | [sqlString] | <code>string</code> | SQL to be appended to the query.<br>This would only be used to add     an `ON DUPLICATE KEY UPDATE` clause. |
-| [values] | <code>Array</code> &#124; <code>\*</code> | A value or an array of values to replace placeholders in `sqlString`.     <br> If passing a single value, it cannot be `null` or `undefined`. |
+| [values] | <code>Array</code> | Values to replace the placeholders in `sqlString`. |
 | cb | <code>[queryCallback](#MySQLTable..queryCallback)</code> | A callback that gets called with the results of the query. |
 
 **Example**: Insert a new user
@@ -414,7 +414,7 @@ UserTable.insert({email: 'email@example.com', name: 'John Doe'}, (err, result) =
 const data = {id: 5, points: 100};
 // If duplicate key (id), add the points
 const onDuplicateKeySQL = 'ON DUPLICATE KEY UPDATE `points` = `points` + ?';
-UserTable.insert(data, onDuplicateKeySQL, data.points, (err, result) => {
+UserTable.insert(data, onDuplicateKeySQL, [data.points], (err, result) => {
   if (err) throw err;
   // data inserted or updated!
 }
@@ -477,23 +477,22 @@ UserTable.replace({id: 5, email: 'newemail@example.com', name: 'Jane Doe'}, (err
 ### mySQLTable.update(data, [sqlString], [values], cb) ⇒ <code>void</code>
 Updates data in the table.
 
-__Note:__ Callers of this method are responsible for escaping
-any user-input values in the `sqlString` parameter. Likewise
-if the `data` parameter is a string.
+__Note:__ Callers of this method are responsible for escaping any user-input values
+in the `sqlString` parameter. Likewise if the `data` parameter is a string.
 
 
 | Param | Type | Description |
 | --- | --- | --- |
 | data | <code>Object</code> &#124; <code>string</code> | An object of (column name)-(data value) pairs or a     string for the `SET` part of the statement. If `data` is an object it will     be escaped so if you want to use a MySQL function to update a value, you'll     need to pass a string with the desired SQL. |
 | [sqlString] | <code>string</code> | SQL to be appended to the query after the `SET data` clause.     Using this parameter isn't necessary if `data` is a string. |
-| [values] | <code>Array</code> &#124; <code>\*</code> | A value or an array of values to replace placeholders in `sqlString`.     <br> If passing a single value, it cannot be `null` or `undefined`. |
+| [values] | <code>Array</code> | Values to replace the placeholders in `sqlString` (and/or `data`). |
 | cb | <code>[queryCallback](#MySQLTable..queryCallback)</code> | A callback that gets called with the results of the query. |
 
 **Example**: With `data` as an object
 ```js
 const data = {email: 'updated@email.com'};
 const id = 5;
-UserTable.update(data, 'WHERE `id` = ?', id, (err, result) => {
+UserTable.update(data, 'WHERE `id` = ?', [id], (err, result) => {
   if (err) throw err;
   // email updated!
 }
@@ -527,7 +526,7 @@ any user-input values in the `sqlString` parameter.
 | Param | Type | Description |
 | --- | --- | --- |
 | [sqlString] | <code>string</code> | SQL to be appended to the query after the `FROM table` clause. |
-| [values] | <code>Array</code> &#124; <code>\*</code> | A value or an array of values to replace placeholders in `sqlString`.     <br> If passing a single value, it cannot be `null` or `undefined`. |
+| [values] | <code>Array</code> | Values to replace the placeholders in `sqlString`. |
 | cb | <code>[queryCallback](#MySQLTable..queryCallback)</code> | A callback that gets called with the results of the query. |
 
 **Example**: Delete specific rows

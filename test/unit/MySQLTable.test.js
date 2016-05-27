@@ -123,7 +123,7 @@ describe('MySQLTable', () => {
     it('should insert the specified data into the table with an ON DUPLICATE KEY UPDATE clause', done => {
       const data = {id: 4, email: 'four@email.com'};
       const onDuplicateKey = 'ON DUPLICATE KEY UPDATE `email` = ?';
-      testTable.insert(data, onDuplicateKey, 'four2@email.com', (err, result) => {
+      testTable.insert(data, onDuplicateKey, ['four2@email.com'], (err, result) => {
         if (err) throw err;
         result.affectedRows.should.equal(2); // Updated rows are affected twice
         result.insertId.should.equal(4);
@@ -191,7 +191,7 @@ describe('MySQLTable', () => {
     });
 
     it('should be able to update rows using SQL formatted with placeholders', done => {
-      testTable.update({email: 'updated2@email.com'}, 'WHERE `id` = ?', 5, (err, result) => {
+      testTable.update({email: 'updated2@email.com'}, 'WHERE `id` = ?', [5], (err, result) => {
         if (err) throw err;
         result.affectedRows.should.equal(1);
         result.changedRows.should.equal(1);
@@ -200,7 +200,7 @@ describe('MySQLTable', () => {
     });
 
     it('should accept a string for the `data` parameter', done => {
-      testTable.update("`email` = 'updated3@email.com'", 'WHERE `id` = ?', 5, (err, result) => {
+      testTable.update("`email` = 'updated3@email.com'", 'WHERE `id` = ?', [5], (err, result) => {
         if (err) throw err;
         result.affectedRows.should.equal(1);
         result.changedRows.should.equal(1);
@@ -209,7 +209,7 @@ describe('MySQLTable', () => {
     });
 
     it('should accept a string for the `data` parameter without using the `sqlString` parameter', done => {
-      testTable.update("`email` = 'updated4@email.com' WHERE `id` = ?", 5, (err, result) => {
+      testTable.update("`email` = 'updated4@email.com' WHERE `id` = ?", [5], (err, result) => {
         if (err) throw err;
         result.affectedRows.should.equal(1);
         result.changedRows.should.equal(1);
