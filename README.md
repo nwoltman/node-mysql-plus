@@ -302,7 +302,7 @@ A class that provides convenient methods for performing queries.
         * [.insert(data, [sqlString], [values], cb)](#MySQLTable+insert) ⇒ <code>void</code>
         * [.insertIgnore(data, cb)](#MySQLTable+insertIgnore) ⇒ <code>void</code>
         * [.replace(data, cb)](#MySQLTable+replace) ⇒ <code>void</code>
-        * [.update(data, [sqlString], [values], cb)](#MySQLTable+update) ⇒ <code>void</code>
+        * [.update([data], [sqlString], [values], cb)](#MySQLTable+update) ⇒ <code>void</code>
         * [.delete([sqlString], [values], cb)](#MySQLTable+delete) ⇒ <code>void</code>
         * [.query()](#MySQLTable+query) ⇒ <code>void</code>
     * _inner_
@@ -474,21 +474,24 @@ UserTable.replace({id: 5, email: 'newemail@example.com', name: 'Jane Doe'}, (err
 
 <a name="MySQLTable+update"></a>
 
-### mySQLTable.update(data, [sqlString], [values], cb) ⇒ <code>void</code>
+### mySQLTable.update([data], [sqlString], [values], cb) ⇒ <code>void</code>
 Updates data in the table.
 
-__Note:__ Callers of this method are responsible for escaping any user-input values
-in the `sqlString` parameter. Likewise if the `data` parameter is a string.
+__Note:__ The `data` and `sqlString` arguments are individually
+optional but at least one of them must be specified.
+
+__Note:__ Callers of this method are responsible for escaping
+any user-input values in the `sqlString` parameter.
 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| data | <code>Object</code> &#124; <code>string</code> | An object of (column name)-(data value) pairs or a     string for the `SET` part of the statement. If `data` is an object it will     be escaped so if you want to use a MySQL function to update a value, you'll     need to pass a string with the desired SQL. |
-| [sqlString] | <code>string</code> | SQL to be appended to the query after the `SET data` clause.     Using this parameter isn't necessary if `data` is a string. |
+| [data] | <code>Object</code> | An object of (column name)-(data value) pairs that define the new column values.     This object will be escaped by `mysql.escape()` so if you want to use more sophisticated SQL (such as     a MySQL function) to update a column's value, you'll need to use the `sqlString` argument instead. |
+| [sqlString] | <code>string</code> | SQL to be appended to the query after the `SET data` clause     or immediately after `SET ` if `data` is omitted. |
 | [values] | <code>Array</code> | Values to replace the placeholders in `sqlString` (and/or `data`). |
 | cb | <code>[queryCallback](#MySQLTable..queryCallback)</code> | A callback that gets called with the results of the query. |
 
-**Example**: With `data` as an object
+**Example**: With both the `data` and `sqlString` arguments
 ```js
 const data = {email: 'updated@email.com'};
 const id = 5;
@@ -498,16 +501,23 @@ UserTable.update(data, 'WHERE `id` = ?', [id], (err, result) => {
 }
 ```
 
-**Example**: With `data` as a string
+**Example**: With only the `sqlString` argument
 ```js
-UserTable.update('`points` = `points` + 1 WHERE `winner` = 1', (err, result) => {
-  if (err) throw err;
-  // 1 point added to all winners!
-}
-
 UserTable.update("`word` = CONCAT('prefix', `word`)", (err, result) => {
   if (err) throw err;
   // prefix added to all words!
+}
+UserTable.update('`points` = `points` + ? WHERE `winner` = ?', [1, 1] (err, result) => {
+  if (err) throw err;
+  // 1 point added to all winners!
+}
+```
+
+**Example**: With only the `data` argument (updates all rows)
+```js
+UserTable.update({points: 1000}, (err, result) => {
+  if (err) throw err;
+  // Now everyone has 1000 points!
 }
 ```
 

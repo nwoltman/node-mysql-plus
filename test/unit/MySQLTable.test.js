@@ -131,6 +131,17 @@ describe('MySQLTable', () => {
       });
     });
 
+    it('should insert data with question marks into the table when using the `sqlString` and `values` parameters', done => {
+      const data = {id: 4, email: '??four?@email.com'};
+      const onDuplicateKey = 'ON DUPLICATE KEY UPDATE ?? = ?';
+      testTable.insert(data, onDuplicateKey, ['email', 'four3@email.com'], (err, result) => {
+        if (err) throw err;
+        result.affectedRows.should.equal(2); // Updated rows are affected twice
+        result.insertId.should.equal(4);
+        done();
+      });
+    });
+
   });
 
 
@@ -199,8 +210,8 @@ describe('MySQLTable', () => {
       });
     });
 
-    it('should accept a string for the `data` parameter', done => {
-      testTable.update("`email` = 'updated3@email.com'", 'WHERE `id` = ?', [5], (err, result) => {
+    it('should accept the `sqlString` argument without using the `data` argument', done => {
+      testTable.update("`email` = 'updated3@email.com' WHERE `id` = ?", [5], (err, result) => {
         if (err) throw err;
         result.affectedRows.should.equal(1);
         result.changedRows.should.equal(1);
@@ -208,8 +219,8 @@ describe('MySQLTable', () => {
       });
     });
 
-    it('should accept a string for the `data` parameter without using the `sqlString` parameter', done => {
-      testTable.update("`email` = 'updated4@email.com' WHERE `id` = ?", [5], (err, result) => {
+    it('should accept the `sqlString` argument without the `data` or `values` arguments', done => {
+      testTable.update("`email` = 'updated4@email.com' WHERE `id` = 5", (err, result) => {
         if (err) throw err;
         result.affectedRows.should.equal(1);
         result.changedRows.should.equal(1);
@@ -217,8 +228,8 @@ describe('MySQLTable', () => {
       });
     });
 
-    it('should accept a string for the `data` parameter without using the `sqlString` or `values` parameters', done => {
-      testTable.update("`email` = 'updated5@email.com' WHERE `id` = 5", (err, result) => {
+    it('should work with `data` objects that contain question marks', done => {
+      testTable.update({email: 'updated?@email.com'}, 'WHERE `id` = ?', [5], (err, result) => {
         if (err) throw err;
         result.affectedRows.should.equal(1);
         result.changedRows.should.equal(1);
