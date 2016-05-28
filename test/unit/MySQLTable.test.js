@@ -64,53 +64,61 @@ describe('MySQLTable', () => {
   describe('#select()', () => {
 
     it('should be able to select all data from the table', done => {
-      testTable.select('*', (err, results) => {
+      testTable.select('*', (err, rows) => {
         if (err) throw err;
-        results.length.should.equal(3);
+        rows.length.should.equal(3);
         done();
       });
     });
 
     it('should be able to select certain columns of data from the table', done => {
-      testTable.select('email', (err, results) => {
+      testTable.select('email', (err, rows) => {
         if (err) throw err;
-        results.length.should.equal(3);
-        results.forEach(result => {
-          result.should.not.have.property('id');
-          result.should.have.property('email');
+        rows.length.should.equal(3);
+        rows.forEach(row => {
+          row.should.not.have.property('id');
+          row.should.have.property('email');
         });
         done();
       });
     });
 
     it('should be able to select specific columns and rows from the table', done => {
-      testTable.select(['id', 'email'], 'WHERE `id` > 1 ORDER BY `id`', (err, results) => {
+      testTable.select(['id', 'email'], 'WHERE `id` > 1 ORDER BY `id`', (err, rows) => {
         if (err) throw err;
-        results.length.should.equal(2);
-        results[0].id.should.equal(2);
-        results[0].email.should.equal('two@email.com');
-        results[1].id.should.equal(3);
-        results[1].email.should.equal('three@email.com');
+        rows.length.should.equal(2);
+        rows[0].id.should.equal(2);
+        rows[0].email.should.equal('two@email.com');
+        rows[1].id.should.equal(3);
+        rows[1].email.should.equal('three@email.com');
         done();
       });
     });
 
     it('should be able to use SQL formatted with placeholders', done => {
-      testTable.select(['id', 'email'], 'WHERE ?? > ? ORDER BY ??', ['id', 1, 'id'], (err, results) => {
+      testTable.select('??', 'WHERE ?? > ? ORDER BY ??', [['id', 'email'], 'id', 1, 'id'], (err, rows) => {
         if (err) throw err;
-        results.length.should.equal(2);
-        results[0].id.should.equal(2);
-        results[0].email.should.equal('two@email.com');
-        results[1].id.should.equal(3);
-        results[1].email.should.equal('three@email.com');
+        rows.length.should.equal(2);
+        rows[0].id.should.equal(2);
+        rows[0].email.should.equal('two@email.com');
+        rows[1].id.should.equal(3);
+        rows[1].email.should.equal('three@email.com');
         done();
       });
     });
 
     it('should be able to select columns using aliases', done => {
-      testTable.select('`id`, `email` as `eml`', 'WHERE `id` = 1', (err, results) => {
+      testTable.select('`id`, `email` AS `eml`', 'WHERE `id` = 1', (err, rows) => {
         if (err) throw err;
-        results.should.deepEqual([{id: 1, eml: 'one@email.com'}]);
+        rows.should.deepEqual([{id: 1, eml: 'one@email.com'}]);
+        done();
+      });
+    });
+
+    it('should be able to select using a function', done => {
+      testTable.select('COUNT(*) AS `everyoneElse`', 'WHERE `id` <> 1', (err, rows) => {
+        if (err) throw err;
+        rows.should.deepEqual([{everyoneElse: 2}]);
         done();
       });
     });

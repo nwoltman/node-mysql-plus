@@ -345,43 +345,51 @@ Selects data from the table.
 | --- | --- | --- |
 | columns | <code>Array.&lt;string&gt;</code> &#124; <code>string</code> | An array of columns to select or a custom `SELECT` string. |
 | [sqlString] | <code>string</code> | SQL to be appended to the query after the `FROM table` clause. |
-| [values] | <code>Array</code> | Values to replace the placeholders in `sqlString`. |
+| [values] | <code>Array</code> | Values to replace the placeholders in `sqlString` and `columns`. |
 | cb | <code>function</code> | A callback that gets called with the results of the query. |
 
 **Example**: Select all columns
 ```js
-UserTable.select('*', (err, results) => {
+UserTable.select('*', (err, rows) => {
   if (err) throw err;
-  // results contains all data for all users
+  // rows contains all data for all users
 });
 ```
 
 **Example**: Select specific columns
 ```js
-UserTable.select(['email', 'name'], 'WHERE `points` > 10000', (err, results) => {
+UserTable.select(['email', 'name'], 'WHERE `points` > 10000', (err, rows) => {
   if (err) throw err;
-  console.log(results); // -> [{email: 'email@example.com', name: 'John Doe'}, etc.]
+  console.log(rows); // -> [{email: 'email@example.com', name: 'John Doe'}, etc.]
 });
 ```
 
-**Example**: Select using `sqlString` with placeholders
+**Example**: Select with placeholders
 ```js
-UserTable.select(['email'], 'WHERE `id` = ?', [5], (err, results) => {
+UserTable.select(['email'], 'WHERE `id` = ?', [5], (err, rows) => {
   if (err) throw err;
-  console.log(results); // -> [{email: 'email@example.com'}]
+  console.log(rows); // -> [{email: 'email@example.com'}]
 });
 
-UserTable.select('*', 'WHERE ?', [{id: 5}], (err, results) => {
+UserTable.select('??', 'WHERE ?', ['email', {id: 5}], (err, rows) => {
   if (err) throw err;
-  console.log(results); // -> [{id: 5, email: 'email@example.com', name: 'John Doe'}]
+  console.log(rows); // -> [{email: 'email@example.com'}]
 });
 ```
 
 **Example**: Select columns with aliases
 ```js
-UserTable.select('`display_name` as `name`', 'WHERE `points` > 10000', (err, results) => {
+UserTable.select('`display_name` AS `name`', 'WHERE `points` > 10000', (err, rows) => {
   if (err) throw err;
-  console.log(results); // -> [{name: 'JohnD'}, etc.]
+  console.log(rows); // -> [{name: 'JohnD'}, etc.]
+});
+```
+
+**Example**: Select using a function
+```js
+UserTable.select('COUNT(*) AS `highScorers`', 'WHERE `points` > 10000', (err, rows) => {
+  if (err) throw err;
+  console.log(rows); // -> [{highScorers: 27}]
 });
 ```
 
