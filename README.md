@@ -340,9 +340,6 @@ The `PoolPlus` instance that created this table.
 ### mySQLTable.select(columns, [sqlString], [values], cb) ⇒ <code>void</code>
 Selects data from the table.
 
-__Note:__ Callers of this method are responsible for escaping
-any user-input values in the `sqlString` parameter.
-
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -480,9 +477,6 @@ Updates data in the table.
 __Note:__ The `data` and `sqlString` arguments are individually
 optional but at least one of them must be specified.
 
-__Note:__ Callers of this method are responsible for escaping
-any user-input values in the `sqlString` parameter.
-
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -528,9 +522,6 @@ UserTable.update({points: 1000}, (err, result) => {
 
 ### mySQLTable.delete([sqlString], [values], cb) ⇒ <code>void</code>
 Deletes data from the table.
-
-__Note:__ Callers of this method are responsible for escaping
-any user-input values in the `sqlString` parameter.
 
 
 | Param | Type | Description |
