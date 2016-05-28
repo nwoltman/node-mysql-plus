@@ -15,7 +15,8 @@ describe('MySQLTable', () => {
   const tableSQL = `
     CREATE TABLE \`mysql_table_test_table\` (
       \`id\` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-      \`email\` VARCHAR(255) NOT NULL UNIQUE
+      \`email\` VARCHAR(255) NOT NULL UNIQUE,
+      \`letter\` CHAR(1)
     )
   `;
 
@@ -122,8 +123,8 @@ describe('MySQLTable', () => {
 
     it('should insert the specified data into the table with an ON DUPLICATE KEY UPDATE clause', done => {
       const data = {id: 4, email: 'four@email.com'};
-      const onDuplicateKey = 'ON DUPLICATE KEY UPDATE `email` = ?';
-      testTable.insert(data, onDuplicateKey, ['four2@email.com'], (err, result) => {
+      const onDuplicateKey = "ON DUPLICATE KEY UPDATE `email` = 'four2@email.com'";
+      testTable.insert(data, onDuplicateKey, (err, result) => {
         if (err) throw err;
         result.affectedRows.should.equal(2); // Updated rows are affected twice
         result.insertId.should.equal(4);
@@ -183,7 +184,16 @@ describe('MySQLTable', () => {
 
   describe('#update()', () => {
 
-    it('should be able to update all rows in the table', done => {
+    it('should be able to update all rows in the table with only the `data` argument', done => {
+      testTable.update({letter: '?'}, (err, result) => {
+        if (err) throw err;
+        result.affectedRows.should.equal(5);
+        result.changedRows.should.equal(5);
+        done();
+      });
+    });
+
+    it('should be able to update all rows in the table with only the `sqlString` argument', done => {
       testTable.update("`email` = CONCAT('updated_', `email`)", (err, result) => {
         if (err) throw err;
         result.affectedRows.should.equal(5);

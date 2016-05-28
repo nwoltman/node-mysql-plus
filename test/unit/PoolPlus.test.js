@@ -46,6 +46,23 @@ describe('PoolPlus', () => {
   });
 
 
+  describe('#format()', () => {
+
+    it('should format an SQL string', done => {
+      const tempPool = new PoolPlus(config);
+      tempPool.format('?? ?', ['a', 'b']).should.equal("`a` 'b'");
+      tempPool.end(done);
+    });
+
+    it('should format an SQL string with a custom formatter', done => {
+      const tempPool = new PoolPlus(Object.assign({queryFormat: sql => sql + '!'}, config));
+      tempPool.format('?? ?', ['a', 'b']).should.equal('?? ?!');
+      tempPool.end(done);
+    });
+
+  });
+
+
   describe('#defineTable()', () => {
 
     it('should return a MySQLTable instance', () => {
