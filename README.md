@@ -371,8 +371,7 @@ UserTable.select(['email'], 'WHERE `id` = ?', [5], (err, results) => {
   console.log(results); // -> [{email: 'email@example.com'}]
 });
 
-const values = [{id: 5}];
-UserTable.select('*', 'WHERE ?', values, (err, results) => {
+UserTable.select('*', 'WHERE ?', [{id: 5}], (err, results) => {
   if (err) throw err;
   console.log(results); // -> [{id: 5, email: 'email@example.com', name: 'John Doe'}]
 });
@@ -515,9 +514,7 @@ optional but at least one of them must be specified.
 
 **Example**: With both the `data` and `sqlString` arguments
 ```js
-const data = {email: 'updated@email.com'};
-const id = 5;
-UserTable.update(data, 'WHERE `id` = ?', [id], (err, result) => {
+UserTable.update({email: 'updated@email.com'}, 'WHERE `id` = ?', [5], (err, result) => {
   if (err) throw err;
   // email updated!
 });
@@ -529,6 +526,7 @@ UserTable.update("`word` = CONCAT('prefix', `word`)", (err, result) => {
   if (err) throw err;
   // prefix added to all words!
 });
+
 UserTable.update('`points` = `points` + ? WHERE `winner` = ?', [1, 1] (err, result) => {
   if (err) throw err;
   // 1 point added to all winners!
