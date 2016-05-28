@@ -343,7 +343,7 @@ Selects data from the table.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| columns | <code>string</code> &#124; <code>Array.&lt;string&gt;</code> | The name of a column or an array of columns to select.     <br> The special value `*` can be used to select all columns. |
+| columns | <code>Array.&lt;string&gt;</code> &#124; <code>string</code> | An array of columns to select or a custom `SELECT` string. |
 | [sqlString] | <code>string</code> | SQL to be appended to the query after the `FROM table` clause. |
 | [values] | <code>Array</code> | Values to replace the placeholders in `sqlString`. |
 | cb | <code>function</code> | A callback that gets called with the results of the query. |
@@ -356,15 +356,6 @@ UserTable.select('*', (err, results) => {
 }
 ```
 
-**Example**: Select a specific column
-```js
-const values = [5];
-UserTable.select('email', 'WHERE `id` = ?', values, (err, results) => {
-  if (err) throw err;
-  console.log(results); // -> [{email: 'email@example.com'}]
-}
-```
-
 **Example**: Select specific columns
 ```js
 UserTable.select(['email', 'name'], 'WHERE `points` > 10000', (err, results) => {
@@ -373,12 +364,25 @@ UserTable.select(['email', 'name'], 'WHERE `points` > 10000', (err, results) => 
 }
 ```
 
-**Example**: Select with equality conditions
+**Example**: Select using `sqlString` with placeholders
 ```js
+UserTable.select(['email'], 'WHERE `id` = ?', [5], (err, results) => {
+  if (err) throw err;
+  console.log(results); // -> [{email: 'email@example.com'}]
+}
+
 const values = [{id: 5}];
 UserTable.select('*', 'WHERE ?', values, (err, results) => {
   if (err) throw err;
   console.log(results); // -> [{id: 5, email: 'email@example.com', name: 'John Doe'}]
+}
+```
+
+**Example**: Select columns with aliases
+```js
+UserTable.select('`display_name` as `name`', 'WHERE `points` > 10000', (err, results) => {
+  if (err) throw err;
+  console.log(results); // -> [{name: 'JohnD'}, etc.]
 }
 ```
 

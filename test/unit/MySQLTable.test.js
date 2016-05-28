@@ -83,8 +83,8 @@ describe('MySQLTable', () => {
       });
     });
 
-    it('should be able to select specific rows from the table', done => {
-      testTable.select('*', 'WHERE `id` > 1 ORDER BY `id`', (err, results) => {
+    it('should be able to select specific columns and rows from the table', done => {
+      testTable.select(['id', 'email'], 'WHERE `id` > 1 ORDER BY `id`', (err, results) => {
         if (err) throw err;
         results.length.should.equal(2);
         results[0].id.should.equal(2);
@@ -96,13 +96,21 @@ describe('MySQLTable', () => {
     });
 
     it('should be able to use SQL formatted with placeholders', done => {
-      testTable.select('*', 'WHERE ?? > ? ORDER BY ??', ['id', 1, 'id'], (err, results) => {
+      testTable.select(['id', 'email'], 'WHERE ?? > ? ORDER BY ??', ['id', 1, 'id'], (err, results) => {
         if (err) throw err;
         results.length.should.equal(2);
         results[0].id.should.equal(2);
         results[0].email.should.equal('two@email.com');
         results[1].id.should.equal(3);
         results[1].email.should.equal('three@email.com');
+        done();
+      });
+    });
+
+    it('should be able to select columns using aliases', done => {
+      testTable.select('`id`, `email` as `eml`', 'WHERE `id` = 1', (err, results) => {
+        if (err) throw err;
+        results.should.deepEqual([{id: 1, eml: 'one@email.com'}]);
         done();
       });
     });
