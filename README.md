@@ -353,7 +353,7 @@ Selects data from the table.
 UserTable.select('*', (err, results) => {
   if (err) throw err;
   // results contains all data for all users
-}
+});
 ```
 
 **Example**: Select specific columns
@@ -361,7 +361,7 @@ UserTable.select('*', (err, results) => {
 UserTable.select(['email', 'name'], 'WHERE `points` > 10000', (err, results) => {
   if (err) throw err;
   console.log(results); // -> [{email: 'email@example.com', name: 'John Doe'}, etc.]
-}
+});
 ```
 
 **Example**: Select using `sqlString` with placeholders
@@ -369,13 +369,13 @@ UserTable.select(['email', 'name'], 'WHERE `points` > 10000', (err, results) => 
 UserTable.select(['email'], 'WHERE `id` = ?', [5], (err, results) => {
   if (err) throw err;
   console.log(results); // -> [{email: 'email@example.com'}]
-}
+});
 
 const values = [{id: 5}];
 UserTable.select('*', 'WHERE ?', values, (err, results) => {
   if (err) throw err;
   console.log(results); // -> [{id: 5, email: 'email@example.com', name: 'John Doe'}]
-}
+});
 ```
 
 **Example**: Select columns with aliases
@@ -383,7 +383,7 @@ UserTable.select('*', 'WHERE ?', values, (err, results) => {
 UserTable.select('`display_name` as `name`', 'WHERE `points` > 10000', (err, results) => {
   if (err) throw err;
   console.log(results); // -> [{name: 'JohnD'}, etc.]
-}
+});
 ```
 
 
@@ -407,7 +407,7 @@ Inserts data into a new row in the table.
 UserTable.insert({email: 'email@example.com', name: 'John Doe'}, (err, result) => {
   if (err) throw err;
   // data inserted!
-}
+});
 ```
 
 **Example**: Insert or update
@@ -418,7 +418,7 @@ const onDuplicateKeySQL = 'ON DUPLICATE KEY UPDATE `points` = `points` + ?';
 UserTable.insert(data, onDuplicateKeySQL, [data.points], (err, result) => {
   if (err) throw err;
   // data inserted or updated!
-}
+});
 ```
 
 **Example**: Bulk insert
@@ -430,7 +430,7 @@ const users = [
 UserTable.insert([users], (err, result) => {
   if (err) throw err;
   // users inserted!
-}
+});
 ```
 
 **Example**: Bulk insert with specified columns
@@ -442,7 +442,7 @@ const users = [
 UserTable.insert([['email', 'name'], users], (err, result) => {
   if (err) throw err;
   // users inserted!
-}
+});
 ```
 
 
@@ -468,7 +468,7 @@ value (if there is one) may be incremented anyway due to a bug in MySQL.
 UserTable.insertIgnore({email: 'email@example.com', name: 'John Doe'}, (err, result) => {
   if (err) throw err;
   // data inserted! (maybe)
-}
+});
 ```
 
 
@@ -491,7 +491,7 @@ Replaces a row in the table with new data.
 UserTable.replace({id: 5, email: 'newemail@example.com', name: 'Jane Doe'}, (err, result) => {
   if (err) throw err;
   // row with id = 5 replaced with new data!
-}
+});
 ```
 
 
@@ -520,7 +520,7 @@ const id = 5;
 UserTable.update(data, 'WHERE `id` = ?', [id], (err, result) => {
   if (err) throw err;
   // email updated!
-}
+});
 ```
 
 **Example**: With only the `sqlString` argument
@@ -528,11 +528,11 @@ UserTable.update(data, 'WHERE `id` = ?', [id], (err, result) => {
 UserTable.update("`word` = CONCAT('prefix', `word`)", (err, result) => {
   if (err) throw err;
   // prefix added to all words!
-}
+});
 UserTable.update('`points` = `points` + ? WHERE `winner` = ?', [1, 1] (err, result) => {
   if (err) throw err;
   // 1 point added to all winners!
-}
+});
 ```
 
 **Example**: With only the `data` argument (updates all rows)
@@ -540,7 +540,7 @@ UserTable.update('`points` = `points` + ? WHERE `winner` = ?', [1, 1] (err, resu
 UserTable.update({points: 1000}, (err, result) => {
   if (err) throw err;
   // Now everyone has 1000 points!
-}
+});
 ```
 
 
@@ -563,7 +563,7 @@ Deletes data from the table.
 UserTable.delete('WHERE `spammer` = 1', (err, result) => {
   if (err) throw err;
   // spammers deleted!
-}
+});
 ```
 
 **Example**: Delete all rows (you probably don't want to do this)
@@ -571,7 +571,7 @@ UserTable.delete('WHERE `spammer` = 1', (err, result) => {
 UserTable.delete((err, result) => {
   if (err) throw err;
   // all rows deleted :(
-}
+});
 ```
 
 
