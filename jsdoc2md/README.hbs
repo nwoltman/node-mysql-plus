@@ -8,7 +8,7 @@ A MySQL client for Node.js with methods for defining tables with auto-migration 
 [![Dependency Status](https://david-dm.org/nwoltman/node-mysql-plus.svg)](https://david-dm.org/nwoltman/node-mysql-plus)
 [![devDependency Status](https://david-dm.org/nwoltman/node-mysql-plus/dev-status.svg)](https://david-dm.org/nwoltman/node-mysql-plus#info=devDependencies)
 
-This module fully is compatible with the popular [mysql](https://www.npmjs.com/package/mysql) module so it can be safely dropped in as a replacement before using any of its additional features.
+This module extends the popular [mysql](https://www.npmjs.com/package/mysql) module so it can be safely dropped in as a replacement before using any of its additional features.
 
 > Requires Node v4 or higher
 
