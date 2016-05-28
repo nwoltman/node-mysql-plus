@@ -397,7 +397,7 @@ Inserts data into a new row in the table.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| data | <code>Object</code> | An object of (column name)-(data value) pairs. |
+| data | <code>Object</code> &#124; <code>Array</code> | An object of (column name)-(data value) pairs or     an array containing either 1) an array of arrays of data values or 2) an array     of column names and the data array from 1). |
 | [sqlString] | <code>string</code> | SQL to be appended to the query.<br>This would only be used to add     an `ON DUPLICATE KEY UPDATE` clause. |
 | [values] | <code>Array</code> | Values to replace the placeholders in `sqlString`. |
 | cb | <code>[queryCallback](#MySQLTable..queryCallback)</code> | A callback that gets called with the results of the query. |
@@ -418,6 +418,30 @@ const onDuplicateKeySQL = 'ON DUPLICATE KEY UPDATE `points` = `points` + ?';
 UserTable.insert(data, onDuplicateKeySQL, [data.points], (err, result) => {
   if (err) throw err;
   // data inserted or updated!
+}
+```
+
+**Example**: Bulk insert
+```js
+const users = [
+  [1, 'john@email.com', 'John Doe'],
+  [2, 'jane@email.com', 'Jane Brown'],
+];
+UserTable.insert([users], (err, result) => {
+  if (err) throw err;
+  // users inserted!
+}
+```
+
+**Example**: Bulk insert with specified columns
+```js
+const users = [
+  ['john@email.com', 'John Doe'],
+  ['jane@email.com', 'Jane Brown'],
+];
+UserTable.insert([['email', 'name'], users], (err, result) => {
+  if (err) throw err;
+  // users inserted!
 }
 ```
 

@@ -151,22 +151,46 @@ describe('MySQLTable', () => {
       });
     });
 
+    it('should be able to perform bulk inserts', done => {
+      const data = [
+        [5, 'five@email.com', null],
+        [6, 'six@email.com', null],
+      ];
+      testTable.insert([data], (err, result) => {
+        if (err) throw err;
+        result.affectedRows.should.equal(2);
+        done();
+      });
+    });
+
+    it('should be able to perform bulk inserts with specified columns', done => {
+      const data = [
+        [null, 'seven@email.com'],
+        [null, 'eigth@email.com'],
+      ];
+      testTable.insert([['letter', 'email'], data], (err, result) => {
+        if (err) throw err;
+        result.affectedRows.should.equal(2);
+        done();
+      });
+    });
+
   });
 
 
   describe('#insertIgnore()', () => {
 
     it('should insert the specified data into the table', done => {
-      testTable.insertIgnore({email: 'five@email.com'}, (err, result) => {
+      testTable.insertIgnore({email: 'nine@email.com'}, (err, result) => {
         if (err) throw err;
         result.affectedRows.should.equal(1);
-        result.insertId.should.equal(5);
+        result.insertId.should.equal(9);
         done();
       });
     });
 
     it('should not result in an error if attempting to insert a duplicate key', done => {
-      testTable.insertIgnore({email: 'five@email.com'}, (err, result) => {
+      testTable.insertIgnore({email: 'nine@email.com'}, (err, result) => {
         if (err) throw err;
         result.affectedRows.should.equal(0);
         done();
@@ -195,8 +219,8 @@ describe('MySQLTable', () => {
     it('should be able to update all rows in the table with only the `data` argument', done => {
       testTable.update({letter: '?'}, (err, result) => {
         if (err) throw err;
-        result.affectedRows.should.equal(5);
-        result.changedRows.should.equal(5);
+        result.affectedRows.should.equal(9);
+        result.changedRows.should.equal(9);
         done();
       });
     });
@@ -204,8 +228,8 @@ describe('MySQLTable', () => {
     it('should be able to update all rows in the table with only the `sqlString` argument', done => {
       testTable.update("`email` = CONCAT('updated_', `email`)", (err, result) => {
         if (err) throw err;
-        result.affectedRows.should.equal(5);
-        result.changedRows.should.equal(5);
+        result.affectedRows.should.equal(9);
+        result.changedRows.should.equal(9);
         done();
       });
     });
@@ -263,7 +287,7 @@ describe('MySQLTable', () => {
     it('should delete specific rows from the table', done => {
       testTable.delete('WHERE `id` > 3', (err, result) => {
         if (err) throw err;
-        result.affectedRows.should.equal(2);
+        result.affectedRows.should.equal(6);
         done();
       });
     });
