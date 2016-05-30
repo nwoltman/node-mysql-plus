@@ -17,6 +17,9 @@ This module extends the popular [mysql](https://www.npmjs.com/package/mysql) mod
 + [Installation](#installation)
 + [Usage Example](#usage-example)
 + [API](#api)
+  + [Migration Strategies](#migration-strategies)
+  + [Defining Table Schemas](#defining-table-schemas)
+  + [Column Types](#column-types)
 + [Roadmap](#roadmap)
 
 ## Installation
@@ -32,7 +35,12 @@ npm install mysql-plus --save
 ```js
 // Both mysql and pool are 100% compatible with the mysql module
 const mysql = require('mysql-plus');
-const pool = mysql.createPool(config);
+const pool = mysql.createPool({
+  host: 'localhost',
+  user: 'username',
+  password: 'secret',
+  database: 'my_db',
+});
 
 module.exports = pool;
 ```
@@ -42,39 +50,28 @@ module.exports = pool;
 ```js
 const db = require('./db');
 
-const UserTable = db.defineTable('user', {
+const userTable = db.defineTable('user', {
   columns: {
     id: db.Type.bigint().unsigned().notNull().primaryKey().autoIncrement(),
     email: db.Type.varchar(255).notNull().unique(),
-    name: db.Type.varchar(63).notNull().index(),
-    newsletterSubscriber: db.Type.bool().default(1),
-    level: db.Type.int().unsigned().default(0),
-  },
-  indexes: [
-    'level',
-    ['newsletterSubscriber', 'level'],
-  ],
-  foreignKeys: {
-    level: 'statsTable.level',
+    name: db.Type.varchar(63).notNull(),
   },
   autoIncrement: 5000000000,
 });
 
 const User = {
-  createAndSelectExample() {
-    UserTable.insert({email: 'newuser@email.com', name: 'newuser'}, (err, result) => {
+  insertAndSelectExample() {
+    userTable.insert({email: 'newuser@email.com', name: 'newuser'}, (err, result) => {
       if (err) throw err;
 
-      UserTable.select('*', 'WHERE `id` = ' + result.insertId, (err, rows) => {
+      userTable.select('*', 'WHERE `id` = ' + result.insertId, (err, rows) => {
         if (err) throw err;
         console.log(rows);
         /*
           [{
             id: 5000000001,
             email: 'newuser@email.com',
-            name: 'newuser',
-            newsletterSubscriber: 1,
-            level: 0
+            name: 'newuser'
           }]
         */
       });
@@ -92,8 +89,10 @@ const db = require('./db');
 const express = require('express');
 const app = express();
 
-db.sync(err => {
+// Sync the table schemas to the database
+db.sync((err) => {
   if (err) throw err;
+  // Now the server can be safely started
   app.listen(/*...*/);
 });
 ```
@@ -185,7 +184,7 @@ A namespace that provides the column type methods used to define columns.
 ```js
 const mysql = require('mysql-plus');
 const pool = mysql.createPool(config);
-const UserTable = pool.defineTable('user', {
+const userTable = pool.defineTable('user', {
   columns: {
     id: mysql.Type.bigint().unsigned().notNull().primaryKey(),
     created: mysql.Type.datetime(),
@@ -228,7 +227,7 @@ Defines a table to be created or updated in the database.
 **See**: [Defining Table Schemas](#defining-table-schemas)  
 **Example**:
 ```js
-const UserTable = pool.defineTable('user', {
+const userTable = pool.defineTable('user', {
   columns: {
     id: pool.Type.bigint().unsigned().notNull().primaryKey().autoIncrement(),
     email: pool.Type.varchar(255).notNull().unique(),
@@ -275,7 +274,7 @@ Just here for convenience.
 ```js
 const pool = mysql.createPool(config);
 const Type = pool.Type;
-const UserTable = pool.defineTable('user', {
+const userTable = pool.defineTable('user', {
   columns: {
     id: Type.bigint().unsigned().notNull().primaryKey(),
     created: Type.datetime(),
@@ -350,7 +349,7 @@ Selects data from the table.
 
 **Example**: Select all columns
 ```js
-UserTable.select('*', (err, rows) => {
+userTable.select('*', (err, rows) => {
   if (err) throw err;
   // rows contains all data for all users
 });
@@ -358,7 +357,7 @@ UserTable.select('*', (err, rows) => {
 
 **Example**: Select specific columns
 ```js
-UserTable.select(['email', 'name'], 'WHERE `points` > 10000', (err, rows) => {
+userTable.select(['email', 'name'], 'WHERE `points` > 10000', (err, rows) => {
   if (err) throw err;
   console.log(rows); // -> [{email: 'email@example.com', name: 'John Doe'}, etc.]
 });
@@ -366,12 +365,12 @@ UserTable.select(['email', 'name'], 'WHERE `points` > 10000', (err, rows) => {
 
 **Example**: Select with placeholders
 ```js
-UserTable.select(['email'], 'WHERE `id` = ?', [5], (err, rows) => {
+userTable.select(['email'], 'WHERE `id` = ?', [5], (err, rows) => {
   if (err) throw err;
   console.log(rows); // -> [{email: 'email@example.com'}]
 });
 
-UserTable.select('??', 'WHERE ?', ['email', {id: 5}], (err, rows) => {
+userTable.select('??', 'WHERE ?', ['email', {id: 5}], (err, rows) => {
   if (err) throw err;
   console.log(rows); // -> [{email: 'email@example.com'}]
 });
@@ -379,7 +378,7 @@ UserTable.select('??', 'WHERE ?', ['email', {id: 5}], (err, rows) => {
 
 **Example**: Select columns with aliases
 ```js
-UserTable.select('`display_name` AS `name`', 'WHERE `points` > 10000', (err, rows) => {
+userTable.select('`display_name` AS `name`', 'WHERE `points` > 10000', (err, rows) => {
   if (err) throw err;
   console.log(rows); // -> [{name: 'JohnD'}, etc.]
 });
@@ -387,7 +386,7 @@ UserTable.select('`display_name` AS `name`', 'WHERE `points` > 10000', (err, row
 
 **Example**: Select using a function
 ```js
-UserTable.select('COUNT(*) AS `highScorers`', 'WHERE `points` > 10000', (err, rows) => {
+userTable.select('COUNT(*) AS `highScorers`', 'WHERE `points` > 10000', (err, rows) => {
   if (err) throw err;
   console.log(rows); // -> [{highScorers: 27}]
 });
@@ -411,7 +410,7 @@ Inserts data into a new row in the table.
 
 **Example**: Insert a new user
 ```js
-UserTable.insert({email: 'email@example.com', name: 'John Doe'}, (err, result) => {
+userTable.insert({email: 'email@example.com', name: 'John Doe'}, (err, result) => {
   if (err) throw err;
   // data inserted!
 });
@@ -422,7 +421,7 @@ UserTable.insert({email: 'email@example.com', name: 'John Doe'}, (err, result) =
 const data = {id: 5, points: 100};
 // If duplicate key (id), add the points
 const onDuplicateKeySQL = 'ON DUPLICATE KEY UPDATE `points` = `points` + ?';
-UserTable.insert(data, onDuplicateKeySQL, [data.points], (err, result) => {
+userTable.insert(data, onDuplicateKeySQL, [data.points], (err, result) => {
   if (err) throw err;
   // data inserted or updated!
 });
@@ -434,7 +433,7 @@ const users = [
   [1, 'john@email.com', 'John Doe'],
   [2, 'jane@email.com', 'Jane Brown'],
 ];
-UserTable.insert([users], (err, result) => {
+userTable.insert([users], (err, result) => {
   if (err) throw err;
   // users inserted!
 });
@@ -446,7 +445,7 @@ const users = [
   ['john@email.com', 'John Doe'],
   ['jane@email.com', 'Jane Brown'],
 ];
-UserTable.insert([['email', 'name'], users], (err, result) => {
+userTable.insert([['email', 'name'], users], (err, result) => {
   if (err) throw err;
   // users inserted!
 });
@@ -472,7 +471,7 @@ value (if there is one) may be incremented anyway due to a bug in MySQL.
 
 **Example**:
 ```js
-UserTable.insertIgnore({email: 'email@example.com', name: 'John Doe'}, (err, result) => {
+userTable.insertIgnore({email: 'email@example.com', name: 'John Doe'}, (err, result) => {
   if (err) throw err;
   // data inserted! (maybe)
 });
@@ -495,7 +494,7 @@ Replaces a row in the table with new data.
 **Example**:
 ```js
 // `id` is a primary key
-UserTable.replace({id: 5, email: 'newemail@example.com', name: 'Jane Doe'}, (err, result) => {
+userTable.replace({id: 5, email: 'newemail@example.com', name: 'Jane Doe'}, (err, result) => {
   if (err) throw err;
   // row with id = 5 replaced with new data!
 });
@@ -522,7 +521,7 @@ optional but at least one of them must be specified.
 
 **Example**: With both the `data` and `sqlString` arguments
 ```js
-UserTable.update({email: 'updated@email.com'}, 'WHERE `id` = ?', [5], (err, result) => {
+userTable.update({email: 'updated@email.com'}, 'WHERE `id` = ?', [5], (err, result) => {
   if (err) throw err;
   // email updated!
 });
@@ -530,12 +529,12 @@ UserTable.update({email: 'updated@email.com'}, 'WHERE `id` = ?', [5], (err, resu
 
 **Example**: With only the `sqlString` argument
 ```js
-UserTable.update("`word` = CONCAT('prefix', `word`)", (err, result) => {
+userTable.update("`word` = CONCAT('prefix', `word`)", (err, result) => {
   if (err) throw err;
   // prefix added to all words!
 });
 
-UserTable.update('`points` = `points` + ? WHERE `winner` = ?', [1, 1] (err, result) => {
+userTable.update('`points` = `points` + ? WHERE `winner` = ?', [1, 1] (err, result) => {
   if (err) throw err;
   // 1 point added to all winners!
 });
@@ -543,7 +542,7 @@ UserTable.update('`points` = `points` + ? WHERE `winner` = ?', [1, 1] (err, resu
 
 **Example**: With only the `data` argument (updates all rows)
 ```js
-UserTable.update({points: 1000}, (err, result) => {
+userTable.update({points: 1000}, (err, result) => {
   if (err) throw err;
   // Now everyone has 1000 points!
 });
@@ -566,7 +565,7 @@ Deletes data from the table.
 
 **Example**: Delete specific rows
 ```js
-UserTable.delete('WHERE `spammer` = 1', (err, result) => {
+userTable.delete('WHERE `spammer` = 1', (err, result) => {
   if (err) throw err;
   // spammers deleted!
 });
@@ -574,7 +573,7 @@ UserTable.delete('WHERE `spammer` = 1', (err, result) => {
 
 **Example**: Delete all rows (you probably don't want to do this)
 ```js
-UserTable.delete((err, result) => {
+userTable.delete((err, result) => {
   if (err) throw err;
   // all rows deleted :(
 });
@@ -777,6 +776,7 @@ These schema properties configure table-level options. The options currently sup
 **Example:**
 ```js
 {
+  columns: {...},
   engine: 'MyISAM',
   autoIncrement: 5000000000
   charset: 'utf8mb4',
