@@ -4,7 +4,10 @@ const MySQLTable = require('../../lib/MySQLTable');
 const MySQLPlus = require('../../lib/MySQLPlus');
 
 const config = require('../config');
+const should = require('should');
 const sinon = require('sinon');
+
+should.config.checkProtoEql = false;
 
 describe('MySQLTable', () => {
 
