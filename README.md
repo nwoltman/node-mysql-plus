@@ -1,5 +1,7 @@
 # mysql-plus
 
+[![Join the chat at https://gitter.im/nwoltman/node-mysql-plus](https://badges.gitter.im/nwoltman/node-mysql-plus.svg)](https://gitter.im/nwoltman/node-mysql-plus?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 A MySQL client for Node.js with methods for defining tables with auto-migration and making basic queries.
 
 [![NPM Version](https://img.shields.io/npm/v/mysql-plus.svg)](https://www.npmjs.com/package/mysql-plus)
