@@ -393,6 +393,7 @@ describe('MySQLPlus', function() {
       b: Type.char(1).charset('utf8mb4'),
       c: Type.char(1).charset('utf8mb4').collate('utf8mb4_unicode_ci'),
       d: Type.char(1).collate('utf8mb4_unicode_ci'),
+      e: Type.char(1).collate('utf8mb4_bin'), // eslint-disable-line id-blacklist
     },
     charset: 'utf8mb4',
     collate: 'utf8mb4_unicode_ci',
@@ -402,7 +403,8 @@ describe('MySQLPlus', function() {
     '  `a` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n' +
     '  `b` char(1) CHARACTER SET utf8mb4 DEFAULT NULL,\n' +
     '  `c` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n' +
-    '  `d` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL\n' +
+    '  `d` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n' +
+    '  `e` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL\n' +
     ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci';
 
 
