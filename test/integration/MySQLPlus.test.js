@@ -393,7 +393,7 @@ describe('MySQLPlus', function() {
       b: Type.char(1).charset('utf8mb4'),
       c: Type.char(1).charset('utf8mb4').collate('utf8mb4_unicode_ci'),
       d: Type.char(1).collate('utf8mb4_unicode_ci'),
-      e: Type.char(1).collate('utf8mb4_bin'), // eslint-disable-line id-blacklist
+      e: Type.char(1).collate('utf8mb4_bin'),
     },
     charset: 'utf8mb4',
     collate: 'utf8mb4_unicode_ci',
