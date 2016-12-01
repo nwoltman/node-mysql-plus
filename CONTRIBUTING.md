@@ -6,7 +6,7 @@ If you're new to open source in general, check out [GitHub's open source intro g
 
 ## Issue Contributions
 
-Before creating an issue, please make sure that the problem is with this module and not the [mysql](https://github.com/felixge/node-mysql) module.
+Before creating an issue, please make sure that the problem is with this module and not the [mysql](https://github.com/mysqljs/mysql) module.
 
 If reporting a bug, make sure to include a code snippet and/or other relevant information that can be used to reproduce the bug.
 

@@ -138,7 +138,7 @@ db.sync((err) => {
 This module.
 
 **Extends:** <code>mysql</code>  
-**See**: [mysql](https://github.com/felixge/node-mysql#mysql)  
+**See**: [mysql](https://github.com/mysqljs/mysql#mysql)  
 
 * [mysql-plus](#module_mysql-plus) ⇐ <code>mysql</code>
     * [~Type](#module_mysql-plus..Type)
@@ -171,13 +171,13 @@ const userTable = pool.defineTable('user', {
 <a name="module_mysql-plus..createPool"></a>
 
 ### mysql-plus~createPool(config) ⇒ <code>[PoolPlus](#PoolPlus)</code>
-Just like the original [`mysql.createPool()`](https://github.com/felixge/node-mysql#pooling-connections)
+Just like the original [`mysql.createPool()`](https://github.com/mysqljs/mysql#pooling-connections)
 method except it returns a [`PoolPlus`](#PoolPlus) instance and accepts more options.
 
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| config | <code>Object</code> |  | A configuration object defining MySQL connection options. In addition to the     possible [mysql connection options](https://github.com/felixge/node-mysql#connection-options),     this object may also have the following two options: |
+| config | <code>Object</code> |  | A configuration object defining MySQL connection options. In addition to the     possible [mysql connection options](https://github.com/mysqljs/mysql#connection-options),     this object may also have the following two options: |
 | [config.migrationStrategy] | <code>string</code> |  | One of `safe`, `alter`, or `drop`.     Please see the migration strategies documentation [here](#migration-strategies).     Defaults to `safe` in production and `alter` everywhere else. |
 | [config.allowAlterInProduction] | <code>boolean</code> | <code>false</code> | Setting this to `true` will     allow `alter` to be used as a migration strategy in production environments. |
 
@@ -207,7 +207,7 @@ pool.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
 A class that extends the `mysql` module's `Pool` class with the ability to define tables.
 
 **Extends:** <code>Pool</code>  
-**See**: [Pool](https://github.com/felixge/node-mysql#pooling-connections)  
+**See**: [Pool](https://github.com/mysqljs/mysql#pooling-connections)  
 
 * [PoolPlus](#PoolPlus) ⇐ <code>Pool</code>
     * [.Type](#PoolPlus+Type)
@@ -296,7 +296,7 @@ pool.sync(function(err) {
 ## MySQLTable
 A class that provides convenient methods for performing queries.
 
-**See**: [https://github.com/felixge/node-mysql#performing-queries](https://github.com/felixge/node-mysql#performing-queries)  
+**See**: [https://github.com/mysqljs/mysql#performing-queries](https://github.com/mysqljs/mysql#performing-queries)  
 
 * [MySQLTable](#MySQLTable)
     * _instance_
@@ -595,7 +595,7 @@ userTable.delete((err, result) => {
 <a name="MySQLTable+query"></a>
 
 ### mySQLTable.query() ⇒ <code>void</code>
-Exactly the same as [`pool.query()`](https://github.com/felixge/node-mysql#performing-queries).
+Exactly the same as [`pool.query()`](https://github.com/mysqljs/mysql#performing-queries).
 
 
 ---
@@ -612,7 +612,7 @@ A function called with the results of a query.
 | results | <code>Array</code> | The results of the query. |
 | fields | <code>Array</code> | Information about the returned results' fields (if any). |
 
-**See**: [https://github.com/felixge/node-mysql#performing-queries](https://github.com/felixge/node-mysql#performing-queries)  
+**See**: [https://github.com/mysqljs/mysql#performing-queries](https://github.com/mysqljs/mysql#performing-queries)  
 
 ---
 
