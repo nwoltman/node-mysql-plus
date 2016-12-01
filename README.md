@@ -299,8 +299,8 @@ A class that provides convenient methods for performing queries.
         * [.pool](#MySQLTable+pool) : <code>[PoolPlus](#PoolPlus)</code>
         * [.select(columns, [sqlString], [values], cb)](#MySQLTable+select) ⇒ <code>void</code>
         * [.insert(data, [sqlString], [values], cb)](#MySQLTable+insert) ⇒ <code>void</code>
-        * [.insertIgnore(data, cb)](#MySQLTable+insertIgnore) ⇒ <code>void</code>
-        * [.replace(data, cb)](#MySQLTable+replace) ⇒ <code>void</code>
+        * ~~[.insertIgnore(data, cb)](#MySQLTable+insertIgnore) ⇒ <code>void</code>~~
+        * ~~[.replace(data, cb)](#MySQLTable+replace) ⇒ <code>void</code>~~
         * [.update([data], [sqlString], [values], cb)](#MySQLTable+update) ⇒ <code>void</code>
         * [.delete([sqlString], [values], cb)](#MySQLTable+delete) ⇒ <code>void</code>
         * [.query()](#MySQLTable+query) ⇒ <code>void</code>
@@ -456,7 +456,9 @@ userTable.insert([['email', 'name'], users], (err, result) => {
 
 <a name="MySQLTable+insertIgnore"></a>
 
-### mySQLTable.insertIgnore(data, cb) ⇒ <code>void</code>
+### ~~mySQLTable.insertIgnore(data, cb) ⇒ <code>void</code>~~
+***Deprecated***
+
 Inserts data into a new row in the table. The row is not
 inserted if it would result in a duplicate key error.
 
@@ -482,7 +484,9 @@ userTable.insertIgnore({email: 'email@example.com', name: 'John Doe'}, (err, res
 
 <a name="MySQLTable+replace"></a>
 
-### mySQLTable.replace(data, cb) ⇒ <code>void</code>
+### ~~mySQLTable.replace(data, cb) ⇒ <code>void</code>~~
+***Deprecated***
+
 Replaces a row in the table with new data.
 
 
