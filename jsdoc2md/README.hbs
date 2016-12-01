@@ -17,9 +17,15 @@ This module extends the popular [mysql](https://www.npmjs.com/package/mysql) mod
 + [Installation](#installation)
 + [Usage Example](#usage-example)
 + [API](#api)
-  + [Migration Strategies](#migration-strategies)
-  + [Defining Table Schemas](#defining-table-schemas)
-  + [Column Types](#column-types)
+  + Modules
+    + [mysql-plus](#module_mysql-plus)
+  + Classes
+    + [PoolPlus](#PoolPlus)
+    + [MySQLTable](#MySQLTable)
+  + Info
+    + [Migration Strategies](#migration-strategies)
+    + [Defining Table Schemas](#defining-table-schemas)
+    + [Column Types](#column-types)
 + [Roadmap](#roadmap)
 
 ## Installation
