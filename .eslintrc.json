@@ -34,7 +34,7 @@
     "key-spacing": 2,
     "keyword-spacing": 2,
     "lines-around-directive": 2,
-    "max-len": [2, {"code": 120, "ignoreUrls": true, "ignorePattern": "^\\s+/.+/;$"}],
+    "max-len": [2, 120, {"ignoreUrls": true, "ignoreRegExpLiterals": true}],
     "max-nested-callbacks": [2, 3],
     "new-cap": 2,
     "new-parens": 2,
