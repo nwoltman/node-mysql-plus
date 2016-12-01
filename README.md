@@ -1,14 +1,14 @@
 # mysql-plus
 
-A MySQL client for Node.js with methods for defining tables with auto-migration and making basic queries.
-
 [![NPM Version](https://img.shields.io/npm/v/mysql-plus.svg)](https://www.npmjs.com/package/mysql-plus)
 [![Build Status](https://travis-ci.org/nwoltman/node-mysql-plus.svg?branch=master)](https://travis-ci.org/nwoltman/node-mysql-plus)
 [![Coverage Status](https://coveralls.io/repos/github/nwoltman/node-mysql-plus/badge.svg?branch=master)](https://coveralls.io/github/nwoltman/node-mysql-plus?branch=master)
 [![dependencies Status](https://david-dm.org/nwoltman/node-mysql-plus/status.svg)](https://david-dm.org/nwoltman/node-mysql-plus)
 [![devDependencies Status](https://david-dm.org/nwoltman/node-mysql-plus/dev-status.svg)](https://david-dm.org/nwoltman/node-mysql-plus?type=dev)
 
-This module extends the popular [mysql](https://www.npmjs.com/package/mysql) module so it can be safely dropped in as a replacement before using any of its additional features.
+A MySQL client for Node.js with methods for defining tables with auto-migration and making basic queries.
+
+This module extends the popular [`mysql`](https://www.npmjs.com/package/mysql) module, so it can be safely dropped in as a replacement for that module before using any of its additional features. It is recommended that you read the [documentation](https://github.com/mysqljs/mysql#introduction) for the `mysql` module, especially the sections on [connection options](https://github.com/mysqljs/mysql#connection-options), [performing queries](https://github.com/mysqljs/mysql#performing-queries), [escaping query values](https://github.com/mysqljs/mysql#escaping-query-values), and [escaping query identifiers](https://github.com/mysqljs/mysql#escaping-query-identifiers).
 
 > Requires Node v4 or higher
 
@@ -39,7 +39,6 @@ npm install mysql-plus --save
 #### db.js
 
 ```js
-// Both mysql and pool are 100% compatible with the mysql module
 const mysql = require('mysql-plus');
 const pool = mysql.createPool({
   host: 'localhost',
@@ -47,6 +46,7 @@ const pool = mysql.createPool({
   password: 'secret',
   database: 'my_db',
 });
+// Both `mysql` and `pool` are 100% compatible with the mysql module
 
 module.exports = pool;
 ```
