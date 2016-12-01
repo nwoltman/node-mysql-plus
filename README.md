@@ -135,8 +135,29 @@ This module.
 **See**: [mysql](https://github.com/felixge/node-mysql#mysql)  
 
 * [mysql-plus](#module_mysql-plus) ⇐ <code>mysql</code>
-    * [~createPool(config)](#module_mysql-plus..createPool) ⇒ <code>[PoolPlus](#PoolPlus)</code>
     * [~Type](#module_mysql-plus..Type)
+    * [~createPool(config)](#module_mysql-plus..createPool) ⇒ <code>[PoolPlus](#PoolPlus)</code>
+
+
+---
+
+<a name="module_mysql-plus..Type"></a>
+
+### mysql-plus~Type
+A namespace that provides the column type methods used to define columns.
+
+**See**: [Column Types](#column-types)  
+**Example**:
+```js
+const mysql = require('mysql-plus');
+const pool = mysql.createPool(config);
+const userTable = pool.defineTable('user', {
+  columns: {
+    id: mysql.Type.bigint().unsigned().notNull().primaryKey(),
+    created: mysql.Type.datetime(),
+  }
+});
+```
 
 
 ---
@@ -174,27 +195,6 @@ pool.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
 
 ---
 
-<a name="module_mysql-plus..Type"></a>
-
-### mysql-plus~Type
-A namespace that provides the column type methods used to define columns.
-
-**See**: [Column Types](#column-types)  
-**Example**:
-```js
-const mysql = require('mysql-plus');
-const pool = mysql.createPool(config);
-const userTable = pool.defineTable('user', {
-  columns: {
-    id: mysql.Type.bigint().unsigned().notNull().primaryKey(),
-    created: mysql.Type.datetime(),
-  }
-});
-```
-
-
----
-
 <a name="PoolPlus"></a>
 
 ## PoolPlus ⇐ <code>Pool</code>
@@ -204,9 +204,32 @@ A class that extends the `mysql` module's `Pool` class with the ability to defin
 **See**: [Pool](https://github.com/felixge/node-mysql#pooling-connections)  
 
 * [PoolPlus](#PoolPlus) ⇐ <code>Pool</code>
+    * [.Type](#PoolPlus+Type)
     * [.defineTable(name, schema, [migrationStrategy])](#PoolPlus+defineTable) ⇒ <code>[MySQLTable](#MySQLTable)</code>
     * [.sync(cb)](#PoolPlus+sync) ⇒ <code>void</code>
-    * [.Type](#PoolPlus+Type)
+
+
+---
+
+<a name="PoolPlus+Type"></a>
+
+### poolPlus.Type
+A namespace that provides the column type methods used to define columns.
+The exact same thing as [`mysql.Type`](#module_mysql-plus..Type).
+Just here for convenience.
+
+**See**: [Column Types](#column-types)  
+**Example**:
+```js
+const pool = mysql.createPool(config);
+const Type = pool.Type;
+const userTable = pool.defineTable('user', {
+  columns: {
+    id: Type.bigint().unsigned().notNull().primaryKey(),
+    created: Type.datetime(),
+  }
+});
+```
 
 
 ---
@@ -256,29 +279,6 @@ should only be called once when starting up a server.
 pool.sync(function(err) {
   if (err) throw err;
   // Now do something such as start an HTTP server
-});
-```
-
-
----
-
-<a name="PoolPlus+Type"></a>
-
-### poolPlus.Type
-A namespace that provides the column type methods used to define columns.
-The exact same thing as [`mysql.Type`](#module_mysql-plus..Type).
-Just here for convenience.
-
-**See**: [Column Types](#column-types)  
-**Example**:
-```js
-const pool = mysql.createPool(config);
-const Type = pool.Type;
-const userTable = pool.defineTable('user', {
-  columns: {
-    id: Type.bigint().unsigned().notNull().primaryKey(),
-    created: Type.datetime(),
-  }
 });
 ```
 
