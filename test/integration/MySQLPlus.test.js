@@ -364,12 +364,13 @@ describe('MySQLPlus', function() {
     autoIncrement: 10,
     charset: 'ascii',
     collate: 'ascii_bin',
+    compression: 'zlib',
     rowFormat: 'REDUNDANT',
   };
   const optionsTableExpectedSQL =
     'CREATE TABLE `options_table` (\n' +
     '  `id` int(11) DEFAULT NULL\n' +
-    ') ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=ascii COLLATE=ascii_bin ROW_FORMAT=REDUNDANT';
+    ') ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=ascii COLLATE=ascii_bin ROW_FORMAT=REDUNDANT COMPRESSION=\'zlib\'';
 
   const optionsTableMigratedSchema = {
     columns: {
@@ -378,13 +379,13 @@ describe('MySQLPlus', function() {
     engine: 'InnoDB',
     charset: 'latin1',
     collate: 'latin1_bin',
-    // compression: 'LZ4', // MySQL 5.7 only
+    compression: 'LZ4',
     rowFormat: 'DEFAULT',
   };
   const optionsTableMigratedExpectedSQL =
     'CREATE TABLE `options_table` (\n' +
     '  `id` int(11) DEFAULT NULL\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_bin';
+    ') ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_bin COMPRESSION=\'LZ4\'';
 
   const textTableName = 'text_table';
   const textTableSchema = {

@@ -914,4 +914,3 @@ Compatible types:
 # Roadmap
 
 + Prepared statements
-+ Travis CI tests with MySQL 5.7 (waiting on [this issue](https://github.com/travis-ci/travis-ci/issues/5122))
