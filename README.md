@@ -300,7 +300,8 @@ A class that provides convenient methods for performing queries.
 
 * [MySQLTable](#MySQLTable)
     * _instance_
-        * [.tableName](#MySQLTable+tableName) : <code>string</code>
+        * ~~[.tableName](#MySQLTable+tableName) : <code>string</code>~~
+        * [.name](#MySQLTable+name) : <code>string</code>
         * [.schema](#MySQLTable+schema) : <code>string</code>
         * [.pool](#MySQLTable+pool) : <code>[PoolPlus](#PoolPlus)</code>
         * [.select(columns, [sqlString], [values], cb)](#MySQLTable+select) ⇒ <code>void</code>
@@ -318,7 +319,17 @@ A class that provides convenient methods for performing queries.
 
 <a name="MySQLTable+tableName"></a>
 
-### mySQLTable.tableName : <code>string</code>
+### ~~mySQLTable.tableName : <code>string</code>~~
+***Deprecated***
+
+The table's name (as passed to [`poolPlus.defineTable()`](#PoolPlus+defineTable)).
+
+
+---
+
+<a name="MySQLTable+name"></a>
+
+### mySQLTable.name : <code>string</code>
 The table's name (as passed to [`poolPlus.defineTable()`](#PoolPlus+defineTable)).
 
 
