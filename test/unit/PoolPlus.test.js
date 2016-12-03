@@ -16,7 +16,7 @@ describe('PoolPlus', () => {
 
   const TEST_TABLE_NAME = 'pool_plus_test_table';
   const TEST_TABLE_SCHEMA = {
-    columns: {id: pool.Type.bigint().unsigned()},
+    columns: {id: pool.ColTypes.bigint().unsigned()},
   };
 
   after(done => {
@@ -24,10 +24,19 @@ describe('PoolPlus', () => {
   });
 
 
-  describe('.Type', () => {
+  describe('.Type', () => { // TODO: Remove after v0.4.0 is released.
 
     it('should provide the ColumnDefinitions functions', () => {
       pool.Type.should.equal(ColumnDefinitions);
+    });
+
+  });
+
+
+  describe('.ColTypes', () => {
+
+    it('should provide the ColumnDefinitions functions', () => {
+      pool.ColTypes.should.equal(ColumnDefinitions);
     });
 
   });

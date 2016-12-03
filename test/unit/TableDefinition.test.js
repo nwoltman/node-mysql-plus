@@ -14,7 +14,7 @@ describe('TableDefinition', () => {
     ')';
 
   const throwTableSchema = {
-    columns: {id: MySQLPlus.Type.int()},
+    columns: {id: MySQLPlus.ColTypes.int()},
   };
   const throwTable1Name = 'mock_throw_table_1';
   const throwTable2Name = 'mock_throw_table_2';
@@ -73,7 +73,7 @@ describe('TableDefinition', () => {
       const tableName = 'table_definition_test_table';
       const schema = {
         columns: {
-          id: MySQLPlus.Type.int().unsigned().notNull().primaryKey(),
+          id: MySQLPlus.ColTypes.int().unsigned().notNull().primaryKey(),
         },
       };
       const expectedOperations = [
@@ -111,7 +111,7 @@ describe('TableDefinition', () => {
   describe('if the table already exists', () => {
 
     const newSchema = {
-      columns: {id: MySQLPlus.Type.int().unsigned().notNull()},
+      columns: {id: MySQLPlus.ColTypes.int().unsigned().notNull()},
     };
 
     describe('and the migration strategy is "safe"', () => {

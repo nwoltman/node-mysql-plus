@@ -6,7 +6,7 @@ const MySQLPlus = require('../../lib/MySQLPlus');
 const config = require('../config');
 const sinon = require('sinon');
 
-const Type = MySQLPlus.Type;
+const ColTypes = MySQLPlus.ColTypes;
 
 describe('MySQLPlus', function() {
 
@@ -15,17 +15,17 @@ describe('MySQLPlus', function() {
   const bigTableName = 'big_table';
   const bigTableSchema = {
     columns: {
-      id: Type.bigint().unsigned().notNull().primaryKey().autoIncrement(),
-      name: Type.varchar(63),
-      email: Type.varchar(255).notNull().unique(),
-      password: Type.char(40).notNull(),
-      letter: Type.char(1).default('a').index(),
-      created: Type.datetime().default('CURRENT_TIMESTAMP'),
-      updated: Type.datetime().onUpdateCurrentTimestamp(),
-      weirdtext: Type.tinytext().charset('ascii').collate('ascii_bin'),
-      zfill: Type.smallint().zerofill(),
-      myenum: Type.enum('A', 'B', 'C').default('A'),
-      myset: Type.set('ONE', 'TWO'),
+      id: ColTypes.bigint().unsigned().notNull().primaryKey().autoIncrement(),
+      name: ColTypes.varchar(63),
+      email: ColTypes.varchar(255).notNull().unique(),
+      password: ColTypes.char(40).notNull(),
+      letter: ColTypes.char(1).default('a').index(),
+      created: ColTypes.datetime().default('CURRENT_TIMESTAMP'),
+      updated: ColTypes.datetime().onUpdateCurrentTimestamp(),
+      weirdtext: ColTypes.tinytext().charset('ascii').collate('ascii_bin'),
+      zfill: ColTypes.smallint().zerofill(),
+      myenum: ColTypes.enum('A', 'B', 'C').default('A'),
+      myset: ColTypes.set('ONE', 'TWO'),
     },
     uniqueKeys: [
       ['name', 'letter'],
@@ -56,8 +56,8 @@ describe('MySQLPlus', function() {
   const autoIncTableName = 'auto_inc_table';
   const autoIncTableSchema = {
     columns: {
-      id: Type.bigint().unsigned().primaryKey().autoIncrement(),
-      number: Type.mediumint(),
+      id: ColTypes.bigint().unsigned().primaryKey().autoIncrement(),
+      number: ColTypes.mediumint(),
     },
     indexes: ['number'],
     autoIncrement: 5000000000,
@@ -72,8 +72,8 @@ describe('MySQLPlus', function() {
 
   const autoIncTableMigratedSchema = {
     columns: {
-      id: Type.bigint().unsigned().primaryKey().autoIncrement(),
-      number: Type.mediumint(),
+      id: ColTypes.bigint().unsigned().primaryKey().autoIncrement(),
+      number: ColTypes.mediumint(),
     },
     indexes: ['number'],
     autoIncrement: 6000000000,
@@ -89,9 +89,9 @@ describe('MySQLPlus', function() {
   const pivotTableName = 'pivot_table';
   const pivotTableSchema = {
     columns: {
-      autoID: Type.bigint().unsigned(),
-      autoNumber: Type.mediumint(),
-      bigID: Type.bigint().unsigned().index(),
+      autoID: ColTypes.bigint().unsigned(),
+      autoNumber: ColTypes.mediumint(),
+      bigID: ColTypes.bigint().unsigned().index(),
     },
     primaryKey: ['autoID', 'autoNumber'],
     indexes: ['autoNumber'],
@@ -125,11 +125,11 @@ describe('MySQLPlus', function() {
   const columnsTableName = 'columns_table';
   const columnsTableSchema = {
     columns: {
-      id: Type.int().unsigned().notNull().primaryKey().autoIncrement(),
-      uuid: Type.char(44).unique(),
-      email: Type.char(255),
-      fp: Type.float(7, 4),
-      dropme: Type.blob(),
+      id: ColTypes.int().unsigned().notNull().primaryKey().autoIncrement(),
+      uuid: ColTypes.char(44).unique(),
+      email: ColTypes.char(255),
+      fp: ColTypes.float(7, 4),
+      dropme: ColTypes.blob(),
     },
     indexes: ['email'],
   };
@@ -147,11 +147,11 @@ describe('MySQLPlus', function() {
 
   const columnsTableMigratedSchema = {
     columns: {
-      id: Type.bigint(5).unsigned().notNull().primaryKey().autoIncrement(),
-      uuid: Type.char(44).unique(),
-      email: Type.varchar(255).notNull(),
-      fp: Type.float(8, 3),
-      added: Type.text(),
+      id: ColTypes.bigint(5).unsigned().notNull().primaryKey().autoIncrement(),
+      uuid: ColTypes.char(44).unique(),
+      email: ColTypes.varchar(255).notNull(),
+      fp: ColTypes.float(8, 3),
+      added: ColTypes.text(),
     },
     uniqueKeys: ['email'],
   };
@@ -170,8 +170,8 @@ describe('MySQLPlus', function() {
   const primaryKeyTableName = 'pk_table';
   const primaryKeyTableSchema = {
     columns: {
-      a: Type.int(),
-      b: Type.char(1),
+      a: ColTypes.int(),
+      b: ColTypes.char(1),
     },
     primaryKey: ['a', 'b'],
   };
@@ -184,8 +184,8 @@ describe('MySQLPlus', function() {
 
   const primaryKeyTableMigratedSchema = {
     columns: {
-      a: Type.int(),
-      b: Type.char(1),
+      a: ColTypes.int(),
+      b: ColTypes.char(1),
     },
     primaryKey: 'a',
   };
@@ -199,9 +199,9 @@ describe('MySQLPlus', function() {
   const uniqueKeysTableName = 'unique_table';
   const uniqueKeysTableSchema = {
     columns: {
-      a: Type.int(),
-      b: Type.bigint(),
-      c: Type.char(1),
+      a: ColTypes.int(),
+      b: ColTypes.bigint(),
+      c: ColTypes.char(1),
     },
     uniqueKeys: [
       ['a', 'b'],
@@ -219,9 +219,9 @@ describe('MySQLPlus', function() {
 
   const uniqueKeysTableMigragedSchema = {
     columns: {
-      a: Type.int(),
-      b: Type.bigint(),
-      c: Type.char(1),
+      a: ColTypes.int(),
+      b: ColTypes.bigint(),
+      c: ColTypes.char(1),
     },
     uniqueKeys: [
       ['a', 'c'],
@@ -240,9 +240,9 @@ describe('MySQLPlus', function() {
   const indexesTableName = 'indexes_table';
   const indexesTableSchema = {
     columns: {
-      a: Type.int(),
-      b: Type.bigint(),
-      c: Type.char(1),
+      a: ColTypes.int(),
+      b: ColTypes.bigint(),
+      c: ColTypes.char(1),
     },
     indexes: [
       ['a', 'b'],
@@ -260,9 +260,9 @@ describe('MySQLPlus', function() {
 
   const indexesTableMigragedSchema = {
     columns: {
-      a: Type.int(),
-      b: Type.bigint(),
-      c: Type.char(1),
+      a: ColTypes.int(),
+      b: ColTypes.bigint(),
+      c: ColTypes.char(1),
     },
     indexes: [
       ['a', 'c'],
@@ -281,11 +281,11 @@ describe('MySQLPlus', function() {
   const foreignKeysTableName = 'fk_table';
   const foreignKeysTableSchema = {
     columns: {
-      a: Type.bigint().unsigned(),
-      b: Type.bigint().unsigned(),
-      c: Type.bigint().unsigned(),
-      ai: Type.int(),
-      bi: Type.bigint(),
+      a: ColTypes.bigint().unsigned(),
+      b: ColTypes.bigint().unsigned(),
+      c: ColTypes.bigint().unsigned(),
+      ai: ColTypes.int(),
+      bi: ColTypes.bigint(),
     },
     indexes: ['b', 'c', ['ai', 'bi']],
     foreignKeys: {
@@ -319,11 +319,11 @@ describe('MySQLPlus', function() {
 
   const foreignKeysTableMigratedSchema = {
     columns: {
-      a: Type.bigint().unsigned(),
-      b: Type.bigint().unsigned(),
-      c: Type.bigint().unsigned(),
-      ai: Type.int(),
-      ci: Type.char(1),
+      a: ColTypes.bigint().unsigned(),
+      b: ColTypes.bigint().unsigned(),
+      c: ColTypes.bigint().unsigned(),
+      ai: ColTypes.int(),
+      ci: ColTypes.char(1),
     },
     indexes: ['a', 'c', ['ai', 'ci']],
     foreignKeys: {
@@ -358,7 +358,7 @@ describe('MySQLPlus', function() {
   const optionsTableName = 'options_table';
   const optionsTableSchema = {
     columns: {
-      id: Type.int(),
+      id: ColTypes.int(),
     },
     engine: 'MyISAM',
     autoIncrement: 10,
@@ -374,7 +374,7 @@ describe('MySQLPlus', function() {
 
   const optionsTableMigratedSchema = {
     columns: {
-      id: Type.int(),
+      id: ColTypes.int(),
     },
     engine: 'InnoDB',
     charset: 'latin1',
@@ -390,11 +390,11 @@ describe('MySQLPlus', function() {
   const textTableName = 'text_table';
   const textTableSchema = {
     columns: {
-      a: Type.char(1),
-      b: Type.char(1).charset('utf8mb4'),
-      c: Type.char(1).charset('utf8mb4').collate('utf8mb4_unicode_ci'),
-      d: Type.char(1).collate('utf8mb4_unicode_ci'),
-      e: Type.char(1).collate('utf8mb4_bin'),
+      a: ColTypes.char(1),
+      b: ColTypes.char(1).charset('utf8mb4'),
+      c: ColTypes.char(1).charset('utf8mb4').collate('utf8mb4_unicode_ci'),
+      d: ColTypes.char(1).collate('utf8mb4_unicode_ci'),
+      e: ColTypes.char(1).collate('utf8mb4_bin'),
     },
     charset: 'utf8mb4',
     collate: 'utf8mb4_unicode_ci',

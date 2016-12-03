@@ -58,9 +58,9 @@ const db = require('./db');
 
 const userTable = db.defineTable('user', {
   columns: {
-    id: db.Type.bigint().unsigned().notNull().primaryKey().autoIncrement(),
-    email: db.Type.varchar(255).notNull().unique(),
-    name: db.Type.varchar(63).notNull(),
+    id: db.ColTypes.bigint().unsigned().notNull().primaryKey().autoIncrement(),
+    email: db.ColTypes.varchar(255).notNull().unique(),
+    name: db.ColTypes.varchar(63).notNull(),
   },
   autoIncrement: 5000000000,
 });
@@ -150,9 +150,9 @@ Columns are defined using the `column` property which is an object where the key
 ```js
 {
   columns: {
-    id: pool.Type.bigint().unsigned().notNull().primaryKey().autoIncrement(),
-    email: pool.Type.varchar(255).notNull().unique(),
-    points: pool.Type.int().unsigned().default(0),
+    id: pool.ColTypes.bigint().unsigned().notNull().primaryKey().autoIncrement(),
+    email: pool.ColTypes.varchar(255).notNull().unique(),
+    points: pool.ColTypes.int().unsigned().default(0),
   }
 }
 ```
@@ -291,7 +291,7 @@ These schema properties configure table-level options. The options currently sup
 
 ## Column Types
 
-[`mysql.Type`](#module_mysql-plus..Type) and [`pool.Type`](#PoolPlus+Type) both expose the following methods:
+[`mysql.ColTypes`](#module_mysql-plus..ColTypes) and [`pool.ColTypes`](#PoolPlus+ColTypes) both expose the following methods:
 
 + `tinyint([m])`
 + `smallint([m])`

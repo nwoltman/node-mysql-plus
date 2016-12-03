@@ -58,9 +58,9 @@ const db = require('./db');
 
 const userTable = db.defineTable('user', {
   columns: {
-    id: db.Type.bigint().unsigned().notNull().primaryKey().autoIncrement(),
-    email: db.Type.varchar(255).notNull().unique(),
-    name: db.Type.varchar(63).notNull(),
+    id: db.ColTypes.bigint().unsigned().notNull().primaryKey().autoIncrement(),
+    email: db.ColTypes.varchar(255).notNull().unique(),
+    name: db.ColTypes.varchar(63).notNull(),
   },
   autoIncrement: 5000000000,
 });
@@ -141,7 +141,8 @@ This module.
 **See**: [mysql](https://github.com/mysqljs/mysql#mysql)  
 
 * [mysql-plus](#module_mysql-plus) ⇐ <code>mysql</code>
-    * [~Type](#module_mysql-plus..Type)
+    * ~~[~Type](#module_mysql-plus..Type)~~
+    * [~ColTypes](#module_mysql-plus..ColTypes)
     * [~createPool(config)](#module_mysql-plus..createPool) ⇒ <code>[PoolPlus](#PoolPlus)</code>
 
 
@@ -149,7 +150,18 @@ This module.
 
 <a name="module_mysql-plus..Type"></a>
 
-### mysql-plus~Type
+### ~~mysql-plus~Type~~
+***Deprecated***
+
+A namespace that provides the column type methods used to define columns.
+
+**See**: [`mysqlPlus.ColTypes`](#module_mysql-plus..ColTypes)  
+
+---
+
+<a name="module_mysql-plus..ColTypes"></a>
+
+### mysql-plus~ColTypes
 A namespace that provides the column type methods used to define columns.
 
 **See**: [Column Types](#column-types)  
@@ -159,8 +171,8 @@ const mysql = require('mysql-plus');
 const pool = mysql.createPool(config);
 const userTable = pool.defineTable('user', {
   columns: {
-    id: mysql.Type.bigint().unsigned().notNull().primaryKey(),
-    created: mysql.Type.datetime(),
+    id: mysql.ColTypes.bigint().unsigned().notNull().primaryKey(),
+    created: mysql.ColTypes.datetime(),
   }
 });
 ```
@@ -210,7 +222,8 @@ A class that extends the `mysql` module's `Pool` class with the ability to defin
 **See**: [Pool](https://github.com/mysqljs/mysql#pooling-connections)  
 
 * [PoolPlus](#PoolPlus) ⇐ <code>Pool</code>
-    * [.Type](#PoolPlus+Type)
+    * ~~[.Type](#PoolPlus+Type)~~
+    * [.ColTypes](#PoolPlus+ColTypes)
     * [.defineTable(name, schema, [migrationStrategy])](#PoolPlus+defineTable) ⇒ <code>[MySQLTable](#MySQLTable)</code>
     * [.sync(cb)](#PoolPlus+sync) ⇒ <code>void</code>
 
@@ -219,20 +232,31 @@ A class that extends the `mysql` module's `Pool` class with the ability to defin
 
 <a name="PoolPlus+Type"></a>
 
-### poolPlus.Type
+### ~~poolPlus.Type~~
+***Deprecated***
+
 A namespace that provides the column type methods used to define columns.
-The exact same thing as [`mysql.Type`](#module_mysql-plus..Type).
+
+**See**: [`poolPlus.ColTypes`](#PoolPlus+ColTypes)  
+
+---
+
+<a name="PoolPlus+ColTypes"></a>
+
+### poolPlus.ColTypes
+A namespace that provides the column type methods used to define columns.
+The exact same thing as [`mysqlPlus.ColTypes`](#module_mysql-plus..ColTypes).
 Just here for convenience.
 
 **See**: [Column Types](#column-types)  
 **Example**:
 ```js
 const pool = mysql.createPool(config);
-const Type = pool.Type;
+const ColTypes = pool.ColTypes;
 const userTable = pool.defineTable('user', {
   columns: {
-    id: Type.bigint().unsigned().notNull().primaryKey(),
-    created: Type.datetime(),
+    id: ColTypes.bigint().unsigned().notNull().primaryKey(),
+    created: ColTypes.datetime(),
   }
 });
 ```
@@ -258,9 +282,9 @@ Defines a table to be created or updated in the database.
 ```js
 const userTable = pool.defineTable('user', {
   columns: {
-    id: pool.Type.bigint().unsigned().notNull().primaryKey().autoIncrement(),
-    email: pool.Type.varchar(255).notNull().unique(),
-    created: pool.Type.datetime(),
+    id: pool.ColTypes.bigint().unsigned().notNull().primaryKey().autoIncrement(),
+    email: pool.ColTypes.varchar(255).notNull().unique(),
+    created: pool.ColTypes.datetime(),
   }
 });
 ```
@@ -670,9 +694,9 @@ Columns are defined using the `column` property which is an object where the key
 ```js
 {
   columns: {
-    id: pool.Type.bigint().unsigned().notNull().primaryKey().autoIncrement(),
-    email: pool.Type.varchar(255).notNull().unique(),
-    points: pool.Type.int().unsigned().default(0),
+    id: pool.ColTypes.bigint().unsigned().notNull().primaryKey().autoIncrement(),
+    email: pool.ColTypes.varchar(255).notNull().unique(),
+    points: pool.ColTypes.int().unsigned().default(0),
   }
 }
 ```
@@ -811,7 +835,7 @@ These schema properties configure table-level options. The options currently sup
 
 ## Column Types
 
-[`mysql.Type`](#module_mysql-plus..Type) and [`pool.Type`](#PoolPlus+Type) both expose the following methods:
+[`mysql.ColTypes`](#module_mysql-plus..ColTypes) and [`pool.ColTypes`](#PoolPlus+ColTypes) both expose the following methods:
 
 + `tinyint([m])`
 + `smallint([m])`
