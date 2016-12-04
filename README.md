@@ -879,7 +879,10 @@ All of these methods return a `ColumnDefinition` class.
 This class is what is used to define the column's attributes. These attributes can be set using the following methods:
 
 + `notNull()` - Adds the `NOT NULL` attribute
-+ `default(value)` - Sets the column's `DEFAULT` value
++ `default(value)` - Sets the column's `DEFAULT` value (escapes the input value).
+  + Example: `.default('Hello')` produces `DEFAULT 'Hello'`
++ `defaultRaw(value: string)` - Sets the column's `DEFAULT` value (does not escape the input value).
+  + Example: `.defaultRaw('NOW()')` produces `DEFAULT NOW()`
 + `primaryKey()` - Declares the column to be the table's primary key
 + `unique()` - Declares the column as a unique index
 + `index()` - Declares the column as an index
