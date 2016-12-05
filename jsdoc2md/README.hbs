@@ -118,19 +118,19 @@ The possible migration strategies are as follows:
 
 In addition to being the default in a production environment, the `safe` strategy is the only allowed strategy in production. This means that if `alter` or `drop` are used anywhere to configure your connections or tables, they will be ignored and `safe` will be used instead. However, if you really want to use `alter` in production, you may set the `allowAlterInProduction` option to `true` in your [Pool configuration](#mysql-pluscreatepoolconfig--poolplus).
 
-#### safe
+### safe
 
-Only allows newly-defined tables to be created. Existing tables are never altered or dropped.
+Only allows newly-defined tables to be created. Existing tables are never changed in any way.
 
-#### alter
+### alter
 
 Specifies that newly-defined tables will be created, existing tables that are no longer defined will be dropped, and existing tables that have a different definition from what is found in the database will be migrated with minimal data-loss.
 
-**When renaming table columns**, you must specify the column's old name in the [column definition](#columndefinition) with the `.oldName('name')` method. If you don't, the column will be dropped and you will lose all of the data that was in that column.
+**To rename table columns**, you must specify the column's old name in the [column definition](#columndefinition) with the `.oldName('name')` method. If you don't, the column will be dropped and you will lose all of the data that was in that column.
 
-**Note:** It is up to you to understand how changes to an existing table might affect the data. For example, changing a BIGINT column to a MEDIUMINT will cause integers greater than what can fit into a MEDIUMINT to wrap around and essentially become a different value (and you won't be able to recover the original value). Furthermore, some changes to tables cannot be done and will cause an error. An example of this would be adding a column with the `NOT NULL` attribute to a non-empty table without specifying a default value.
+**Note:** It is up to you to understand how changes to an existing table might affect the data. For example, changing a DOUBLE column to a FLOAT will cause the precision of the value to be reduced so you may lose some significant digits (i.e. `1.123456789` would be reduced to `1.12346`). Furthermore, some changes to tables cannot be done and will cause an error. An example of this would be adding a column with the `NOT NULL` attribute to a non-empty table without specifying a default value.
 
-#### drop
+### drop
 
 All defined tables will be dropped and recreated.
 
@@ -352,6 +352,8 @@ Additionally, certain column types have type-specific methods. These are as foll
 
 #### NumericColumnDefinition
 
+Methods:
+
 + `unsigned()` - Adds the `unsigned` attribute
 + `zerofill()` - Adds the `zerofill` attribute
 + `autoIncrement()` - Adds the `AUTO_INCREMENT` attribute
@@ -373,6 +375,8 @@ Compatible types:
 
 #### TextColumnDefinition
 
+Methods:
+
 + `charset(value)` - Sets the column's character set
 + `collate(value)` - Sets the column's collation
 
@@ -388,6 +392,8 @@ Compatible types:
 + `set`
 
 #### UpdatableTimeColumnDefinition
+
+Methods:
 
 + `onUpdateCurrentTimestamp()` - Adds the `ON UPDATE CURRENT_TIMESTAMP` attribute
 
