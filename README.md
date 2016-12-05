@@ -579,7 +579,7 @@ userTable.update("`word` = CONCAT('prefix', `word`)", (err, result) => {
   // prefix added to all words!
 });
 
-userTable.update('`points` = `points` + ? WHERE `winner` = ?', [1, 1] (err, result) => {
+userTable.update('`points` = `points` + ? WHERE `winner` = ?', [1, 1], (err, result) => {
   if (err) throw err;
   // 1 point added to all winners!
 });
