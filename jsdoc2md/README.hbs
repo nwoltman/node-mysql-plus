@@ -126,7 +126,9 @@ Only allows newly-defined tables to be created. Existing tables are never altere
 
 Specifies that newly-defined tables will be created, existing tables that are no longer defined will be dropped, and existing tables that have a different definition from what is found in the database will be migrated with minimal data-loss.
 
-**Note:** The migration cannot always retain data. Currently, the only known example is that renaming a column will not preserve its data (and it's possible that there are others). For this reason, and the fact that there is no reasonable way to test how well the migration will work on a live production database, using the `alter` strategy in production is discouraged.
+**When renaming table columns**, you must specify the column's old name in the [column definition](#columndefinition) with the `.oldName('name')` method. If you don't, the column will be dropped and you will lose all of the data that was in that column.
+
+**Note:** It is up to you to understand how changes to an existing table might affect the data. For example, changing a BIGINT column to a MEDIUMINT will cause integers greater than what can fit into a MEDIUMINT to wrap around and essentially become a different value (and you won't be able to recover the original value). Furthermore, some changes to tables cannot be done and will cause an error. An example of this would be adding a column with the `NOT NULL` attribute to a non-empty table without specifying a default value.
 
 #### drop
 
@@ -342,6 +344,7 @@ This class is what is used to define the column's attributes. These attributes c
 + `primaryKey()` - Declares the column to be the table's primary key
 + `unique()` - Declares the column as a unique index
 + `index()` - Declares the column as an index
++ `oldName(name: string)` - The previous/current column name. If a column with this name exists, it will be renamed to the column name associated with the column defintion so that the data in that column will not be lost.
 
 All `ColumnDefinition` methods return the `ColumnDefinition`, so they are chainable.
 

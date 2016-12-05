@@ -152,6 +152,12 @@ describe('ColumnDefinitions', () => {
     b = ColumnDefinitions.int();
     a.$equals(b).should.be.true();
     b.$equals(a).should.be.true();
+
+    // Setting an old name doesn't affect equality
+    a = ColumnDefinitions.int().oldName('old_a');
+    b = ColumnDefinitions.int().oldName('old_b');
+    a.$equals(b).should.be.true();
+    b.$equals(a).should.be.true();
   });
 
 
@@ -445,6 +451,20 @@ describe('ColumnDefinitions', () => {
 
       cd = ColumnDefinitions.blob().primaryKey();
       cd.$toSQL().should.equal('blob NOT NULL');
+    });
+
+    it('should allow columns to have their old column name specified but not change the SQL', () => {
+      ColumnDefinitions.int().oldName('old').$toSQL()
+        .should.equal(ColumnDefinitions.int().$toSQL());
+
+      ColumnDefinitions.char().oldName('old').$toSQL()
+        .should.equal(ColumnDefinitions.char().$toSQL());
+
+      ColumnDefinitions.blob().oldName('old').$toSQL()
+        .should.equal(ColumnDefinitions.blob().$toSQL());
+
+      ColumnDefinitions.timestamp().oldName('old').$toSQL()
+        .should.equal(ColumnDefinitions.timestamp().$toSQL());
     });
 
   });

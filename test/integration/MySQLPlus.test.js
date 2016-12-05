@@ -125,21 +125,29 @@ describe('MySQLPlus', function() {
   const columnsTableName = 'columns_table';
   const columnsTableSchema = {
     columns: {
-      id: ColTypes.int().unsigned().notNull().primaryKey().autoIncrement(),
+      id: ColTypes.int().unsigned().notNull().primaryKey(),
       uuid: ColTypes.char(44).unique(),
       email: ColTypes.char(255),
       fp: ColTypes.float(7, 4),
       dropme: ColTypes.blob(),
+      renameme: ColTypes.tinyint(),
+      changeme: ColTypes.tinyint(),
+      neverchange: ColTypes.tinyint().oldName('fake_column'),
+      norename: ColTypes.tinyint().oldName('fake_column'),
     },
     indexes: ['email'],
   };
   const columnsTableExpectedSQL =
     'CREATE TABLE `columns_table` (\n' +
-    '  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,\n' +
+    '  `id` int(10) unsigned NOT NULL,\n' +
     '  `uuid` char(44) DEFAULT NULL,\n' +
     '  `email` char(255) DEFAULT NULL,\n' +
     '  `fp` float(7,4) DEFAULT NULL,\n' +
     '  `dropme` blob,\n' +
+    '  `renameme` tinyint(4) DEFAULT NULL,\n' +
+    '  `changeme` tinyint(4) DEFAULT NULL,\n' +
+    '  `neverchange` tinyint(4) DEFAULT NULL,\n' +
+    '  `norename` tinyint(4) DEFAULT NULL,\n' +
     '  PRIMARY KEY (`id`),\n' +
     '  UNIQUE KEY `unique_columns_table_uuid` (`uuid`),\n' +
     '  KEY `index_columns_table_email` (`email`)\n' +
@@ -147,20 +155,28 @@ describe('MySQLPlus', function() {
 
   const columnsTableMigratedSchema = {
     columns: {
-      id: ColTypes.bigint(5).unsigned().notNull().primaryKey().autoIncrement(),
+      id: ColTypes.bigint(5).unsigned().notNull().primaryKey(),
       uuid: ColTypes.char(44).unique(),
       email: ColTypes.varchar(255).notNull(),
       fp: ColTypes.float(8, 3),
+      renamed: ColTypes.tinyint().oldName('renameme'),
+      changed: ColTypes.smallint().oldName('changeme'),
+      neverchange: ColTypes.tinyint().oldName('fake_column'),
+      norename: ColTypes.smallint().oldName('fake_column'),
       added: ColTypes.text(),
     },
     uniqueKeys: ['email'],
   };
   const columnsTableMigratedExpectedSQL =
     'CREATE TABLE `columns_table` (\n' +
-    '  `id` bigint(5) unsigned NOT NULL AUTO_INCREMENT,\n' +
+    '  `id` bigint(5) unsigned NOT NULL,\n' +
     '  `uuid` char(44) DEFAULT NULL,\n' +
     '  `email` varchar(255) NOT NULL,\n' +
     '  `fp` float(8,3) DEFAULT NULL,\n' +
+    '  `renamed` tinyint(4) DEFAULT NULL,\n' +
+    '  `changed` smallint(6) DEFAULT NULL,\n' +
+    '  `neverchange` tinyint(4) DEFAULT NULL,\n' +
+    '  `norename` smallint(6) DEFAULT NULL,\n' +
     '  `added` text,\n' +
     '  PRIMARY KEY (`id`),\n' +
     '  UNIQUE KEY `unique_columns_table_email` (`email`),\n' +
@@ -727,7 +743,16 @@ describe('MySQLPlus', function() {
       pool.defineTable(indexesTableName, indexesTableMigragedSchema);
       pool.defineTable(foreignKeysTableName, foreignKeysTableMigratedSchema);
       pool.defineTable(optionsTableName, optionsTableMigratedSchema);
-      pool.sync(done);
+
+      // Insert data into the columns table before syncing the table changes so
+      // we can check if the data is still there after some columns get renamed
+      pool.query(
+        `INSERT INTO ${columnsTableName} (id, email, renameme, changeme) VALUES (1, 'a', 1, 2), (2, 'b', 3, 4)`,
+        err => {
+          if (err) throw err;
+          pool.sync(done);
+        }
+      );
     });
 
     after(done => {
@@ -814,6 +839,22 @@ describe('MySQLPlus', function() {
           result[0]['Create Table'].should.equal(autoIncTableMigratedExpectedSQL);
           tempPool.end(done);
         });
+      });
+    });
+
+    it('should not lose data when renaming columns', done => {
+      pool.query(`SELECT renamed, changed FROM ${columnsTableName}`, (err, rows) => {
+        if (err) throw err;
+
+        rows.length.should.equal(2);
+
+        rows[0].renamed.should.equal(1);
+        rows[0].changed.should.equal(2);
+
+        rows[1].renamed.should.equal(3);
+        rows[1].changed.should.equal(4);
+
+        done();
       });
     });
 
