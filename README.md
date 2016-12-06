@@ -419,7 +419,7 @@ A class that provides convenient methods for performing queries.
 * [MySQLTable](#MySQLTable)
     * ~~[.tableName](#MySQLTable+tableName) : <code>string</code>~~
     * [.name](#MySQLTable+name) : <code>string</code>
-    * [.schema](#MySQLTable+schema) : <code>string</code>
+    * [.schema](#MySQLTable+schema) : <code>Object</code>
     * [.pool](#MySQLTable+pool) : <code>[PoolPlus](#PoolPlus)</code>
     * [.select(columns, [sqlString], [values], [cb])](#MySQLTable+select) ⇒ <code>Promise</code>
     * [.insert(data, [sqlString], [values], [cb])](#MySQLTable+insert) ⇒ <code>Promise</code>
@@ -452,7 +452,7 @@ The table's name (as passed to [`poolPlus.defineTable()`](#PoolPlus+defineTable)
 
 <a name="MySQLTable+schema"></a>
 
-### mySQLTable.schema : <code>string</code>
+### mySQLTable.schema : <code>Object</code>
 The table's schema (as passed to [`poolPlus.defineTable()`](#PoolPlus+defineTable)).
 
 
