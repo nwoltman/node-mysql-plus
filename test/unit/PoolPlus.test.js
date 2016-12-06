@@ -194,6 +194,45 @@ describe('PoolPlus', () => {
   });
 
 
+  describe('#pquery()', () => {
+
+    it('should behave like #query() when passed a callback', () => {
+      const expectedSql = 'SELECT 1 as ??';
+      const expectedValues = ['solution'];
+      function expectedCb() { /* no-op */ }
+
+      sinon.stub(pool, 'query', function(sql, values, cb) {
+        sql.should.equal(expectedSql);
+        values.should.equal(expectedValues);
+        cb.should.equal(expectedCb);
+      });
+
+      pool.pquery(expectedSql, expectedValues, expectedCb);
+      pool.query.should.be.called();
+
+      pool.query.restore();
+    });
+
+    it('should return a working Promise', done => {
+      pool.pquery('SELECT "a" as solution')
+        .then(results => {
+          results.length.should.equal(1);
+          results[0].solution.should.equal('a');
+        })
+        .catch(done)
+        .then(() => pool.pquery('SELECT "a" as ??'), ['solution'])
+        .then(results => {
+          results.length.should.equal(1);
+          results[0].solution.should.equal('a');
+        })
+        .then(() => pool.pquery('SELECT a as solution'))
+        .then(() => done(new Error()))
+        .catch(() => done());
+    });
+
+  });
+
+
   describe('when defining tables', () => {
 
     var MockPool;

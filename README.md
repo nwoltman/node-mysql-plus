@@ -144,6 +144,7 @@ This module.
     * ~~[~Type](#module_mysql-plus..Type)~~
     * [~ColTypes](#module_mysql-plus..ColTypes)
     * [~createPool(config)](#module_mysql-plus..createPool) ⇒ <code>[PoolPlus](#PoolPlus)</code>
+    * [~queryCallback](#module_mysql-plus..queryCallback) : <code>function</code>
 
 
 ---
@@ -213,6 +214,22 @@ pool.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
 
 ---
 
+<a name="module_mysql-plus..queryCallback"></a>
+
+### mysql-plus~queryCallback : <code>function</code>
+A function called with the results of a query.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| error | <code>?Error</code> | An `Error` object if an error occurred; `null` otherwise. |
+| results | <code>Array</code> &#124; <code>Object</code> | The results of the query. |
+| fields | <code>Array.&lt;Object&gt;</code> | Information about the returned results' fields (if any). |
+
+**See**: [https://github.com/mysqljs/mysql#performing-queries](https://github.com/mysqljs/mysql#performing-queries)  
+
+---
+
 <a name="PoolPlus"></a>
 
 ## PoolPlus ⇐ <code>Pool</code>
@@ -226,6 +243,7 @@ A class that extends the `mysql` module's `Pool` class with the ability to defin
     * [.ColTypes](#PoolPlus+ColTypes)
     * [.defineTable(name, schema, [migrationStrategy])](#PoolPlus+defineTable) ⇒ <code>[MySQLTable](#MySQLTable)</code>
     * [.sync(cb)](#PoolPlus+sync) ⇒ <code>void</code>
+    * [.pquery(sql, [values], [cb])](#PoolPlus+pquery) ⇒ <code>Promise</code>
 
 
 ---
@@ -315,6 +333,45 @@ pool.sync(function(err) {
 
 ---
 
+<a name="PoolPlus+pquery"></a>
+
+### poolPlus.pquery(sql, [values], [cb]) ⇒ <code>Promise</code>
+The same `query` method as on the original mysql pool except when not passed a
+callback it returns a promise that resolves with the results of the query.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| sql | <code>string</code> &#124; <code>Object</code> | An SqlString or options object. |
+| [values] | <code>Array</code> | Values to replace placeholders in the SqlString. |
+| [cb] | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | An optional callback that gets called with     the results of the query. |
+
+**Returns**: <code>?Promise</code> - If the `cb` parameter is omitted, a promise that will resolve with the results
+    of the query is returned.  
+**See**: [https://github.com/mysqljs/mysql#performing-queries](https://github.com/mysqljs/mysql#performing-queries)  
+**Example**: Promise example
+```js
+pool.pquery('SELECT * FROM `books` WHERE `author` = "David"')
+  .then((results) => {
+    // results will contain the results of the query
+  })
+  .catch((error) => {
+    // error will be the Error that occurred during the query
+  });
+```
+
+**Example**: Callback example
+```js
+pool.pquery('SELECT * FROM `books` WHERE `author` = "David"', (error, results, fields) => {
+  // error will be an Error if one occurred during the query
+  // results will contain the results of the query
+  // fields will contain information about the returned results fields (if any)
+});
+```
+
+
+---
+
 <a name="MySQLTable"></a>
 
 ## MySQLTable
@@ -323,20 +380,17 @@ A class that provides convenient methods for performing queries.
 **See**: [https://github.com/mysqljs/mysql#performing-queries](https://github.com/mysqljs/mysql#performing-queries)  
 
 * [MySQLTable](#MySQLTable)
-    * _instance_
-        * ~~[.tableName](#MySQLTable+tableName) : <code>string</code>~~
-        * [.name](#MySQLTable+name) : <code>string</code>
-        * [.schema](#MySQLTable+schema) : <code>string</code>
-        * [.pool](#MySQLTable+pool) : <code>[PoolPlus](#PoolPlus)</code>
-        * [.select(columns, [sqlString], [values], cb)](#MySQLTable+select) ⇒ <code>void</code>
-        * [.insert(data, [sqlString], [values], cb)](#MySQLTable+insert) ⇒ <code>void</code>
-        * ~~[.insertIgnore(data, cb)](#MySQLTable+insertIgnore) ⇒ <code>void</code>~~
-        * ~~[.replace(data, cb)](#MySQLTable+replace) ⇒ <code>void</code>~~
-        * [.update([data], [sqlString], [values], cb)](#MySQLTable+update) ⇒ <code>void</code>
-        * [.delete([sqlString], [values], cb)](#MySQLTable+delete) ⇒ <code>void</code>
-        * [.query()](#MySQLTable+query) ⇒ <code>void</code>
-    * _inner_
-        * [~queryCallback](#MySQLTable..queryCallback) : <code>function</code>
+    * ~~[.tableName](#MySQLTable+tableName) : <code>string</code>~~
+    * [.name](#MySQLTable+name) : <code>string</code>
+    * [.schema](#MySQLTable+schema) : <code>string</code>
+    * [.pool](#MySQLTable+pool) : <code>[PoolPlus](#PoolPlus)</code>
+    * [.select(columns, [sqlString], [values], cb)](#MySQLTable+select) ⇒ <code>void</code>
+    * [.insert(data, [sqlString], [values], cb)](#MySQLTable+insert) ⇒ <code>void</code>
+    * ~~[.insertIgnore(data, cb)](#MySQLTable+insertIgnore) ⇒ <code>void</code>~~
+    * ~~[.replace(data, cb)](#MySQLTable+replace) ⇒ <code>void</code>~~
+    * [.update([data], [sqlString], [values], cb)](#MySQLTable+update) ⇒ <code>void</code>
+    * [.delete([sqlString], [values], cb)](#MySQLTable+delete) ⇒ <code>void</code>
+    * [.query()](#MySQLTable+query) ⇒ <code>void</code>
 
 
 ---
@@ -386,7 +440,7 @@ Selects data from the table.
 | columns | <code>Array.&lt;string&gt;</code> &#124; <code>string</code> | An array of columns to select or a custom `SELECT` string. |
 | [sqlString] | <code>string</code> | SQL to be appended to the query after the `FROM table` clause. |
 | [values] | <code>Array</code> | Values to replace the placeholders in `sqlString` and `columns`. |
-| cb | <code>function</code> | A callback that gets called with the results of the query. |
+| cb | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | A callback that gets called with the results of the query. |
 
 **Example**: Select all columns
 ```js
@@ -447,7 +501,7 @@ Inserts data into a new row in the table.
 | data | <code>Object</code> &#124; <code>Array</code> | An object of (column name)-(data value) pairs or     an array containing either 1) an array of arrays of data values or 2) an array     of column names and the data array from 1). |
 | [sqlString] | <code>string</code> | SQL to be appended to the query.<br>This would only be used to add     an `ON DUPLICATE KEY UPDATE` clause. |
 | [values] | <code>Array</code> | Values to replace the placeholders in `sqlString`. |
-| cb | <code>[queryCallback](#MySQLTable..queryCallback)</code> | A callback that gets called with the results of the query. |
+| cb | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | A callback that gets called with the results of the query. |
 
 **Example**: Insert a new user
 ```js
@@ -510,7 +564,7 @@ value (if there is one) may be incremented anyway due to a bug in MySQL.
 | Param | Type | Description |
 | --- | --- | --- |
 | data | <code>Object</code> | An object of (column name)-(data value) pairs. |
-| cb | <code>[queryCallback](#MySQLTable..queryCallback)</code> | A callback that gets called with the results of the query. |
+| cb | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | A callback that gets called with the results of the query. |
 
 **Example**:
 ```js
@@ -534,7 +588,7 @@ Replaces a row in the table with new data.
 | Param | Type | Description |
 | --- | --- | --- |
 | data | <code>Object</code> | An object of (column name)-(data value) pairs. |
-| cb | <code>[queryCallback](#MySQLTable..queryCallback)</code> | A callback that gets called with the results of the query. |
+| cb | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | A callback that gets called with the results of the query. |
 
 **Example**:
 ```js
@@ -562,7 +616,7 @@ optional but at least one of them must be specified.
 | [data] | <code>Object</code> | An object of (column name)-(data value) pairs that define the new column values.     This object will be escaped by `mysql.escape()` so if you want to use more sophisticated SQL (such as     a MySQL function) to update a column's value, you'll need to use the `sqlString` argument instead. |
 | [sqlString] | <code>string</code> | SQL to be appended to the query after the `SET data` clause     or immediately after `SET ` if `data` is omitted. |
 | [values] | <code>Array</code> | Values to replace the placeholders in `sqlString` (and/or `data`). |
-| cb | <code>[queryCallback](#MySQLTable..queryCallback)</code> | A callback that gets called with the results of the query. |
+| cb | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | A callback that gets called with the results of the query. |
 
 **Example**: With both the `data` and `sqlString` arguments
 ```js
@@ -606,7 +660,7 @@ Deletes data from the table.
 | --- | --- | --- |
 | [sqlString] | <code>string</code> | SQL to be appended to the query after the `FROM table` clause. |
 | [values] | <code>Array</code> | Values to replace the placeholders in `sqlString`. |
-| cb | <code>[queryCallback](#MySQLTable..queryCallback)</code> | A callback that gets called with the results of the query. |
+| cb | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | A callback that gets called with the results of the query. |
 
 **Example**: Delete specific rows
 ```js
@@ -632,22 +686,6 @@ userTable.delete((err, result) => {
 ### mySQLTable.query() ⇒ <code>void</code>
 Exactly the same as [`pool.query()`](https://github.com/mysqljs/mysql#performing-queries).
 
-
----
-
-<a name="MySQLTable..queryCallback"></a>
-
-### MySQLTable~queryCallback : <code>function</code>
-A function called with the results of a query.
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| error | <code>?Error</code> | An `Error` object if an error occurred; `null` otherwise. |
-| results | <code>Array</code> | The results of the query. |
-| fields | <code>Array</code> | Information about the returned results' fields (if any). |
-
-**See**: [https://github.com/mysqljs/mysql#performing-queries](https://github.com/mysqljs/mysql#performing-queries)  
 
 ---
 
