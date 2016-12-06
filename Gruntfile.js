@@ -79,7 +79,7 @@ module.exports = function(grunt) {
           'sort-by': ['order'],
           template: require('fs').readFileSync('jsdoc2md/README.hbs', 'utf8'),
         },
-        src: ['lib/MySQLPlus.js', 'lib/PoolPlus.js', 'lib/MySQLTable.js'],
+        src: ['lib/MySQLPlus.js', 'lib/PoolPlus.js', 'lib/Connection.js', 'lib/MySQLTable.js'],
         dest: 'README.md',
       },
     },

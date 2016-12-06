@@ -218,16 +218,19 @@ describe('PoolPlus', () => {
         .then(results => {
           results.length.should.equal(1);
           results[0].solution.should.equal('a');
+
+          pool.pquery('SELECT "a" as ??', ['solution'])
+            .then(results2 => {
+              results2.length.should.equal(1);
+              results2[0].solution.should.equal('a');
+
+              pool.pquery('SELECT a as solution')
+                .then(() => done(new Error()))
+                .catch(() => done());
+            })
+            .catch(done);
         })
-        .catch(done)
-        .then(() => pool.pquery('SELECT "a" as ??'), ['solution'])
-        .then(results => {
-          results.length.should.equal(1);
-          results[0].solution.should.equal('a');
-        })
-        .then(() => pool.pquery('SELECT a as solution'))
-        .then(() => done(new Error()))
-        .catch(() => done());
+        .catch(done);
     });
 
   });

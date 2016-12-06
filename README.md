@@ -21,6 +21,7 @@ This module extends the popular [`mysql`](https://www.npmjs.com/package/mysql) m
     + [mysql-plus](#module_mysql-plus)
   + Classes
     + [PoolPlus](#PoolPlus)
+    + [Connection](#Connection)
     + [MySQLTable](#MySQLTable)
   + Info
     + [Migration Strategies](#migration-strategies)
@@ -119,6 +120,11 @@ db.sync((err) => {
 <dl>
 <dt><a href="#PoolPlus">PoolPlus</a> ⇐ <code>Pool</code></dt>
 <dd><p>A class that extends the <code>mysql</code> module&#39;s <code>Pool</code> class with the ability to define tables.</p>
+</dd>
+<dt><a href="#Connection">Connection</a></dt>
+<dd><p>The <code>mysql</code> module&#39;s <code>Connection</code> class extended with one extra method. Returned by
+<a href="https://github.com/mysqljs/mysql#establishing-connections"><code>mysql.createConnection()</code></a>,
+and <a href="https://github.com/mysqljs/mysql#pooling-connections"><code>pool.getConnection()</code></a>.</p>
 </dd>
 <dt><a href="#MySQLTable">MySQLTable</a></dt>
 <dd><p>A class that provides convenient methods for performing queries.</p>
@@ -336,7 +342,7 @@ pool.sync(function(err) {
 <a name="PoolPlus+pquery"></a>
 
 ### poolPlus.pquery(sql, [values], [cb]) ⇒ <code>Promise</code>
-The same `query` method as on the original mysql pool except when not passed a
+The same as the `query` method on the original mysql Pool except when not passed a
 callback it returns a promise that resolves with the results of the query.
 
 
@@ -349,7 +355,7 @@ callback it returns a promise that resolves with the results of the query.
 **Returns**: <code>?Promise</code> - If the `cb` parameter is omitted, a promise that will resolve with the results
     of the query is returned.  
 **See**: [https://github.com/mysqljs/mysql#performing-queries](https://github.com/mysqljs/mysql#performing-queries)  
-**Example**: Promise example
+**Example**:
 ```js
 pool.pquery('SELECT * FROM `books` WHERE `author` = "David"')
   .then((results) => {
@@ -360,13 +366,44 @@ pool.pquery('SELECT * FROM `books` WHERE `author` = "David"')
   });
 ```
 
-**Example**: Callback example
+
+---
+
+<a name="Connection"></a>
+
+## Connection
+The `mysql` module's `Connection` class extended with one extra method. Returned by
+[`mysql.createConnection()`](https://github.com/mysqljs/mysql#establishing-connections),
+and [`pool.getConnection()`](https://github.com/mysqljs/mysql#pooling-connections).
+
+
+---
+
+<a name="Connection+pquery"></a>
+
+### connection.pquery(sql, [values], [cb]) ⇒ <code>Promise</code>
+The same as the `query` method except when not passed a callback it returns
+a promise that resolves with the results of the query.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| sql | <code>string</code> &#124; <code>Object</code> | An SqlString or options object. |
+| [values] | <code>Array</code> | Values to replace placeholders in the SqlString. |
+| [cb] | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | An optional callback that gets called with     the results of the query. |
+
+**Returns**: <code>?Promise</code> - If the `cb` parameter is omitted, a promise that will resolve with the results
+    of the query is returned.  
+**See**: [https://github.com/mysqljs/mysql#performing-queries](https://github.com/mysqljs/mysql#performing-queries)  
+**Example**:
 ```js
-pool.pquery('SELECT * FROM `books` WHERE `author` = "David"', (error, results, fields) => {
-  // error will be an Error if one occurred during the query
-  // results will contain the results of the query
-  // fields will contain information about the returned results fields (if any)
-});
+connection.pquery('SELECT * FROM `books` WHERE `author` = "David"')
+  .then((results) => {
+    // results will contain the results of the query
+  })
+  .catch((error) => {
+    // error will be the Error that occurred during the query
+  });
 ```
 
 
