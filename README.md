@@ -329,8 +329,11 @@ const userTable = pool.defineTable('user', {
 
 ### poolPlus.sync(cb) ⇒ <code>void</code>
 Syncs the defined tables to the database by creating new tables and dropping
-or migrating existing tables (depending on the migration setting). Generally
-should only be called once when starting up a server.
+or migrating existing tables (depending on the migration setting). If an
+error occurs while syncing the tables, all changes are rolled back so the
+database will be in the same state as it was before the attempted sync.
+
+Generally, this should only be called once when starting up a server.
 
 
 | Param | Type | Description |
@@ -339,7 +342,7 @@ should only be called once when starting up a server.
 
 **Example**:
 ```js
-pool.sync(function(err) {
+pool.sync((err) => {
   if (err) throw err;
   // Now do something such as start an HTTP server
 });

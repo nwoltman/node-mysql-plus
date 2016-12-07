@@ -115,7 +115,10 @@ describe('PoolPlus', () => {
 
     it('should sync the defined tables to the database', done => {
       pool.sync(err => {
-        if (err) throw err;
+        if (err) {
+          done(err);
+          return;
+        }
         pool.query(`SHOW CREATE TABLE ${TEST_TABLE_NAME}`, (err, result) => {
           if (err) throw err;
           result[0]['Create Table'].should.equal(

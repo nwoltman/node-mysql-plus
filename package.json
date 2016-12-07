@@ -18,12 +18,12 @@
   "homepage": "https://github.com/nwoltman/node-mysql-plus#readme",
   "dependencies": {
     "array-equal": "^1.0.0",
-    "es6-callback-manager": "^2.0.0",
     "lodash": "^4.15.0",
     "mysql": "^2.11.1"
   },
   "devDependencies": {
     "coveralls": "^2.11.6",
+    "es6-callback-manager": "^2.0.0",
     "grunt": "^1.0.1",
     "grunt-env": "^0.4.4",
     "grunt-eslint": "^19.0.0",
