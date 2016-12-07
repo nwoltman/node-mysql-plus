@@ -1,6 +1,7 @@
 'use strict';
 
 const ColumnDefinitions = require('../../lib/ColumnDefinitions');
+const Connection = require('mysql/lib/Connection');
 const MySQLTable = require('../../lib/MySQLTable');
 const Pool = require('mysql/lib/Pool');
 const PoolPlus = require('../../lib/PoolPlus');
@@ -231,6 +232,260 @@ describe('PoolPlus', () => {
             .catch(done);
         })
         .catch(done);
+    });
+
+  });
+
+
+  describe('#transaction()', () => {
+
+    describe('with a callback interface', () => {
+
+      before(done => {
+        pool.query('CREATE TABLE mysql_plus_transaction_test (id int)', done);
+      });
+
+      after(done => {
+        pool.query('DROP TABLE mysql_plus_transaction_test', done);
+      });
+
+      it('should commit changes if no errors occur', done => {
+        pool.transaction((trxn, done) => {
+          trxn.query('INSERT INTO mysql_plus_transaction_test VALUES (1), (2)', (err, result) => {
+            if (err) {
+              done(err);
+              return;
+            }
+
+            result.affectedRows.should.equal(2);
+
+            trxn.query('DELETE FROM mysql_plus_transaction_test WHERE id = 1', (err, result) => {
+              if (err) {
+                done(err);
+                return;
+              }
+
+              result.affectedRows.should.equal(1);
+
+              done(null, 'success!');
+            });
+          });
+        })
+        .then(result => {
+          result.should.equal('success!');
+          return pool.pquery('SELECT * from mysql_plus_transaction_test')
+            .then(rows => {
+              rows.length.should.equal(1);
+              rows[0].id.should.equal(2);
+              done();
+            });
+        })
+        .catch(done);
+      });
+
+      it('should rollback changes if an errors occur', done => {
+        pool.transaction((trxn, done) => {
+          trxn.query('INSERT INTO mysql_plus_transaction_test VALUES (3)', (err, result) => {
+            if (err) {
+              done(err);
+              return;
+            }
+
+            result.affectedRows.should.equal(1);
+
+            trxn.query('DELETE FROM mysql_plus_transaction_test WHERE id = ERROR', (err, result) => {
+              if (err) {
+                done(err);
+                return;
+              }
+
+              result.affectedRows.should.equal(1);
+
+              done(null, 'success!');
+            });
+          });
+        })
+        .then(result => {
+          done(new Error(result));
+        })
+        .catch(err => {
+          err.code.should.equal('ER_BAD_FIELD_ERROR');
+          return pool.pquery('SELECT * from mysql_plus_transaction_test')
+            .then(rows => {
+              rows.length.should.equal(1);
+              rows[0].id.should.equal(2);
+              done();
+            });
+        })
+        .catch(done);
+      });
+
+    });
+
+
+    describe('with a promise interface', () => {
+
+      before(() => pool.pquery('CREATE TABLE mysql_plus_transaction_test (id int)'));
+
+      after(() => pool.pquery('DROP TABLE mysql_plus_transaction_test'));
+
+      it('should commit changes if no errors occur', () => {
+        return pool.transaction(trxn => {
+          return trxn.pquery('INSERT INTO mysql_plus_transaction_test VALUES (1), (2)')
+            .then(result => {
+              result.affectedRows.should.equal(2);
+              return trxn.pquery('DELETE FROM mysql_plus_transaction_test WHERE id = 1');
+            })
+            .then(result => {
+              result.affectedRows.should.equal(1);
+              return 'success!';
+            });
+        })
+        .then(result => {
+          result.should.equal('success!');
+          return pool.pquery('SELECT * FROM mysql_plus_transaction_test')
+            .then(rows => {
+              rows.length.should.equal(1);
+              rows[0].id.should.equal(2);
+            });
+        });
+      });
+
+      it('should rollback changes if an errors occur', () => {
+        return pool.transaction(trxn => {
+          return trxn.pquery('INSERT INTO mysql_plus_transaction_test VALUES (3)')
+            .then(result => {
+              result.affectedRows.should.equal(1);
+              return trxn.pquery('DELETE FROM mysql_plus_transaction_test WHERE id = ERROR');
+            })
+            .then(result => {
+              result.affectedRows.should.equal(1);
+              return 'success!';
+            });
+        })
+        .then(result => {
+          throw new Error(result);
+        })
+        .catch(err => {
+          err.code.should.equal('ER_BAD_FIELD_ERROR');
+          return pool.pquery('SELECT * FROM mysql_plus_transaction_test')
+            .then(rows => {
+              rows.length.should.equal(1);
+              rows[0].id.should.equal(2);
+            });
+        });
+      });
+
+    });
+
+
+    describe('with either interface', () => {
+
+      before(done => {
+        pool.query('CREATE TABLE mysql_plus_transaction_test (id int)', err => {
+          if (err) throw err;
+          pool.query('INSERT INTO mysql_plus_transaction_test VALUES (2)', done);
+        });
+      });
+
+      after(done => {
+        pool.query('DROP TABLE mysql_plus_transaction_test', done);
+      });
+
+
+      describe('if an error occured getting a connection', () => {
+
+        const error = new Error('test error');
+
+        before(() => {
+          sinon.stub(pool, 'getConnection', function(cb) {
+            process.nextTick(() => cb(error));
+          });
+        });
+
+        after(() => {
+          pool.getConnection.restore();
+        });
+
+        it('should reject with an error', done => {
+          pool.transaction(() => 'success!')
+            .then(result => {
+              done(new Error(result));
+            })
+            .catch(err => {
+              err.should.equal(error);
+              done();
+            })
+            .catch(done);
+        });
+
+      });
+
+
+      describe('if an error occured beginning a transaction', () => {
+
+        const error = new Error('test error');
+
+        before(() => {
+          sinon.stub(Connection.prototype, 'beginTransaction', function(cb) {
+            process.nextTick(() => cb(error));
+          });
+        });
+
+        after(() => {
+          Connection.prototype.beginTransaction.restore();
+        });
+
+        it('should reject with an error', done => {
+          pool.transaction(() => 'success!')
+            .then(result => {
+              done(new Error(result));
+            })
+            .catch(err => {
+              err.should.equal(error);
+              done();
+            })
+            .catch(done);
+        });
+
+      });
+
+
+      describe('if an error occured while trying to commit a transaction', () => {
+
+        const error = new Error('test error');
+
+        before(() => {
+          sinon.stub(Connection.prototype, 'commit', function(cb) {
+            process.nextTick(() => cb(error));
+          });
+        });
+
+        after(() => {
+          Connection.prototype.commit.restore();
+        });
+
+        it('should reject with an error', done => {
+          pool.transaction(trxn => {
+            return trxn.pquery('INSERT INTO mysql_plus_transaction_test VALUES (3)');
+          })
+          .then(result => {
+            done(new Error(result));
+          })
+          .catch(err => {
+            err.should.equal(error);
+            return pool.pquery('SELECT * FROM mysql_plus_transaction_test')
+              .then(rows => {
+                rows.length.should.equal(1);
+                rows[0].id.should.equal(2);
+                done();
+              });
+          })
+          .catch(done);
+        });
+
+      });
+
     });
 
   });

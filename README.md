@@ -123,8 +123,9 @@ db.sync((err) => {
 </dd>
 <dt><a href="#Connection">Connection</a></dt>
 <dd><p>The <code>mysql</code> module&#39;s <code>Connection</code> class extended with one extra method. Returned by
-<a href="https://github.com/mysqljs/mysql#establishing-connections"><code>mysql.createConnection()</code></a>,
-and <a href="https://github.com/mysqljs/mysql#pooling-connections"><code>pool.getConnection()</code></a>.</p>
+  <a href="https://github.com/mysqljs/mysql#establishing-connections"><code>mysql.createConnection()</code></a>
+  and <a href="https://github.com/mysqljs/mysql#pooling-connections"><code>pool.getConnection()</code></a> and
+  passed to <a href="#PoolPlus..transactionHandler"><code>transactionHandler</code></a>.</p>
 </dd>
 <dt><a href="#MySQLTable">MySQLTable</a></dt>
 <dd><p>A class that provides convenient methods for performing queries.</p>
@@ -171,7 +172,8 @@ A namespace that provides the column type methods used to define columns.
 ### mysql-plus~ColTypes
 A namespace that provides the column type methods used to define columns.
 
-**See**: [Column Types](#column-types)  
+**See**: [Column Types](#column-types)
+
 **Example**:
 ```js
 const mysql = require('mysql-plus');
@@ -200,7 +202,8 @@ method except it returns a [`PoolPlus`](#PoolPlus) instance and accepts more opt
 | [config.migrationStrategy] | <code>string</code> |  | One of `safe`, `alter`, or `drop`.     Please see the migration strategies documentation [here](#migration-strategies).     Defaults to `safe` in production and `alter` everywhere else. |
 | [config.allowAlterInProduction] | <code>boolean</code> | <code>false</code> | Setting this to `true` will     allow `alter` to be used as a migration strategy in production environments. |
 
-**Returns**: <code>[PoolPlus](#PoolPlus)</code> - A new `PoolPlus` instance.  
+**Returns**: <code>[PoolPlus](#PoolPlus)</code> - A new `PoolPlus` instance.
+
 **Example**:
 ```js
 const mysql = require('mysql-plus');
@@ -245,11 +248,15 @@ A class that extends the `mysql` module's `Pool` class with the ability to defin
 **See**: [Pool](https://github.com/mysqljs/mysql#pooling-connections)  
 
 * [PoolPlus](#PoolPlus) ⇐ <code>Pool</code>
-    * ~~[.Type](#PoolPlus+Type)~~
-    * [.ColTypes](#PoolPlus+ColTypes)
-    * [.defineTable(name, schema, [migrationStrategy])](#PoolPlus+defineTable) ⇒ <code>[MySQLTable](#MySQLTable)</code>
-    * [.sync(cb)](#PoolPlus+sync) ⇒ <code>void</code>
-    * [.pquery(sql, [values], [cb])](#PoolPlus+pquery) ⇒ <code>Promise</code>
+    * _instance_
+        * ~~[.Type](#PoolPlus+Type)~~
+        * [.ColTypes](#PoolPlus+ColTypes)
+        * [.defineTable(name, schema, [migrationStrategy])](#PoolPlus+defineTable) ⇒ <code>[MySQLTable](#MySQLTable)</code>
+        * [.sync(cb)](#PoolPlus+sync) ⇒ <code>void</code>
+        * [.pquery(sql, [values], [cb])](#PoolPlus+pquery) ⇒ <code>Promise</code>
+        * [.transaction(trxnHandler)](#PoolPlus+transaction) ⇒ <code>Promise</code>
+    * _inner_
+        * [~transactionHandler](#PoolPlus..transactionHandler) ⇒ <code>Promise</code>
 
 
 ---
@@ -272,7 +279,8 @@ A namespace that provides the column type methods used to define columns.
 The exact same thing as [`mysqlPlus.ColTypes`](#module_mysql-plus..ColTypes).
 Just here for convenience.
 
-**See**: [Column Types](#column-types)  
+**See**: [Column Types](#column-types)
+
 **Example**:
 ```js
 const pool = mysql.createPool(config);
@@ -301,7 +309,8 @@ Defines a table to be created or updated in the database.
 | [migrationStrategy] | <code>string</code> | One of `safe`, `alter`, or `drop`. This will override     the `migrationStrategy` value from the [`config`](#module_mysql-plus..createPool)     (but is still subject to the same restrictions in production environments). |
 
 **Returns**: <code>[MySQLTable](#MySQLTable)</code> - A `MySQLTable` instance that lets you perform operations on the table.  
-**See**: [Defining Table Schemas](#defining-table-schemas)  
+**See**: [Defining Table Schemas](#defining-table-schemas)
+
 **Example**:
 ```js
 const userTable = pool.defineTable('user', {
@@ -354,7 +363,8 @@ callback it returns a promise that resolves with the results of the query.
 
 **Returns**: <code>?Promise</code> - If the `cb` parameter is omitted, a promise that will resolve with the results
     of the query is returned.  
-**See**: [https://github.com/mysqljs/mysql#performing-queries](https://github.com/mysqljs/mysql#performing-queries)  
+**See**: [https://github.com/mysqljs/mysql#performing-queries](https://github.com/mysqljs/mysql#performing-queries)
+
 **Example**:
 ```js
 pool.pquery('SELECT * FROM `books` WHERE `author` = "David"')
@@ -369,12 +379,122 @@ pool.pquery('SELECT * FROM `books` WHERE `author` = "David"')
 
 ---
 
+<a name="PoolPlus+transaction"></a>
+
+### poolPlus.transaction(trxnHandler) ⇒ <code>Promise</code>
+Begins a transaction and provides a connection to use to make queries during the transaction.
+
+__Note:__ Be aware that there are commands in MySQL that can cause an implicit commit, as described
+in [the MySQL documentation](http://dev.mysql.com/doc/refman/5.5/en/implicit-commit.html).
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| trxnHandler | <code>[transactionHandler](#PoolPlus..transactionHandler)</code> | A function that, given a transaction connection,     will make queries and then end the transaction. |
+
+**Returns**: <code>Promise</code> - A promise that is resolved with the results of the transaction (the value
+    passed to the `done()` callback or the result of the last returned promise) or is
+    rejected with the error that caused the transaction to fail.
+
+**Example**: Using the `done` callback
+```js
+pool.transaction((trxn, done) => {
+  trxn.query('INSERT INTO `animals` VALUES ("dog")', (err, result) => {
+    if (err) return done(err);
+    trxn.query(
+      'INSERT INTO `pets` (`type`,`name`) VALUES (?, "Rover")',
+      [result.insertId],
+      done
+     );
+  });
+})
+.then(result => {
+  // result is the result of inserting "Rover" into `pets`
+})
+.catch(err => {
+  // If this is called then the inserts will have been rolled back
+  // (so "dog" will not be in the `animals` table)
+});
+```
+
+**Example**: Returning a promise
+```js
+pool.transaction((trxn) => {
+  return trxn.pquery('INSERT INTO `animals` VALUES ("dog")')
+    .then(result => trxn.pquery(
+      'INSERT INTO `pets` (`type`,`name`) VALUES (?, "Rover")',
+      [result.insertId]
+    ));
+})
+.then(result => {
+  // result is the result of inserting "Rover" into `pets`
+})
+.catch(err => {
+  // If this is called then the inserts will have been rolled back
+});
+```
+
+
+---
+
+<a name="PoolPlus..transactionHandler"></a>
+
+### PoolPlus~transactionHandler ⇒ <code>Promise</code>
+A function that will make queries during a transaction.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| trxn | <code>[Connection](#Connection)</code> | The transaction connection. |
+| [done] | <code>function</code> | A callback that can be used to end the transaction. |
+
+**Returns**: <code>?Promise</code> - If not using the `done` callback, this function must return a promise.
+    If the promise resolves, the transaction will be committed, and if it rejects, the
+    transaction will be rolled back. Also, if this function does not return a promise,
+    the `done` callback must be used.  
+**See**: [`poolPlus.transaction()`](#PoolPlus+transaction)
+
+**Example**: To fail a transaction using the `done` callback
+```js
+// Call the `done` callback with a truthy value as the first argument
+done(error);
+```
+
+**Example**: To complete a transaction using the `done` callback
+```js
+// Call the `done` callback with a falsy value as the first argument
+// and pass the results of the transaction as the second argument
+done(null, results);
+done(); // Passing results is not required
+```
+
+**Example**: Full example using the `done` callback
+```js
+function trxnHandler(trxn, done) {
+  trxn.query('INSERT INTO `animals` VALUES ("dog")', (err, animalsResult) => {
+    if (err) return done(err);
+    trxn.query(
+      'INSERT INTO `pets` (`type`,`name`) VALUES (?, "Rover")',
+      [animalsResult.insertId],
+      (err, petsResult) => {
+        if (err) return done(err);
+        done(null, {animalsResult, petsResult});
+      }
+    );
+  });
+}
+```
+
+
+---
+
 <a name="Connection"></a>
 
 ## Connection
 The `mysql` module's `Connection` class extended with one extra method. Returned by
-[`mysql.createConnection()`](https://github.com/mysqljs/mysql#establishing-connections),
-and [`pool.getConnection()`](https://github.com/mysqljs/mysql#pooling-connections).
+  [`mysql.createConnection()`](https://github.com/mysqljs/mysql#establishing-connections)
+  and [`pool.getConnection()`](https://github.com/mysqljs/mysql#pooling-connections) and
+  passed to [`transactionHandler`](#PoolPlus..transactionHandler).
 
 
 ---
@@ -394,7 +514,8 @@ a promise that resolves with the results of the query.
 
 **Returns**: <code>?Promise</code> - If the `cb` parameter is omitted, a promise that will resolve with the results
     of the query is returned.  
-**See**: [https://github.com/mysqljs/mysql#performing-queries](https://github.com/mysqljs/mysql#performing-queries)  
+**See**: [https://github.com/mysqljs/mysql#performing-queries](https://github.com/mysqljs/mysql#performing-queries)
+
 **Example**:
 ```js
 connection.pquery('SELECT * FROM `books` WHERE `author` = "David"')
@@ -480,7 +601,8 @@ Selects data from the table.
 | [cb] | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | A callback that gets called with the results of the query. |
 
 **Returns**: <code>?Promise</code> - If the `cb` parameter is omitted, a promise that will resolve with the results
-    of the query is returned.  
+    of the query is returned.
+
 **Example**: Select all columns
 ```js
 userTable.select('*', (err, rows) => {
@@ -543,7 +665,8 @@ Inserts data into a new row in the table.
 | [cb] | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | A callback that gets called with the results of the query. |
 
 **Returns**: <code>?Promise</code> - If the `cb` parameter is omitted, a promise that will resolve with the results
-    of the query is returned.  
+    of the query is returned.
+
 **Example**: Insert a new user
 ```js
 userTable.insert({email: 'email@example.com', name: 'John Doe'}, (err, result) => {
@@ -660,7 +783,8 @@ optional but at least one of them must be specified.
 | [cb] | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | A callback that gets called with the results of the query. |
 
 **Returns**: <code>?Promise</code> - If the `cb` parameter is omitted, a promise that will resolve with the results
-    of the query is returned.  
+    of the query is returned.
+
 **Example**: With both the `data` and `sqlString` arguments
 ```js
 userTable.update({email: 'updated@email.com'}, 'WHERE `id` = ?', [5], (err, result) => {
@@ -706,7 +830,8 @@ Deletes data from the table.
 | [cb] | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | A callback that gets called with the results of the query. |
 
 **Returns**: <code>?Promise</code> - If the `cb` parameter is omitted, a promise that will resolve with the results
-    of the query is returned.  
+    of the query is returned.
+
 **Example**: Delete specific rows
 ```js
 userTable.delete('WHERE `spammer` = 1', (err, result) => {
