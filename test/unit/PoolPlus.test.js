@@ -253,10 +253,10 @@ describe('PoolPlus', () => {
       });
 
       it('should commit changes if no errors occur', done => {
-        pool.transaction((trxn, done) => {
+        pool.transaction((trxn, trxnDone) => {
           trxn.query('INSERT INTO mysql_plus_transaction_test VALUES (1), (2)', (err, result) => {
             if (err) {
-              done(err);
+              trxnDone(err);
               return;
             }
 
@@ -264,13 +264,13 @@ describe('PoolPlus', () => {
 
             trxn.query('DELETE FROM mysql_plus_transaction_test WHERE id = 1', (err, result) => {
               if (err) {
-                done(err);
+                trxnDone(err);
                 return;
               }
 
               result.affectedRows.should.equal(1);
 
-              done(null, 'success!');
+              trxnDone(null, 'success!');
             });
           });
         })
@@ -287,10 +287,10 @@ describe('PoolPlus', () => {
       });
 
       it('should rollback changes if an errors occur', done => {
-        pool.transaction((trxn, done) => {
+        pool.transaction((trxn, trxnDone) => {
           trxn.query('INSERT INTO mysql_plus_transaction_test VALUES (3)', (err, result) => {
             if (err) {
-              done(err);
+              trxnDone(err);
               return;
             }
 
@@ -298,13 +298,13 @@ describe('PoolPlus', () => {
 
             trxn.query('DELETE FROM mysql_plus_transaction_test WHERE id = ERROR', (err, result) => {
               if (err) {
-                done(err);
+                trxnDone(err);
                 return;
               }
 
               result.affectedRows.should.equal(1);
 
-              done(null, 'success!');
+              trxnDone(null, 'success!');
             });
           });
         })
