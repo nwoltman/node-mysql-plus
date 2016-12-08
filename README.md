@@ -119,7 +119,8 @@ db.sync((err) => {
 
 <dl>
 <dt><a href="#PoolPlus">PoolPlus</a> ⇐ <code>Pool</code></dt>
-<dd><p>A class that extends the <code>mysql</code> module&#39;s <code>Pool</code> class with the ability to define tables.</p>
+<dd><p>A class that extends the <code>mysql</code> module&#39;s <code>Pool</code> class with the ability to define tables
+and perform queries and transactions using promises.</p>
 </dd>
 <dt><a href="#Connection">Connection</a></dt>
 <dd><p>The <code>mysql</code> module&#39;s <code>Connection</code> class extended with one extra method. Returned by
@@ -242,7 +243,8 @@ A function called with the results of a query.
 <a name="PoolPlus"></a>
 
 ## PoolPlus ⇐ <code>Pool</code>
-A class that extends the `mysql` module's `Pool` class with the ability to define tables.
+A class that extends the `mysql` module's `Pool` class with the ability to define tables
+and perform queries and transactions using promises.
 
 **Extends:** <code>Pool</code>  
 **See**: [Pool](https://github.com/mysqljs/mysql#pooling-connections)  
@@ -354,7 +356,7 @@ pool.sync((err) => {
 <a name="PoolPlus+pquery"></a>
 
 ### poolPlus.pquery(sql, [values], [cb]) ⇒ <code>Promise</code>
-The same as the `query` method on the original mysql Pool except when not passed a
+The same as the `query` method on the original mysql `Pool` except when not passed a
 callback it returns a promise that resolves with the results of the query.
 
 
@@ -408,7 +410,7 @@ pool.transaction((trxn, done) => {
       'INSERT INTO `pets` (`type`,`name`) VALUES (?, "Rover")',
       [result.insertId],
       done
-     );
+    );
   });
 }).then(result => {
   // result is the result of inserting "Rover" into `pets`
@@ -429,7 +431,7 @@ pool.transaction((trxn) => {
 }).then(result => {
   // result is the result of inserting "Rover" into `pets`
 }).catch(err => {
-  // If this is called then the inserts will have been rolled back
+  // An error occurred and the inserts have been rolled back
 });
 ```
 
@@ -449,8 +451,9 @@ A function that will make queries during a transaction.
 
 **Returns**: <code>?Promise</code> - If not using the `done` callback, this function must return a promise.
     If the promise resolves, the transaction will be committed, and if it rejects, the
-    transaction will be rolled back. Also, if this function does not return a promise,
-    the `done` callback must be used.  
+    transaction will be rolled back. If this function does not return a promise, the
+    `done` callback must be used or else the transaction will not be committed and
+    the transaction connection will never be released.  
 **See**: [`poolPlus.transaction()`](#PoolPlus+transaction)
 
 **Example**: To fail a transaction using the `done` callback
@@ -470,10 +473,10 @@ done(); // Passing results is not required
 **Example**: Full example using the `done` callback
 ```js
 function trxnHandler(trxn, done) {
-  trxn.query('INSERT INTO `animals` VALUES ("dog")', (err, animalsResult) => {
+  trxn.query('INSERT INTO `animals` (`type`) VALUES ("dog")', (err, animalsResult) => {
     if (err) return done(err);
     trxn.query(
-      'INSERT INTO `pets` (`type`,`name`) VALUES (?, "Rover")',
+      'INSERT INTO `pets` (`typeID`,`name`) VALUES (?, "Rover")',
       [animalsResult.insertId],
       (err, petsResult) => {
         if (err) return done(err);
