@@ -30,12 +30,12 @@ describe('Connection', () => {
     it('should return a working Promise', done => {
       connection.pquery('SELECT "a" as solution')
         .then(results => {
-          results.length.should.equal(1);
+          results.should.have.length(1);
           results[0].solution.should.equal('a');
 
           connection.pquery('SELECT "a" as ??', ['solution'])
             .then(results2 => {
-              results2.length.should.equal(1);
+              results2.should.have.length(1);
               results2[0].solution.should.equal('a');
 
               connection.pquery('SELECT a as solution')

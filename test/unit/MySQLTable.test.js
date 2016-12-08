@@ -108,7 +108,7 @@ describe('MySQLTable', () => {
       it('should be able to select all data from the table', done => {
         testTable.select('*', (err, rows) => {
           if (err) throw err;
-          rows.length.should.equal(3);
+          rows.should.have.length(3);
           done();
         });
       });
@@ -116,7 +116,7 @@ describe('MySQLTable', () => {
       it('should be able to select certain columns of data from the table', done => {
         testTable.select('email', (err, rows) => {
           if (err) throw err;
-          rows.length.should.equal(3);
+          rows.should.have.length(3);
           rows.forEach(row => {
             row.should.not.have.property('id');
             row.should.have.property('email');
@@ -128,7 +128,7 @@ describe('MySQLTable', () => {
       it('should be able to select specific columns and rows from the table', done => {
         testTable.select(['id', 'email'], 'WHERE `id` > 1 ORDER BY `id`', (err, rows) => {
           if (err) throw err;
-          rows.length.should.equal(2);
+          rows.should.have.length(2);
           rows[0].id.should.equal(2);
           rows[0].email.should.equal('two@email.com');
           rows[1].id.should.equal(3);
@@ -140,7 +140,7 @@ describe('MySQLTable', () => {
       it('should be able to use SQL formatted with placeholders', done => {
         testTable.select('??', 'WHERE ?? > ? ORDER BY ??', [['id', 'email'], 'id', 1, 'id'], (err, rows) => {
           if (err) throw err;
-          rows.length.should.equal(2);
+          rows.should.have.length(2);
           rows[0].id.should.equal(2);
           rows[0].email.should.equal('two@email.com');
           rows[1].id.should.equal(3);
@@ -173,14 +173,14 @@ describe('MySQLTable', () => {
       it('should be able to select all data from the table', () => {
         return testTable.select('*')
           .then(rows => {
-            rows.length.should.equal(3);
+            rows.should.have.length(3);
           });
       });
 
       it('should be able to select certain columns of data from the table', () => {
         return testTable.select('email')
           .then(rows => {
-            rows.length.should.equal(3);
+            rows.should.have.length(3);
             rows.forEach(row => {
               row.should.not.have.property('id');
               row.should.have.property('email');
@@ -191,7 +191,7 @@ describe('MySQLTable', () => {
       it('should be able to select specific columns and rows from the table', () => {
         return testTable.select(['id', 'email'], 'WHERE `id` > 1 ORDER BY `id`')
           .then(rows => {
-            rows.length.should.equal(2);
+            rows.should.have.length(2);
             rows[0].id.should.equal(2);
             rows[0].email.should.equal('two@email.com');
             rows[1].id.should.equal(3);
@@ -202,7 +202,7 @@ describe('MySQLTable', () => {
       it('should be able to use SQL formatted with placeholders', () => {
         return testTable.select('??', 'WHERE ?? > ? ORDER BY ??', [['id', 'email'], 'id', 1, 'id'])
           .then(rows => {
-            rows.length.should.equal(2);
+            rows.should.have.length(2);
             rows[0].id.should.equal(2);
             rows[0].email.should.equal('two@email.com');
             rows[1].id.should.equal(3);
@@ -644,7 +644,7 @@ describe('MySQLTable', () => {
     it('should just directly call the pool\'s pquery() function', done => {
       testTable.query('SELECT 1 + 1 AS solution', function callback(err, rows) {
         if (err) throw err;
-        rows.length.should.equal(1);
+        rows.should.have.length(1);
         rows[0].solution.should.equal(2);
         pool.pquery.should.be.calledOnce().and.be.calledWith('SELECT 1 + 1 AS solution', callback);
         done();
@@ -654,7 +654,7 @@ describe('MySQLTable', () => {
     it('should return a promise if the callback is omitted', () => {
       return testTable.query('SELECT 1 + 1 AS solution')
         .then(rows => {
-          rows.length.should.equal(1);
+          rows.should.have.length(1);
           rows[0].solution.should.equal(2);
           pool.pquery.should.be.calledOnce().and.be.calledWith('SELECT 1 + 1 AS solution');
         });
@@ -688,7 +688,7 @@ describe('MySQLTable', () => {
           .then(result => trxnTestTable.insert({email: 'meh', letter: result.insertId}))
           .then(() => trxnTestTable.select('*'))
           .then(rows => {
-            rows.length.should.equal(2);
+            rows.should.have.length(2);
             rows[0].id.should.equal(1);
             rows[0].email.should.equal('transacting@email.com');
             rows[1].id.should.equal(2);

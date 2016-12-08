@@ -220,12 +220,12 @@ describe('PoolPlus', () => {
     it('should return a working Promise', done => {
       pool.pquery('SELECT "a" as solution')
         .then(results => {
-          results.length.should.equal(1);
+          results.should.have.length(1);
           results[0].solution.should.equal('a');
 
           pool.pquery('SELECT "a" as ??', ['solution'])
             .then(results2 => {
-              results2.length.should.equal(1);
+              results2.should.have.length(1);
               results2[0].solution.should.equal('a');
 
               pool.pquery('SELECT a as solution')
@@ -278,7 +278,7 @@ describe('PoolPlus', () => {
           result.should.equal('success!');
           return pool.pquery('SELECT * from mysql_plus_transaction_test')
             .then(rows => {
-              rows.length.should.equal(1);
+              rows.should.have.length(1);
               rows[0].id.should.equal(2);
               done();
             });
@@ -315,7 +315,7 @@ describe('PoolPlus', () => {
           err.code.should.equal('ER_BAD_FIELD_ERROR');
           return pool.pquery('SELECT * from mysql_plus_transaction_test')
             .then(rows => {
-              rows.length.should.equal(1);
+              rows.should.have.length(1);
               rows[0].id.should.equal(2);
               done();
             });
@@ -348,7 +348,7 @@ describe('PoolPlus', () => {
           result.should.equal('success!');
           return pool.pquery('SELECT * FROM mysql_plus_transaction_test')
             .then(rows => {
-              rows.length.should.equal(1);
+              rows.should.have.length(1);
               rows[0].id.should.equal(2);
             });
         });
@@ -373,7 +373,7 @@ describe('PoolPlus', () => {
           err.code.should.equal('ER_BAD_FIELD_ERROR');
           return pool.pquery('SELECT * FROM mysql_plus_transaction_test')
             .then(rows => {
-              rows.length.should.equal(1);
+              rows.should.have.length(1);
               rows[0].id.should.equal(2);
             });
         });
@@ -479,7 +479,7 @@ describe('PoolPlus', () => {
             err.should.equal(error);
             return pool.pquery('SELECT * FROM mysql_plus_transaction_test')
               .then(rows => {
-                rows.length.should.equal(1);
+                rows.should.have.length(1);
                 rows[0].id.should.equal(2);
                 done();
               });

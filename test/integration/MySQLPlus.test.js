@@ -846,7 +846,7 @@ describe('MySQLPlus', function() {
       pool.query(`SELECT renamed, changed FROM ${columnsTableName}`, (err, rows) => {
         if (err) throw err;
 
-        rows.length.should.equal(2);
+        rows.should.have.length(2);
 
         rows[0].renamed.should.equal(1);
         rows[0].changed.should.equal(2);
