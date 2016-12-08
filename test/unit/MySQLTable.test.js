@@ -74,6 +74,25 @@ describe('MySQLTable', () => {
   });
 
 
+  describe('#trxn', () => {
+
+
+    it('should be undefined if not passed to the constructor', () => {
+      should(testTable.trxn).be.undefined();
+    });
+
+
+    it('should be the transaction connection that was passed to the constructor', () => {
+      return pool.transaction((trxn, done) => {
+        const trxnTable = new MySQLTable('mysql_table_test_table', mockTableSchema, pool, trxn);
+        trxnTable.trxn.should.equal(trxn);
+        done();
+      });
+    });
+
+  });
+
+
   describe('#select()', () => {
 
     before(done => {
@@ -639,6 +658,54 @@ describe('MySQLTable', () => {
           rows[0].solution.should.equal(2);
           pool.pquery.should.be.calledOnce().and.be.calledWith('SELECT 1 + 1 AS solution');
         });
+    });
+
+  });
+
+
+  describe('#transacting()', () => {
+
+    after(resetTable);
+
+    it('should return a new MySQLTable instance that is almost identical to the original', () => {
+      return pool.transaction((trxn, done) => {
+        const trxnTestTable = testTable.transacting(trxn);
+        trxnTestTable.name.should.equal(testTable.name);
+        trxnTestTable.schema.should.equal(testTable.schema);
+        trxnTestTable.pool.should.equal(testTable.pool);
+        trxnTestTable.trxn.should.equal(trxn);
+        done();
+      });
+    });
+
+    it('should create a new MySQLTable instance that makes queries using the provided transaction connection', () => {
+      const goodError = new Error('Good error');
+
+      return pool.transaction(trxn => {
+        const trxnTestTable = testTable.transacting(trxn);
+
+        return trxnTestTable.insert({email: 'transacting@email.com'})
+          .then(result => trxnTestTable.insert({email: 'meh', letter: result.insertId}))
+          .then(() => trxnTestTable.select('*'))
+          .then(rows => {
+            rows.length.should.equal(2);
+            rows[0].id.should.equal(1);
+            rows[0].email.should.equal('transacting@email.com');
+            rows[1].id.should.equal(2);
+            rows[1].email.should.equal('meh');
+            rows[1].letter.should.equal('1');
+
+            throw goodError;
+          });
+      }).then(() => {
+        throw new Error('Bad error');
+      }).catch(err => {
+        err.should.equal(goodError);
+        return testTable.select('*')
+          .then(rows => {
+            rows.should.be.empty();
+          });
+      });
     });
 
   });

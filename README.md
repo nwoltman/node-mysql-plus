@@ -410,11 +410,9 @@ pool.transaction((trxn, done) => {
       done
      );
   });
-})
-.then(result => {
+}).then(result => {
   // result is the result of inserting "Rover" into `pets`
-})
-.catch(err => {
+}).catch(err => {
   // If this is called then the inserts will have been rolled back
   // (so "dog" will not be in the `animals` table)
 });
@@ -423,16 +421,14 @@ pool.transaction((trxn, done) => {
 **Example**: Returning a promise
 ```js
 pool.transaction((trxn) => {
-  return trxn.pquery('INSERT INTO `animals` VALUES ("dog")')
+  return trxn.pquery('INSERT INTO `animals` (`type`) VALUES ("dog")')
     .then(result => trxn.pquery(
-      'INSERT INTO `pets` (`type`,`name`) VALUES (?, "Rover")',
+      'INSERT INTO `pets` (`typeID`,`name`) VALUES (?, "Rover")',
       [result.insertId]
     ));
-})
-.then(result => {
+}).then(result => {
   // result is the result of inserting "Rover" into `pets`
-})
-.catch(err => {
+}).catch(err => {
   // If this is called then the inserts will have been rolled back
 });
 ```
@@ -545,6 +541,7 @@ A class that provides convenient methods for performing queries.
     * [.name](#MySQLTable+name) : <code>string</code>
     * [.schema](#MySQLTable+schema) : <code>Object</code>
     * [.pool](#MySQLTable+pool) : <code>[PoolPlus](#PoolPlus)</code>
+    * [.trxn](#MySQLTable+trxn) : <code>?[Connection](#Connection)</code>
     * [.select(columns, [sqlString], [values], [cb])](#MySQLTable+select) ⇒ <code>Promise</code>
     * [.insert(data, [sqlString], [values], [cb])](#MySQLTable+insert) ⇒ <code>Promise</code>
     * ~~[.insertIgnore(data, cb)](#MySQLTable+insertIgnore) ⇒ <code>void</code>~~
@@ -552,6 +549,7 @@ A class that provides convenient methods for performing queries.
     * [.update([data], [sqlString], [values], [cb])](#MySQLTable+update) ⇒ <code>Promise</code>
     * [.delete([sqlString], [values], [cb])](#MySQLTable+delete) ⇒ <code>Promise</code>
     * [.query()](#MySQLTable+query) ⇒ <code>Promise</code>
+    * [.transacting(trxn)](#MySQLTable+transacting) ⇒ <code>[MySQLTable](#MySQLTable)</code>
 
 
 ---
@@ -586,6 +584,15 @@ The table's schema (as passed to [`poolPlus.defineTable()`](#PoolPlus+defineTabl
 
 ### mySQLTable.pool : <code>[PoolPlus](#PoolPlus)</code>
 The `PoolPlus` instance that created this table.
+
+
+---
+
+<a name="MySQLTable+trxn"></a>
+
+### mySQLTable.trxn : <code>?[Connection](#Connection)</code>
+The transaction connection that created this table from a call
+to [`table.transacting(trxn)`](#MySQLTable+transacting).
 
 
 ---
@@ -857,7 +864,43 @@ userTable.delete((err, result) => {
 <a name="MySQLTable+query"></a>
 
 ### mySQLTable.query() ⇒ <code>Promise</code>
-Exactly the same as [pool.pquery()](#PoolPlus+pquery).
+Exactly the same as [`pool.pquery()`](#PoolPlus+pquery).
+
+
+---
+
+<a name="MySQLTable+transacting"></a>
+
+### mySQLTable.transacting(trxn) ⇒ <code>[MySQLTable](#MySQLTable)</code>
+Returns a new `MySQLTable` instance that will perform queries using the provided transaction connection.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| trxn | <code>[Connection](#Connection)</code> | The transaction connection that will be used to perform queries. |
+
+**Returns**: <code>[MySQLTable](#MySQLTable)</code> - A new `MySQLTable` instance that will perform queries using the provided transaction
+    connection instead of the `PoolPlus` instance that was used to create the original instance.  
+**See**: [`pool.transaction()`](#PoolPlus+transaction)
+
+**Example**:
+```js
+const animalsTable = pool.defineTable('animals', schema);
+const petsTable = pool.defineTable('pets', schema);
+
+pool.transaction((trxn) => {
+  return animalsTable.transacting(trxn)
+    .insert({type: 'dog'})
+    .then(result =>
+      petsTable.transacting(trxn)
+        .insert({typeID: result.insertId, name: 'Rover'})
+    );
+}).then(result => {
+  // result is the result of inserting "Rover" into the pets table
+}).catch(err => {
+  // An error occurred during the transaction
+});
+```
 
 
 ---
