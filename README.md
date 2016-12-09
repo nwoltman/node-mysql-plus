@@ -198,7 +198,7 @@ method except it returns a [`PoolPlus`](#PoolPlus) instance and accepts more opt
 
 
 | Param | Type | Default | Description |
-| --- | --- | --- | --- |
+|:--- |:--- |:--- |:--- |
 | config | <code>Object</code> |  | A configuration object defining MySQL connection options. In addition to the     possible [mysql connection options](https://github.com/mysqljs/mysql#connection-options),     this object may also have the following two options: |
 | [config.migrationStrategy] | <code>string</code> |  | One of `safe`, `alter`, or `drop`.     Please see the migration strategies documentation [here](#migration-strategies).     Defaults to `safe` in production and `alter` everywhere else. |
 | [config.allowAlterInProduction] | <code>boolean</code> | <code>false</code> | Setting this to `true` will     allow `alter` to be used as a migration strategy in production environments. |
@@ -231,7 +231,7 @@ A function called with the results of a query.
 
 
 | Param | Type | Description |
-| --- | --- | --- |
+|:--- |:--- |:--- |
 | error | <code>?Error</code> | An `Error` object if an error occurred; `null` otherwise. |
 | results | <code>Array</code> &#124; <code>Object</code> | The results of the query. |
 | fields | <code>Array.&lt;Object&gt;</code> | Information about the returned results' fields (if any). |
@@ -305,7 +305,7 @@ Defines a table to be created or updated in the database.
 
 
 | Param | Type | Description |
-| --- | --- | --- |
+|:--- |:--- |:--- |
 | name | <code>string</code> | The name of the table. |
 | schema | <code>Object</code> | An object that defines the table's schema.     See the [Defining Table Schemas](#defining-table-schemas) section. |
 | [migrationStrategy] | <code>string</code> | One of `safe`, `alter`, or `drop`. This will override     the `migrationStrategy` value from the [`config`](#module_mysql-plus..createPool)     (but is still subject to the same restrictions in production environments). |
@@ -339,7 +339,7 @@ Generally, this should only be called once when starting up a server.
 
 
 | Param | Type | Description |
-| --- | --- | --- |
+|:--- |:--- |:--- |
 | cb | <code>function</code> | A callback that is called once all defined table schemas have been synced to the     database. If an error occured, the first argument passed to the callback will be the error object. |
 
 **Example**:
@@ -361,7 +361,7 @@ callback it returns a promise that resolves with the results of the query.
 
 
 | Param | Type | Description |
-| --- | --- | --- |
+|:--- |:--- |:--- |
 | sql | <code>string</code> &#124; <code>Object</code> | An SqlString or options object. |
 | [values] | <code>Array</code> | Values to replace placeholders in the SqlString. |
 | [cb] | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | An optional callback that gets called with     the results of the query. |
@@ -394,7 +394,7 @@ in [the MySQL documentation](http://dev.mysql.com/doc/refman/5.5/en/implicit-com
 
 
 | Param | Type | Description |
-| --- | --- | --- |
+|:--- |:--- |:--- |
 | trxnHandler | <code>[transactionHandler](#PoolPlus..transactionHandler)</code> | A function that, given a transaction connection,     will make queries and then end the transaction. |
 
 **Returns**: <code>Promise</code> - A promise that is resolved with the results of the transaction (the value
@@ -445,7 +445,7 @@ A function that will make queries during a transaction.
 
 
 | Param | Type | Description |
-| --- | --- | --- |
+|:--- |:--- |:--- |
 | trxn | <code>[Connection](#Connection)</code> | The transaction connection. |
 | [done] | <code>function</code> | A callback that can be used to end the transaction. |
 
@@ -509,7 +509,7 @@ a promise that resolves with the results of the query.
 
 
 | Param | Type | Description |
-| --- | --- | --- |
+|:--- |:--- |:--- |
 | sql | <code>string</code> &#124; <code>Object</code> | An SqlString or options object. |
 | [values] | <code>Array</code> | Values to replace placeholders in the SqlString. |
 | [cb] | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | An optional callback that gets called with     the results of the query. |
@@ -607,7 +607,7 @@ Selects data from the table.
 
 
 | Param | Type | Description |
-| --- | --- | --- |
+|:--- |:--- |:--- |
 | columns | <code>Array.&lt;string&gt;</code> &#124; <code>string</code> | An array of columns to select or a custom `SELECT` string. |
 | [sqlString] | <code>string</code> | SQL to be appended to the query after the `FROM table` clause. |
 | [values] | <code>Array</code> | Values to replace the placeholders in `sqlString` and `columns`. |
@@ -671,7 +671,7 @@ Inserts data into a new row in the table.
 
 
 | Param | Type | Description |
-| --- | --- | --- |
+|:--- |:--- |:--- |
 | data | <code>Object</code> &#124; <code>Array</code> | An object of (column name)-(data value) pairs or     an array containing either 1) an array of arrays of data values or 2) an array     of column names and the data array from 1). |
 | [sqlString] | <code>string</code> | SQL to be appended to the query.<br>This would only be used to add     an `ON DUPLICATE KEY UPDATE` clause. |
 | [values] | <code>Array</code> | Values to replace the placeholders in `sqlString`. |
@@ -739,7 +739,7 @@ value (if there is one) may be incremented anyway due to a bug in MySQL.
 
 
 | Param | Type | Description |
-| --- | --- | --- |
+|:--- |:--- |:--- |
 | data | <code>Object</code> | An object of (column name)-(data value) pairs. |
 | cb | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | A callback that gets called with the results of the query. |
 
@@ -763,7 +763,7 @@ Replaces a row in the table with new data.
 
 
 | Param | Type | Description |
-| --- | --- | --- |
+|:--- |:--- |:--- |
 | data | <code>Object</code> | An object of (column name)-(data value) pairs. |
 | cb | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | A callback that gets called with the results of the query. |
 
@@ -789,7 +789,7 @@ optional but at least one of them must be specified.
 
 
 | Param | Type | Description |
-| --- | --- | --- |
+|:--- |:--- |:--- |
 | [data] | <code>Object</code> | An object of (column name)-(data value) pairs that define the new column values.     This object will be escaped by `mysql.escape()` so if you want to use more sophisticated SQL (such as     a MySQL function) to update a column's value, you'll need to use the `sqlString` argument instead. |
 | [sqlString] | <code>string</code> | SQL to be appended to the query after the `SET data` clause     or immediately after `SET ` if `data` is omitted. |
 | [values] | <code>Array</code> | Values to replace the placeholders in `sqlString` (and/or `data`). |
@@ -837,7 +837,7 @@ Deletes data from the table.
 
 
 | Param | Type | Description |
-| --- | --- | --- |
+|:--- |:--- |:--- |
 | [sqlString] | <code>string</code> | SQL to be appended to the query after the `FROM table` clause. |
 | [values] | <code>Array</code> | Values to replace the placeholders in `sqlString`. |
 | [cb] | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | A callback that gets called with the results of the query. |
@@ -879,7 +879,7 @@ Returns a new `MySQLTable` instance that will perform queries using the provided
 
 
 | Param | Type | Description |
-| --- | --- | --- |
+|:--- |:--- |:--- |
 | trxn | <code>[Connection](#Connection)</code> | The transaction connection that will be used to perform queries. |
 
 **Returns**: <code>[MySQLTable](#MySQLTable)</code> - A new `MySQLTable` instance that will perform queries using the provided transaction
