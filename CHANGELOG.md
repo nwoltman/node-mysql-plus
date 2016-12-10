@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.4.1 (2016-12-10)
+
+### Bug Fixes
++ TableDefinition: Use `defaultRaw()` over `default()` when appropriate ([`4d0ed0f`](https://github.com/nwoltman/node-mysql-plus/commit/4d0ed0f6f794c42d0963f4969cbf36f291af71ac))
++ changelog: Add missing deprecation ([`5420a08`](https://github.com/nwoltman/node-mysql-plus/commit/5420a08577e21316dc3dd420f322346ee782625f))
+
 ## 0.4.0 (2016-12-08)
 
 ### Deprecations
