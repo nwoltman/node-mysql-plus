@@ -1,6 +1,6 @@
 {
   "name": "mysql-plus",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "MySQL client for Node.js with methods for defining tables with auto-migration and making basic queries",
   "author": "Nathan Woltman <nwoltman@outlook.com>",
   "license": "MIT",
