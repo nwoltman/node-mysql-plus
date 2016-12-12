@@ -511,6 +511,14 @@ describe('ColumnDefinitions', () => {
 
   describe('updatable time data types', () => {
 
+    it('should provide the defaultCurrentTimestamp() method', () => {
+      ColumnDefinitions.datetime().defaultCurrentTimestamp().$toSQL()
+        .should.equal('datetime DEFAULT CURRENT_TIMESTAMP');
+
+      ColumnDefinitions.timestamp().defaultCurrentTimestamp().$toSQL()
+        .should.equal('timestamp DEFAULT CURRENT_TIMESTAMP');
+    });
+
     it('should provide the onUpdateCurrentTimestamp() method', () => {
       var cd;
 
