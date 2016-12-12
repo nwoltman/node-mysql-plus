@@ -38,7 +38,7 @@ describe('MySQLTable', () => {
   });
 
 
-  describe('#tableName', () => { // TODO: Remove after v0.4.0 is released
+  describe('#tableName', () => { // TODO: Remove after v0.5.0 is released
 
     it('should be the name of the table', () => {
       testTable.tableName.should.equal('mysql_table_test_table');

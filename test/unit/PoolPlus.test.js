@@ -25,7 +25,7 @@ describe('PoolPlus', () => {
   });
 
 
-  describe('.Type', () => { // TODO: Remove after v0.4.0 is released.
+  describe('.Type', () => { // TODO: Remove after v0.5.0 is released.
 
     it('should provide the ColumnDefinitions functions', () => {
       pool.Type.should.equal(ColumnDefinitions);
@@ -78,7 +78,7 @@ describe('PoolPlus', () => {
     it('should return a MySQLTable instance', () => {
       const table = pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA);
       table.should.be.an.instanceOf(MySQLTable);
-      table.tableName.should.equal(TEST_TABLE_NAME); // TODO: Remove after v0.4.0 is released
+      table.tableName.should.equal(TEST_TABLE_NAME); // TODO: Remove after v0.5.0 is released
       table.name.should.equal(TEST_TABLE_NAME);
       table.schema.should.equal(TEST_TABLE_SCHEMA);
     });
