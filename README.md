@@ -1138,10 +1138,15 @@ All of these methods return a `ColumnDefinition` class.
 This class is what is used to define the column's attributes. These attributes can be set using the following methods:
 
 + `notNull()` - Adds the `NOT NULL` attribute
-+ `default(value)` - Sets the column's `DEFAULT` value (escapes the input value).
-  + Example: `.default('Hello')` produces `DEFAULT 'Hello'`
-+ `defaultRaw(value: string)` - Sets the column's `DEFAULT` value (does not escape the input value).
-  + Example: `.defaultRaw('CURRENT_TIMESTAMP')` produces `DEFAULT CURRENT_TIMESTAMP`
++ `default(value)` - Sets the column's `DEFAULT` value
+  + Examples:
+    + `.default('Hello')` produces `DEFAULT 'Hello'`
+    + `.default(null)` produces `DEFAULT NULL`
++ `defaultRaw(value: string)` - Sets the column's `DEFAULT` value without escaping the input value
+  + Examples:
+    + `.defaultRaw('CURRENT_TIMESTAMP')` produces `DEFAULT CURRENT_TIMESTAMP`
+    + `.defaultRaw('NULL')` produces `DEFAULT NULL`
+    + `.defaultRaw('Hello')` produces `DEFAULT Hello` (which will result in an error)
 + `primaryKey()` - Declares the column to be the table's primary key
 + `unique()` - Declares the column as a unique index
 + `index()` - Declares the column as an index
