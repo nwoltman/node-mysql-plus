@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 0.5.0 (2016-12-12)
+
+### Deprecations
++ ColumnDefinition: Deprecate `.defaultRaw()` ([`ee10a0c`](https://github.com/nwoltman/node-mysql-plus/commit/ee10a0cbc740c1f40c8bade9c07cb8889d7de568))
++ lib: Update deprecation warnings to say things will be removed in 0.6.0 (instead of 0.5.0) ([`3273395`](https://github.com/nwoltman/node-mysql-plus/commit/3273395be80fa2345fde67076875414593c11d45))
+
+### New features
++ UpdatableTimeColumnDefinition: Add [`.defaultCurrentTimestamp()`](https://github.com/nwoltman/node-mysql-plus#updatabletimecolumndefinition) method ([`949d72f`](https://github.com/nwoltman/node-mysql-plus/commit/949d72f5a7f04b4da57b484e27fa0eeca946aa0e))
+
 ## 0.4.1 (2016-12-10)
 
 ### Bug Fixes
