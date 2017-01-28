@@ -30,32 +30,16 @@ describe('ColumnDefinitions', () => {
     b = ColumnDefinitions.blob();
     a.$equals(b).should.be.false();
 
-    a = ColumnDefinitions.blob().defaultRaw('a');
-    b = ColumnDefinitions.blob();
-    a.$equals(b).should.be.false();
-
     a = ColumnDefinitions.blob().default('a');
     b = ColumnDefinitions.blob().default('a');
-    a.$equals(b).should.be.true();
-
-    a = ColumnDefinitions.blob().defaultRaw('a');
-    b = ColumnDefinitions.blob().defaultRaw('a');
     a.$equals(b).should.be.true();
 
     a = ColumnDefinitions.blob().notNull();
     b = ColumnDefinitions.blob().notNull().default('a');
     a.$equals(b).should.be.false();
 
-    a = ColumnDefinitions.blob().notNull();
-    b = ColumnDefinitions.blob().notNull().defaultRaw('a');
-    a.$equals(b).should.be.false();
-
     a = ColumnDefinitions.blob().notNull().default('a');
     b = ColumnDefinitions.blob().notNull().default('b');
-    a.$equals(b).should.be.false();
-
-    a = ColumnDefinitions.blob().notNull().defaultRaw('a');
-    b = ColumnDefinitions.blob().notNull().defaultRaw('b');
     a.$equals(b).should.be.false();
 
     a = ColumnDefinitions.int().unsigned().zerofill().notNull().default(2).autoIncrement();
@@ -374,26 +358,8 @@ describe('ColumnDefinitions', () => {
       cd = ColumnDefinitions.timestamp().default('CURRENT_TIMESTAMP');
       cd.$toSQL().should.equal('timestamp DEFAULT \'CURRENT_TIMESTAMP\'');
 
-      cd = ColumnDefinitions.datetime().notNull().defaultRaw('NOW()');
-      cd.$toSQL().should.equal('datetime NOT NULL DEFAULT NOW()');
-
-      cd = ColumnDefinitions.timestamp().notNull().defaultRaw('CURRENT_TIMESTAMP');
-      cd.$toSQL().should.equal('timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP');
-
-      cd = ColumnDefinitions.tinyint().notNull().defaultRaw('1');
-      cd.$toSQL().should.equal('tinyint NOT NULL DEFAULT 1');
-
       cd = ColumnDefinitions.datetime().default('1970-01-01 00:00:01');
       cd.$toSQL().should.equal('datetime DEFAULT \'1970-01-01 00:00:01\'');
-    });
-
-    it('should throw if the value passed to `.defaultRaw()` is not a string', () => {
-      should.throws(() => ColumnDefinitions.int().defaultRaw(1), /defaultRaw.+must be a string/);
-      should.throws(() => ColumnDefinitions.int().defaultRaw([1]), /defaultRaw.+must be a string/);
-      should.throws(() => ColumnDefinitions.int().defaultRaw(null), /defaultRaw.+must be a string/);
-      should.throws(() => ColumnDefinitions.int().defaultRaw(undefined), /defaultRaw.+must be a string/);
-      should.throws(() => ColumnDefinitions.int().defaultRaw(true), /defaultRaw.+must be a string/);
-      should.throws(() => ColumnDefinitions.int().defaultRaw(false), /defaultRaw.+must be a string/);
     });
 
     it('should allow the columns to be defined as keys, but not change the SQL', () => {

@@ -342,9 +342,6 @@ This class is what is used to define the column's attributes. These attributes c
   + Examples:
     + `.default('Hello')` produces `DEFAULT 'Hello'`
     + `.default(null)` produces `DEFAULT NULL`
-+ ~~`defaultRaw(value: string)` - Sets the column's `DEFAULT` value without escaping the input value~~
-  + **deprecated** since version 0.5.0 and will be removed in version 0.6.0
-  + Examples: `.defaultRaw('CURRENT_TIMESTAMP')` produces `DEFAULT CURRENT_TIMESTAMP`
 + `primaryKey()` - Declares the column to be the table's primary key
 + `unique()` - Declares the column as a unique index
 + `index()` - Declares the column as an index
