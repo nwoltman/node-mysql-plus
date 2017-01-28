@@ -149,22 +149,10 @@ This module.
 **See**: [mysql](https://github.com/mysqljs/mysql#mysql)  
 
 * [mysql-plus](#module_mysql-plus) ⇐ <code>mysql</code>
-    * ~~[~Type](#module_mysql-plus..Type)~~
     * [~ColTypes](#module_mysql-plus..ColTypes)
     * [~createPool(config)](#module_mysql-plus..createPool) ⇒ <code>[PoolPlus](#PoolPlus)</code>
     * [~queryCallback](#module_mysql-plus..queryCallback) : <code>function</code>
 
-
----
-
-<a name="module_mysql-plus..Type"></a>
-
-### ~~mysql-plus~Type~~
-***Deprecated***
-
-A namespace that provides the column type methods used to define columns.
-
-**See**: [`mysqlPlus.ColTypes`](#module_mysql-plus..ColTypes)  
 
 ---
 
@@ -251,7 +239,6 @@ and perform queries and transactions using promises.
 
 * [PoolPlus](#PoolPlus) ⇐ <code>Pool</code>
     * _instance_
-        * ~~[.Type](#PoolPlus+Type)~~
         * [.ColTypes](#PoolPlus+ColTypes)
         * [.defineTable(name, schema, [migrationStrategy])](#PoolPlus+defineTable) ⇒ <code>[MySQLTable](#MySQLTable)</code>
         * [.sync(cb)](#PoolPlus+sync) ⇒ <code>void</code>
@@ -260,17 +247,6 @@ and perform queries and transactions using promises.
     * _inner_
         * [~transactionHandler](#PoolPlus..transactionHandler) ⇒ <code>Promise</code>
 
-
----
-
-<a name="PoolPlus+Type"></a>
-
-### ~~poolPlus.Type~~
-***Deprecated***
-
-A namespace that provides the column type methods used to define columns.
-
-**See**: [`poolPlus.ColTypes`](#PoolPlus+ColTypes)  
 
 ---
 

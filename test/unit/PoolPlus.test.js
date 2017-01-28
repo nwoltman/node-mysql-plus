@@ -25,15 +25,6 @@ describe('PoolPlus', () => {
   });
 
 
-  describe('.Type', () => { // TODO: Remove after v0.5.0 is released.
-
-    it('should provide the ColumnDefinitions functions', () => {
-      pool.Type.should.equal(ColumnDefinitions);
-    });
-
-  });
-
-
   describe('.ColTypes', () => {
 
     it('should provide the ColumnDefinitions functions', () => {
