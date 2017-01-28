@@ -547,8 +547,6 @@ A class that provides convenient methods for performing queries.
     * [.trxn](#MySQLTable+trxn) : <code>?[Connection](#Connection)</code>
     * [.select(columns, [sqlString], [values], [cb])](#MySQLTable+select) ⇒ <code>Promise</code>
     * [.insert(data, [sqlString], [values], [cb])](#MySQLTable+insert) ⇒ <code>Promise</code>
-    * ~~[.insertIgnore(data, cb)](#MySQLTable+insertIgnore) ⇒ <code>void</code>~~
-    * ~~[.replace(data, cb)](#MySQLTable+replace) ⇒ <code>void</code>~~
     * [.update([data], [sqlString], [values], [cb])](#MySQLTable+update) ⇒ <code>Promise</code>
     * [.delete([sqlString], [values], [cb])](#MySQLTable+delete) ⇒ <code>Promise</code>
     * [.query()](#MySQLTable+query) ⇒ <code>Promise</code>
@@ -720,59 +718,6 @@ const users = [
 userTable.insert([['email', 'name'], users], (err, result) => {
   if (err) throw err;
   // users inserted!
-});
-```
-
-
----
-
-<a name="MySQLTable+insertIgnore"></a>
-
-### ~~mySQLTable.insertIgnore(data, cb) ⇒ <code>void</code>~~
-***Deprecated***
-
-Inserts data into a new row in the table. The row is not
-inserted if it would result in a duplicate key error.
-
-__Note:__ Be aware that if the insert is ignored, the table's `AUTO_INCREMENT`
-value (if there is one) may be incremented anyway due to a bug in MySQL.
-
-
-| Param | Type | Description |
-|:--- |:--- |:--- |
-| data | <code>Object</code> | An object of (column name)-(data value) pairs. |
-| cb | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | A callback that gets called with the results of the query. |
-
-**Example**:
-```js
-userTable.insertIgnore({email: 'email@example.com', name: 'John Doe'}, (err, result) => {
-  if (err) throw err;
-  // data inserted! (maybe)
-});
-```
-
-
----
-
-<a name="MySQLTable+replace"></a>
-
-### ~~mySQLTable.replace(data, cb) ⇒ <code>void</code>~~
-***Deprecated***
-
-Replaces a row in the table with new data.
-
-
-| Param | Type | Description |
-|:--- |:--- |:--- |
-| data | <code>Object</code> | An object of (column name)-(data value) pairs. |
-| cb | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | A callback that gets called with the results of the query. |
-
-**Example**:
-```js
-// `id` is a primary key
-userTable.replace({id: 5, email: 'newemail@example.com', name: 'Jane Doe'}, (err, result) => {
-  if (err) throw err;
-  // row with id = 5 replaced with new data!
 });
 ```
 

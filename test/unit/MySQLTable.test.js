@@ -356,55 +356,6 @@ describe('MySQLTable', () => {
   });
 
 
-  describe('#insertIgnore()', () => {
-
-    after(resetTable);
-
-    it('should insert the specified data into the table', done => {
-      testTable.insertIgnore({email: 'one@email.com'}, (err, result) => {
-        if (err) throw err;
-        result.affectedRows.should.equal(1);
-        result.insertId.should.equal(1);
-        done();
-      });
-    });
-
-    it('should not result in an error if attempting to insert a duplicate key', done => {
-      testTable.insertIgnore({email: 'one@email.com'}, (err, result) => {
-        if (err) throw err;
-        result.affectedRows.should.equal(0);
-        done();
-      });
-    });
-
-  });
-
-
-  describe('#replace()', () => {
-
-    after(resetTable);
-
-    it('should insert the specified data into the table', done => {
-      testTable.replace({email: 'one@email.com'}, (err, result) => {
-        if (err) throw err;
-        result.affectedRows.should.equal(1);
-        result.insertId.should.equal(1);
-        done();
-      });
-    });
-
-    it('should replace the existing row in the table', done => {
-      testTable.replace({id: 1, email: 'newone@email.com'}, (err, result) => {
-        if (err) throw err;
-        result.affectedRows.should.equal(2); // delete + insert
-        result.insertId.should.equal(1);
-        done();
-      });
-    });
-
-  });
-
-
   describe('#update()', () => {
 
     describe('with a callback', () => {
