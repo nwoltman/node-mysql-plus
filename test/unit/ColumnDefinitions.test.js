@@ -371,9 +371,8 @@ describe('ColumnDefinitions', () => {
       cd = ColumnDefinitions.blob().notNull().default('1');
       cd.$toSQL().should.equal('blob NOT NULL DEFAULT \'1\'');
 
-      // TODO: Uncomment after v0.5.0 is released.
-      // cd = ColumnDefinitions.timestamp().default('CURRENT_TIMESTAMP');
-      // cd.$toSQL().should.equal('timestamp DEFAULT \'CURRENT_TIMESTAMP\'');
+      cd = ColumnDefinitions.timestamp().default('CURRENT_TIMESTAMP');
+      cd.$toSQL().should.equal('timestamp DEFAULT \'CURRENT_TIMESTAMP\'');
 
       cd = ColumnDefinitions.datetime().notNull().defaultRaw('NOW()');
       cd.$toSQL().should.equal('datetime NOT NULL DEFAULT NOW()');
@@ -383,18 +382,6 @@ describe('ColumnDefinitions', () => {
 
       cd = ColumnDefinitions.tinyint().notNull().defaultRaw('1');
       cd.$toSQL().should.equal('tinyint NOT NULL DEFAULT 1');
-
-      // TODO: Remove after v0.5.0 is released.
-      // Special case for TIMESTAMP and DATETIME types when the default is CURRENT_TIMESTAMP
-      cd = ColumnDefinitions.timestamp().default('CURRENT_TIMESTAMP');
-      cd.$toSQL().should.equal('timestamp DEFAULT CURRENT_TIMESTAMP');
-
-      cd = ColumnDefinitions.datetime().default('CURRENT_TIMESTAMP');
-      cd.$toSQL().should.equal('datetime DEFAULT CURRENT_TIMESTAMP');
-
-      // Make sure TIMESTAMP and DATETIME still escape other values
-      cd = ColumnDefinitions.timestamp().default('1970-01-01 00:00:01');
-      cd.$toSQL().should.equal('timestamp DEFAULT \'1970-01-01 00:00:01\'');
 
       cd = ColumnDefinitions.datetime().default('1970-01-01 00:00:01');
       cd.$toSQL().should.equal('datetime DEFAULT \'1970-01-01 00:00:01\'');

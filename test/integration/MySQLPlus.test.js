@@ -20,7 +20,7 @@ describe('MySQLPlus', function() {
       email: ColTypes.varchar(255).notNull().unique(),
       password: ColTypes.char(40).notNull(),
       letter: ColTypes.char(1).default('a').index(),
-      created: ColTypes.datetime().default('CURRENT_TIMESTAMP'),
+      created: ColTypes.datetime().defaultCurrentTimestamp(),
       updated: ColTypes.datetime().onUpdateCurrentTimestamp(),
       weirdtext: ColTypes.tinytext().charset('ascii').collate('ascii_bin'),
       zfill: ColTypes.smallint().zerofill(),
