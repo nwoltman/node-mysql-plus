@@ -38,15 +38,6 @@ describe('MySQLTable', () => {
   });
 
 
-  describe('#tableName', () => { // TODO: Remove after v0.5.0 is released
-
-    it('should be the name of the table', () => {
-      testTable.tableName.should.equal('mysql_table_test_table');
-    });
-
-  });
-
-
   describe('#name', () => {
 
     it('should be the name of the table', () => {

@@ -540,7 +540,6 @@ A class that provides convenient methods for performing queries.
 **See**: [https://github.com/mysqljs/mysql#performing-queries](https://github.com/mysqljs/mysql#performing-queries)  
 
 * [MySQLTable](#MySQLTable)
-    * ~~[.tableName](#MySQLTable+tableName) : <code>string</code>~~
     * [.name](#MySQLTable+name) : <code>string</code>
     * [.schema](#MySQLTable+schema) : <code>Object</code>
     * [.pool](#MySQLTable+pool) : <code>[PoolPlus](#PoolPlus)</code>
@@ -551,16 +550,6 @@ A class that provides convenient methods for performing queries.
     * [.delete([sqlString], [values], [cb])](#MySQLTable+delete) ⇒ <code>Promise</code>
     * [.query()](#MySQLTable+query) ⇒ <code>Promise</code>
     * [.transacting(trxn)](#MySQLTable+transacting) ⇒ <code>[MySQLTable](#MySQLTable)</code>
-
-
----
-
-<a name="MySQLTable+tableName"></a>
-
-### ~~mySQLTable.tableName : <code>string</code>~~
-***Deprecated***
-
-The table's name (as passed to [`poolPlus.defineTable()`](#PoolPlus+defineTable)).
 
 
 ---
