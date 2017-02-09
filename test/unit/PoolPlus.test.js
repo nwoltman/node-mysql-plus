@@ -41,7 +41,18 @@ describe('PoolPlus', () => {
     });
 
     it('should throw if the configured migration strategy is invalid', () => {
-      should.throws(() => new PoolPlus({migrationStrategy: 'bleh'}), /not a valid migration strategy/);
+      should.throws(
+        () => new PoolPlus({plusOptions: {
+          migrationStrategy: 'bleh',
+        }}),
+        /not a valid migration strategy/
+      );
+    });
+
+    // TODO: Remove after v0.6.0 is released
+    it('should throw if the PoolPlus options are not in the `plusOptions` property', () => {
+      should.throws(() => new PoolPlus({migrationStrategy: 'alter'}));
+      should.throws(() => new PoolPlus({allowAlterInProduction: false}));
     });
 
   });
@@ -545,7 +556,9 @@ describe('PoolPlus', () => {
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA, 'drop');
         TableDefinitionStub.args[3][3].should.equal('drop');
 
-        pool = new MockPool({migrationStrategy: 'safe'});
+        pool = new MockPool({plusOptions: {
+          migrationStrategy: 'safe',
+        }});
 
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA);
         TableDefinitionStub.args[4][3].should.equal('safe');
@@ -559,7 +572,9 @@ describe('PoolPlus', () => {
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA, 'drop');
         TableDefinitionStub.args[7][3].should.equal('drop');
 
-        pool = new MockPool({migrationStrategy: 'alter'});
+        pool = new MockPool({plusOptions: {
+          migrationStrategy: 'alter',
+        }});
 
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA);
         TableDefinitionStub.args[8][3].should.equal('alter');
@@ -573,7 +588,9 @@ describe('PoolPlus', () => {
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA, 'drop');
         TableDefinitionStub.args[11][3].should.equal('drop');
 
-        pool = new MockPool({migrationStrategy: 'drop'});
+        pool = new MockPool({plusOptions: {
+          migrationStrategy: 'drop',
+        }});
 
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA);
         TableDefinitionStub.args[12][3].should.equal('drop');
@@ -587,7 +604,9 @@ describe('PoolPlus', () => {
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA, 'drop');
         TableDefinitionStub.args[15][3].should.equal('drop');
 
-        pool = new MockPool({allowAlterInProduction: true});
+        pool = new MockPool({plusOptions: {
+          allowAlterInProduction: true,
+        }});
 
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA);
         TableDefinitionStub.args[16][3].should.equal('alter');
@@ -601,7 +620,10 @@ describe('PoolPlus', () => {
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA, 'drop');
         TableDefinitionStub.args[19][3].should.equal('drop');
 
-        pool = new MockPool({migrationStrategy: 'safe', allowAlterInProduction: true});
+        pool = new MockPool({plusOptions: {
+          migrationStrategy: 'safe',
+          allowAlterInProduction: true,
+        }});
 
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA);
         TableDefinitionStub.args[20][3].should.equal('safe');
@@ -615,7 +637,10 @@ describe('PoolPlus', () => {
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA, 'drop');
         TableDefinitionStub.args[23][3].should.equal('drop');
 
-        pool = new MockPool({migrationStrategy: 'alter', allowAlterInProduction: true});
+        pool = new MockPool({plusOptions: {
+          migrationStrategy: 'alter',
+          allowAlterInProduction: true,
+        }});
 
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA);
         TableDefinitionStub.args[24][3].should.equal('alter');
@@ -629,7 +654,10 @@ describe('PoolPlus', () => {
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA, 'drop');
         TableDefinitionStub.args[27][3].should.equal('drop');
 
-        pool = new MockPool({migrationStrategy: 'drop', allowAlterInProduction: true});
+        pool = new MockPool({plusOptions: {
+          migrationStrategy: 'drop',
+          allowAlterInProduction: true,
+        }});
 
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA);
         TableDefinitionStub.args[28][3].should.equal('drop');
@@ -681,7 +709,9 @@ describe('PoolPlus', () => {
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA, 'drop');
         TableDefinitionStub.args[3][3].should.equal('safe');
 
-        pool = new MockPool({migrationStrategy: 'safe'});
+        pool = new MockPool({plusOptions: {
+          migrationStrategy: 'safe',
+        }});
 
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA);
         TableDefinitionStub.args[4][3].should.equal('safe');
@@ -695,7 +725,9 @@ describe('PoolPlus', () => {
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA, 'drop');
         TableDefinitionStub.args[7][3].should.equal('safe');
 
-        pool = new MockPool({migrationStrategy: 'alter'});
+        pool = new MockPool({plusOptions: {
+          migrationStrategy: 'alter',
+        }});
 
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA);
         TableDefinitionStub.args[8][3].should.equal('safe');
@@ -709,7 +741,9 @@ describe('PoolPlus', () => {
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA, 'drop');
         TableDefinitionStub.args[11][3].should.equal('safe');
 
-        pool = new MockPool({migrationStrategy: 'drop'});
+        pool = new MockPool({plusOptions: {
+          migrationStrategy: 'drop',
+        }});
 
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA);
         TableDefinitionStub.args[12][3].should.equal('safe');
@@ -723,7 +757,9 @@ describe('PoolPlus', () => {
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA, 'drop');
         TableDefinitionStub.args[15][3].should.equal('safe');
 
-        pool = new MockPool({allowAlterInProduction: true});
+        pool = new MockPool({plusOptions: {
+          allowAlterInProduction: true,
+        }});
 
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA);
         TableDefinitionStub.args[16][3].should.equal('safe');
@@ -737,7 +773,10 @@ describe('PoolPlus', () => {
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA, 'drop');
         TableDefinitionStub.args[19][3].should.equal('safe');
 
-        pool = new MockPool({migrationStrategy: 'safe', allowAlterInProduction: true});
+        pool = new MockPool({plusOptions: {
+          migrationStrategy: 'safe',
+          allowAlterInProduction: true,
+        }});
 
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA);
         TableDefinitionStub.args[20][3].should.equal('safe');
@@ -751,7 +790,10 @@ describe('PoolPlus', () => {
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA, 'drop');
         TableDefinitionStub.args[23][3].should.equal('safe');
 
-        pool = new MockPool({migrationStrategy: 'alter', allowAlterInProduction: true});
+        pool = new MockPool({plusOptions: {
+          migrationStrategy: 'alter',
+          allowAlterInProduction: true,
+        }});
 
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA);
         TableDefinitionStub.args[24][3].should.equal('alter');
@@ -765,7 +807,10 @@ describe('PoolPlus', () => {
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA, 'drop');
         TableDefinitionStub.args[27][3].should.equal('safe');
 
-        pool = new MockPool({migrationStrategy: 'drop', allowAlterInProduction: true});
+        pool = new MockPool({plusOptions: {
+          migrationStrategy: 'drop',
+          allowAlterInProduction: true,
+        }});
 
         pool.defineTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA);
         TableDefinitionStub.args[28][3].should.equal('safe');

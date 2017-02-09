@@ -187,9 +187,10 @@ method except it returns a [`PoolPlus`](#PoolPlus) instance and accepts more opt
 
 | Param | Type | Default | Description |
 |:--- |:--- |:--- |:--- |
-| config | <code>Object</code> |  | A configuration object defining MySQL connection options. In addition to the     possible [mysql connection options](https://github.com/mysqljs/mysql#connection-options),     this object may also have the following two options: |
-| [config.migrationStrategy] | <code>string</code> |  | One of `safe`, `alter`, or `drop`.     Please see the migration strategies documentation [here](#migration-strategies).     Defaults to `safe` in production and `alter` everywhere else. |
-| [config.allowAlterInProduction] | <code>boolean</code> | <code>false</code> | Setting this to `true` will     allow `alter` to be used as a migration strategy in production environments. |
+| config | <code>Object</code> |  | A configuration object defining MySQL connection options. In addition to     the, possible [mysql connection options](https://github.com/mysqljs/mysql#connection-options),     this object may also have a `plusOptions` property to configure the [`PoolPlus`](#PoolPlus)     instance, it returns. |
+| [config.plusOptions] | <code>Object</code> |  | An optional configuration object that may have the following properties: |
+| [config.plusOptions.migrationStrategy] | <code>string</code> |  | One of `safe`, `alter`, or `drop`.     Please see the migration strategies documentation [here](#migration-strategies).     Defaults to `safe` in production and `alter` everywhere else. |
+| [config.plusOptions.allowAlterInProduction] | <code>boolean</code> | <code>false</code> | Setting this to `true` will     allow `alter` to be used as a migration strategy in production environments. |
 
 **Returns**: <code>[PoolPlus](#PoolPlus)</code> - A new `PoolPlus` instance.
 
@@ -200,8 +201,10 @@ const pool = mysql.createPool({
   host: 'example.org',
   user: 'me',
   password: 'secret',
-  migrationStrategy: 'safe',
-  allowAlterInProduction: false,
+  plusOptions: {
+    migrationStrategy: 'safe',
+    allowAlterInProduction: true,
+  },
 });
 pool.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
   if (err) throw err;

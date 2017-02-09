@@ -631,7 +631,7 @@ describe('MySQLPlus', function() {
 
   describe('when re-defining existing tables and migrationStrategy = "drop"', () => {
 
-    const dropConfig = Object.assign({migrationStrategy: 'drop'}, config);
+    const dropConfig = Object.assign({plusOptions: {migrationStrategy: 'drop'}}, config);
     const pool = MySQLPlus.createPool(dropConfig);
 
     before(done => {
