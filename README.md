@@ -191,6 +191,7 @@ method except it returns a [`PoolPlus`](#PoolPlus) instance and accepts more opt
 | [config.plusOptions] | <code>Object</code> |  | An optional configuration object that may have the following properties: |
 | [config.plusOptions.migrationStrategy] | <code>string</code> |  | One of `safe`, `alter`, or `drop`.     Please see the migration strategies documentation [here](#migration-strategies).     Defaults to `safe` in production and `alter` everywhere else. |
 | [config.plusOptions.allowAlterInProduction] | <code>boolean</code> | <code>false</code> | Setting this to `true` will     allow `alter` to be used as a migration strategy in production environments. |
+| [config.plusOptions.debug] | <code>boolean</code> | <code>false</code> | If set to `true`, all of the SQL operations     that will be performed will be printed to the console. |
 
 **Returns**: <code>[PoolPlus](#PoolPlus)</code> - A new `PoolPlus` instance.
 
@@ -204,11 +205,8 @@ const pool = mysql.createPool({
   plusOptions: {
     migrationStrategy: 'safe',
     allowAlterInProduction: true,
+    debug: true,
   },
-});
-pool.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
-  if (err) throw err;
-  console.log('The solution is: ', rows[0].solution);
 });
 ```
 
