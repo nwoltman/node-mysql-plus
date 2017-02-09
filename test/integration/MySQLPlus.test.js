@@ -135,7 +135,7 @@ describe('MySQLPlus', function() {
       neverchange: ColTypes.tinyint().oldName('fake_column'),
       norename: ColTypes.tinyint().oldName('fake_column'),
     },
-    indexes: ['email'],
+    indexes: ['email', ['id', 'email']],
   };
   const columnsTableExpectedSQL =
     'CREATE TABLE `columns_table` (\n' +
@@ -150,7 +150,8 @@ describe('MySQLPlus', function() {
     '  `norename` tinyint(4) DEFAULT NULL,\n' +
     '  PRIMARY KEY (`id`),\n' +
     '  UNIQUE KEY `unique_columns_table_uuid` (`uuid`),\n' +
-    '  KEY `index_columns_table_email` (`email`)\n' +
+    '  KEY `index_columns_table_email` (`email`),\n' +
+    '  KEY `index_columns_table_id_email` (`id`,`email`)\n' +
     ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
 
   const columnsTableMigratedSchema = {
@@ -165,6 +166,7 @@ describe('MySQLPlus', function() {
       norename: ColTypes.smallint().oldName('fake_column'),
       added: ColTypes.text(),
     },
+    indexes: [['id', 'email']],
     uniqueKeys: ['email'],
   };
   const columnsTableMigratedExpectedSQL =
@@ -180,7 +182,8 @@ describe('MySQLPlus', function() {
     '  `added` text,\n' +
     '  PRIMARY KEY (`id`),\n' +
     '  UNIQUE KEY `unique_columns_table_email` (`email`),\n' +
-    '  UNIQUE KEY `unique_columns_table_uuid` (`uuid`)\n' +
+    '  UNIQUE KEY `unique_columns_table_uuid` (`uuid`),\n' +
+    '  KEY `index_columns_table_id_email` (`id`,`email`)\n' +
     ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
 
   const primaryKeyTableName = 'pk_table';
@@ -300,11 +303,20 @@ describe('MySQLPlus', function() {
       a: ColTypes.bigint().unsigned(),
       b: ColTypes.bigint().unsigned(),
       c: ColTypes.bigint().unsigned(),
+      d: ColTypes.int().unsigned().notNull(),
       ai: ColTypes.int(),
       bi: ColTypes.bigint(),
+      eb: ColTypes.varchar(63),
+      fb: ColTypes.char(1).default('a'),
+      gc: ColTypes.int().unsigned().notNull(),
+      hc: ColTypes.char(255),
     },
-    indexes: ['b', 'c', ['ai', 'bi']],
+    indexes: ['b', 'c', 'd', ['ai', 'bi'], ['eb', 'fb'], ['gc', 'hc']],
     foreignKeys: {
+      'ai, bi': {
+        table: 'indexes_table',
+        column: ['a', 'b'],
+      },
       b: 'big_table.id',
       c: {
         table: 'big_table',
@@ -312,9 +324,14 @@ describe('MySQLPlus', function() {
         onDelete: 'CASCADE',
         onUpdate: 'NO ACTION',
       },
-      'ai, bi': {
-        table: 'indexes_table',
-        column: ['a', 'b'],
+      d: 'columns_table.id',
+      'eb, fb': {
+        table: 'big_table',
+        column: ['name', 'letter'],
+      },
+      'gc, hc': {
+        table: 'columns_table',
+        column: ['id', 'email'],
       },
     },
   };
@@ -323,14 +340,25 @@ describe('MySQLPlus', function() {
     '  `a` bigint(20) unsigned DEFAULT NULL,\n' +
     '  `b` bigint(20) unsigned DEFAULT NULL,\n' +
     '  `c` bigint(20) unsigned DEFAULT NULL,\n' +
+    '  `d` int(10) unsigned NOT NULL,\n' +
     '  `ai` int(11) DEFAULT NULL,\n' +
     '  `bi` bigint(20) DEFAULT NULL,\n' +
+    '  `eb` varchar(63) DEFAULT NULL,\n' +
+    '  `fb` char(1) DEFAULT \'a\',\n' +
+    '  `gc` int(10) unsigned NOT NULL,\n' +
+    '  `hc` char(255) DEFAULT NULL,\n' +
     '  KEY `index_fk_table_b` (`b`),\n' +
     '  KEY `index_fk_table_c` (`c`),\n' +
+    '  KEY `index_fk_table_d` (`d`),\n' +
     '  KEY `index_fk_table_ai_bi` (`ai`,`bi`),\n' +
+    '  KEY `index_fk_table_eb_fb` (`eb`,`fb`),\n' +
+    '  KEY `index_fk_table_gc_hc` (`gc`,`hc`),\n' +
     '  CONSTRAINT `fk_fk_table_ai_bi` FOREIGN KEY (`ai`, `bi`) REFERENCES `indexes_table` (`a`, `b`),\n' +
     '  CONSTRAINT `fk_fk_table_b` FOREIGN KEY (`b`) REFERENCES `big_table` (`id`),\n' +
-    '  CONSTRAINT `fk_fk_table_c` FOREIGN KEY (`c`) REFERENCES `big_table` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION\n' +
+    '  CONSTRAINT `fk_fk_table_c` FOREIGN KEY (`c`) REFERENCES `big_table` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,\n' +
+    '  CONSTRAINT `fk_fk_table_d` FOREIGN KEY (`d`) REFERENCES `columns_table` (`id`),\n' +
+    '  CONSTRAINT `fk_fk_table_eb_fb` FOREIGN KEY (`eb`, `fb`) REFERENCES `big_table` (`name`, `letter`),\n' +
+    '  CONSTRAINT `fk_fk_table_gc_hc` FOREIGN KEY (`gc`, `hc`) REFERENCES `columns_table` (`id`, `email`)\n' +
     ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
 
   const foreignKeysTableMigratedSchema = {
@@ -338,21 +366,36 @@ describe('MySQLPlus', function() {
       a: ColTypes.bigint().unsigned(),
       b: ColTypes.bigint().unsigned(),
       c: ColTypes.bigint().unsigned(),
+      d: ColTypes.bigint(5).unsigned().notNull(),
       ai: ColTypes.int(),
       ci: ColTypes.char(1),
+      eb: ColTypes.varchar(63),
+      fb: ColTypes.char(1).default('a'),
+      gc: ColTypes.bigint(5).unsigned().notNull(),
+      hc: ColTypes.varchar(255).notNull(),
     },
-    indexes: ['a', 'c', ['ai', 'ci']],
+    indexes: ['a', 'c', 'd', ['ai', 'ci'], ['gc', 'hc']],
+    uniqueKeys: [['eb', 'fb']],
     foreignKeys: {
       a: 'big_table.id',
+      'ai, ci': {
+        table: 'indexes_table',
+        column: ['a', 'c'],
+      },
       c: {
         table: 'big_table',
         column: 'id',
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
       },
-      'ai, ci': {
-        table: 'indexes_table',
-        column: ['a', 'c'],
+      d: 'columns_table.id',
+      'eb, fb': {
+        table: 'big_table',
+        column: ['name', 'letter'],
+      },
+      'gc, hc': {
+        table: 'columns_table',
+        column: ['id', 'email'],
       },
     },
   };
@@ -361,14 +404,25 @@ describe('MySQLPlus', function() {
     '  `a` bigint(20) unsigned DEFAULT NULL,\n' +
     '  `b` bigint(20) unsigned DEFAULT NULL,\n' +
     '  `c` bigint(20) unsigned DEFAULT NULL,\n' +
+    '  `d` bigint(5) unsigned NOT NULL,\n' +
     '  `ai` int(11) DEFAULT NULL,\n' +
+    '  `eb` varchar(63) DEFAULT NULL,\n' +
+    '  `fb` char(1) DEFAULT \'a\',\n' +
+    '  `gc` bigint(5) unsigned NOT NULL,\n' +
+    '  `hc` varchar(255) NOT NULL,\n' +
     '  `ci` char(1) DEFAULT NULL,\n' +
+    '  UNIQUE KEY `unique_fk_table_eb_fb` (`eb`,`fb`),\n' +
     '  KEY `index_fk_table_c` (`c`),\n' +
+    '  KEY `index_fk_table_d` (`d`),\n' +
+    '  KEY `index_fk_table_gc_hc` (`gc`,`hc`),\n' +
     '  KEY `index_fk_table_a` (`a`),\n' +
     '  KEY `index_fk_table_ai_ci` (`ai`,`ci`),\n' +
     '  CONSTRAINT `fk_fk_table_a` FOREIGN KEY (`a`) REFERENCES `big_table` (`id`),\n' +
     '  CONSTRAINT `fk_fk_table_ai_ci` FOREIGN KEY (`ai`, `ci`) REFERENCES `indexes_table` (`a`, `c`),\n' +
-    '  CONSTRAINT `fk_fk_table_c` FOREIGN KEY (`c`) REFERENCES `big_table` (`id`) ON DELETE SET NULL ON UPDATE CASCADE\n' +
+    '  CONSTRAINT `fk_fk_table_c` FOREIGN KEY (`c`) REFERENCES `big_table` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,\n' +
+    '  CONSTRAINT `fk_fk_table_d` FOREIGN KEY (`d`) REFERENCES `columns_table` (`id`),\n' +
+    '  CONSTRAINT `fk_fk_table_eb_fb` FOREIGN KEY (`eb`, `fb`) REFERENCES `big_table` (`name`, `letter`),\n' +
+    '  CONSTRAINT `fk_fk_table_gc_hc` FOREIGN KEY (`gc`, `hc`) REFERENCES `columns_table` (`id`, `email`)\n' +
     ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
 
   const optionsTableName = 'options_table';

@@ -13,14 +13,17 @@ describe('Operation', () => {
       ).should.deepEqual({
         type: Operation.Types.ADD_COLUMN,
         sql: 'some SQL',
+        columns: undefined,
       });
 
       Operation.create(
         Operation.Types.MODIFY_TABLE_OPTIONS,
-        'SQL'
+        'SQL',
+        ['column', 'names']
       ).should.deepEqual({
         type: Operation.Types.MODIFY_TABLE_OPTIONS,
         sql: 'SQL',
+        columns: ['column', 'names'],
       });
     });
 

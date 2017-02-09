@@ -111,7 +111,10 @@ describe('TableDefinition', () => {
   describe('if the table already exists', () => {
 
     const newSchema = {
-      columns: {id: MySQLPlus.ColTypes.int().unsigned().notNull()},
+      columns: {
+        id: MySQLPlus.ColTypes.int().unsigned().notNull(),
+        newCol: MySQLPlus.ColTypes.tinyint(),
+      },
     };
 
     describe('and the migration strategy is "safe"', () => {
@@ -133,11 +136,17 @@ describe('TableDefinition', () => {
         const expectedOperations = [
           Operation.create(
             Operation.Types.MODIFY_COLUMN,
-            'ALTER TABLE `' + existingTableName + '` MODIFY COLUMN `id` int unsigned NOT NULL'
+            'ALTER TABLE `' + existingTableName + '` MODIFY COLUMN `id` int unsigned NOT NULL',
+            ['id']
+          ),
+          Operation.create(
+            Operation.Types.ADD_COLUMN,
+            'ALTER TABLE `' + existingTableName + '` ADD COLUMN `newCol` tinyint'
           ),
           Operation.create(
             Operation.Types.DROP_KEY,
-            'ALTER TABLE `' + existingTableName + '` DROP PRIMARY KEY'
+            'ALTER TABLE `' + existingTableName + '` DROP PRIMARY KEY',
+            'id'
           ),
         ];
         new TableDefinition(existingTableName, newSchema, mockPool, 'alter')
@@ -159,7 +168,7 @@ describe('TableDefinition', () => {
           ),
           Operation.create(
             Operation.Types.CREATE_TABLE,
-            'CREATE TABLE `' + existingTableName + '` (`id` int unsigned NOT NULL)'
+            'CREATE TABLE `' + existingTableName + '` (`id` int unsigned NOT NULL,`newCol` tinyint)'
           ),
         ];
         new TableDefinition(existingTableName, newSchema, mockPool, 'drop')
