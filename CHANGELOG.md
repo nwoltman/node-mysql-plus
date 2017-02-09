@@ -1,12 +1,28 @@
 # CHANGELOG
 
+## 0.6.0 (2017-02-09)
+
+### Breaking Changes
++ lib: Require the "migrationStrategy" and "allowAlterInProduction" options to be under a "plusOptions" config property ([`744e492`](https://github.com/nwoltman/node-mysql-plus/commit/744e4922206357c265e9d9620efe8e7d6ddb218d))
++ lib: Remove the deprecated `Type` namespace ([`3226971`](https://github.com/nwoltman/node-mysql-plus/commit/32269715efddb1c6fb1cfb74a74b07c1e0e14af9))
++ MySQLTable: Remove the deprecated `tableName` instance property ([`db99fbf`](https://github.com/nwoltman/node-mysql-plus/commit/db99fbfaa8fddb1c27870324310edba48de9a94f))
++ MySQLTable: Remove the deprecated `.insertIgnore()` and `.replace()` methods ([`14aca60`](https://github.com/nwoltman/node-mysql-plus/commit/14aca60f8059f3857b34929d38f3a0078bc851fc))
++ ColumnDefinition: Remove deprecated `.defaultRaw()` method ([`709c6f8`](https://github.com/nwoltman/node-mysql-plus/commit/709c6f88b30b8e9a27d9e3b6024d407776250f7f))
++ ColumnDefinition: Remove deprecated handling of `.default('CURRENT_TIMESTAMP')` ([`ca1ace4`](https://github.com/nwoltman/node-mysql-plus/commit/ca1ace48adf955a3425cab5de3f489c1852474a6))
+
+### New Features
++ lib: Add `debug` config option ([`baf89ee`](https://github.com/nwoltman/node-mysql-plus/commit/baf89eebd49018c0d04c19a0773f6d9affbc214c))
+
+### Bug Fixes
++ lib: Prevent error when changing columns or keys with foreign keys ([`d43235a`](https://github.com/nwoltman/node-mysql-plus/commit/d43235a56772115ac1b945cc670f7ffd8f76c447))
+
 ## 0.5.0 (2016-12-12)
 
 ### Deprecations
 + ColumnDefinition: Deprecate `.defaultRaw()` ([`ee10a0c`](https://github.com/nwoltman/node-mysql-plus/commit/ee10a0cbc740c1f40c8bade9c07cb8889d7de568))
 + lib: Update deprecation warnings to say things will be removed in 0.6.0 (instead of 0.5.0) ([`3273395`](https://github.com/nwoltman/node-mysql-plus/commit/3273395be80fa2345fde67076875414593c11d45))
 
-### New features
+### New Features
 + UpdatableTimeColumnDefinition: Add [`.defaultCurrentTimestamp()`](https://github.com/nwoltman/node-mysql-plus#updatabletimecolumndefinition) method ([`949d72f`](https://github.com/nwoltman/node-mysql-plus/commit/949d72f5a7f04b4da57b484e27fa0eeca946aa0e))
 
 ## 0.4.1 (2016-12-10)
