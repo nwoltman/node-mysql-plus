@@ -330,6 +330,15 @@ These schema properties configure table-level options. The options currently sup
 + `longblob()`
 + `enum(...values)`
 + `set(...values)`
++ `json()`
++ `geometry()`
++ `point()`
++ `linestring()`
++ `polygon()`
++ `multipoint()`
++ `multilinestring()`
++ `multipolygon()`
++ `geometrycollection()`
 
 All of these methods return a `ColumnDefinition` class.
 
@@ -342,6 +351,7 @@ This class is what is used to define the column's attributes. These attributes c
   + Examples:
     + `.default('Hello')` produces `DEFAULT 'Hello'`
     + `.default(null)` produces `DEFAULT NULL`
+  + __Note:__ `*blob`, `*text`, `json`, and spacial data (`geometry` and lower) columns cannot be assigned a default value.
 + `primaryKey()` - Declares the column to be the table's primary key
 + `unique()` - Declares the column as a unique index
 + `index()` - Declares the column as an index

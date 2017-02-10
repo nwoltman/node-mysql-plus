@@ -249,6 +249,33 @@ describe('ColumnDefinitions', () => {
 
     cd = ColumnDefinitions.set('value');
     cd.$toSQL().should.equal("set('value')");
+
+    ColumnDefinitions.json()
+      .$toSQL().should.equal('json');
+
+    ColumnDefinitions.geometry()
+      .$toSQL().should.equal('geometry');
+
+    ColumnDefinitions.point()
+      .$toSQL().should.equal('point');
+
+    ColumnDefinitions.linestring()
+      .$toSQL().should.equal('linestring');
+
+    ColumnDefinitions.polygon()
+      .$toSQL().should.equal('polygon');
+
+    ColumnDefinitions.multipoint()
+      .$toSQL().should.equal('multipoint');
+
+    ColumnDefinitions.multilinestring()
+      .$toSQL().should.equal('multilinestring');
+
+    ColumnDefinitions.multipolygon()
+      .$toSQL().should.equal('multipolygon');
+
+    ColumnDefinitions.geometrycollection()
+      .$toSQL().should.equal('geometrycollection');
   });
 
 

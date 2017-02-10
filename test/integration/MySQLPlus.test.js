@@ -26,6 +26,8 @@ describe('MySQLPlus', function() {
       zfill: ColTypes.smallint().zerofill(),
       myenum: ColTypes.enum('A', 'B', 'C').default('A'),
       myset: ColTypes.set('ONE', 'TWO'),
+      jdoc: ColTypes.json(),
+      location: ColTypes.point().notNull(),
     },
     uniqueKeys: [
       ['name', 'letter'],
@@ -46,6 +48,8 @@ describe('MySQLPlus', function() {
     '  `zfill` smallint(5) unsigned zerofill DEFAULT NULL,\n' +
     '  `myenum` enum(\'A\',\'B\',\'C\') DEFAULT \'A\',\n' +
     '  `myset` set(\'ONE\',\'TWO\') DEFAULT NULL,\n' +
+    '  `jdoc` json DEFAULT NULL,\n' +
+    '  `location` point NOT NULL,\n' +
     '  PRIMARY KEY (`id`),\n' +
     '  UNIQUE KEY `unique_big_table_email` (`email`),\n' +
     '  UNIQUE KEY `unique_big_table_name_letter` (`name`,`letter`),\n' +
