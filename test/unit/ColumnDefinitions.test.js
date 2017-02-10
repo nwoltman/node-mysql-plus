@@ -146,109 +146,107 @@ describe('ColumnDefinitions', () => {
 
 
   it('should provide functions to define all possible MySQL data types', () => {
-    var cd;
+    ColumnDefinitions.tinyint()
+      .$toSQL().should.equal('tinyint');
 
-    cd = ColumnDefinitions.tinyint();
-    cd.$toSQL().should.equal('tinyint');
+    ColumnDefinitions.smallint()
+      .$toSQL().should.equal('smallint');
 
-    cd = ColumnDefinitions.smallint();
-    cd.$toSQL().should.equal('smallint');
+    ColumnDefinitions.mediumint()
+      .$toSQL().should.equal('mediumint');
 
-    cd = ColumnDefinitions.mediumint();
-    cd.$toSQL().should.equal('mediumint');
+    ColumnDefinitions.int()
+      .$toSQL().should.equal('int');
 
-    cd = ColumnDefinitions.int();
-    cd.$toSQL().should.equal('int');
+    ColumnDefinitions.integer()
+      .$toSQL().should.equal('integer');
 
-    cd = ColumnDefinitions.integer();
-    cd.$toSQL().should.equal('integer');
+    ColumnDefinitions.bigint()
+      .$toSQL().should.equal('bigint');
 
-    cd = ColumnDefinitions.bigint();
-    cd.$toSQL().should.equal('bigint');
+    ColumnDefinitions.float()
+      .$toSQL().should.equal('float');
 
-    cd = ColumnDefinitions.float();
-    cd.$toSQL().should.equal('float');
+    ColumnDefinitions.double()
+      .$toSQL().should.equal('double');
 
-    cd = ColumnDefinitions.double();
-    cd.$toSQL().should.equal('double');
+    ColumnDefinitions.decimal()
+      .$toSQL().should.equal('decimal');
 
-    cd = ColumnDefinitions.decimal();
-    cd.$toSQL().should.equal('decimal');
+    ColumnDefinitions.dec()
+      .$toSQL().should.equal('dec');
 
-    cd = ColumnDefinitions.dec();
-    cd.$toSQL().should.equal('dec');
+    ColumnDefinitions.numeric()
+      .$toSQL().should.equal('numeric');
 
-    cd = ColumnDefinitions.numeric();
-    cd.$toSQL().should.equal('numeric');
+    ColumnDefinitions.fixed()
+      .$toSQL().should.equal('fixed');
 
-    cd = ColumnDefinitions.fixed();
-    cd.$toSQL().should.equal('fixed');
+    ColumnDefinitions.bit()
+      .$toSQL().should.equal('bit');
 
-    cd = ColumnDefinitions.bit();
-    cd.$toSQL().should.equal('bit');
+    ColumnDefinitions.bool()
+      .$toSQL().should.equal('bool');
 
-    cd = ColumnDefinitions.bool();
-    cd.$toSQL().should.equal('bool');
+    ColumnDefinitions.boolean()
+      .$toSQL().should.equal('boolean');
 
-    cd = ColumnDefinitions.boolean();
-    cd.$toSQL().should.equal('boolean');
+    ColumnDefinitions.date()
+      .$toSQL().should.equal('date');
 
-    cd = ColumnDefinitions.date();
-    cd.$toSQL().should.equal('date');
+    ColumnDefinitions.datetime()
+      .$toSQL().should.equal('datetime');
 
-    cd = ColumnDefinitions.datetime();
-    cd.$toSQL().should.equal('datetime');
+    ColumnDefinitions.timestamp()
+      .$toSQL().should.equal('timestamp');
 
-    cd = ColumnDefinitions.timestamp();
-    cd.$toSQL().should.equal('timestamp');
+    ColumnDefinitions.time()
+      .$toSQL().should.equal('time');
 
-    cd = ColumnDefinitions.time();
-    cd.$toSQL().should.equal('time');
+    ColumnDefinitions.year()
+      .$toSQL().should.equal('year');
 
-    cd = ColumnDefinitions.year();
-    cd.$toSQL().should.equal('year');
+    ColumnDefinitions.char()
+      .$toSQL().should.equal('char');
 
-    cd = ColumnDefinitions.char();
-    cd.$toSQL().should.equal('char');
+    ColumnDefinitions.varchar(1)
+      .$toSQL().should.equal('varchar(1)');
 
-    cd = ColumnDefinitions.varchar(1);
-    cd.$toSQL().should.equal('varchar(1)');
+    ColumnDefinitions.text()
+      .$toSQL().should.equal('text');
 
-    cd = ColumnDefinitions.text();
-    cd.$toSQL().should.equal('text');
+    ColumnDefinitions.tinytext()
+      .$toSQL().should.equal('tinytext');
 
-    cd = ColumnDefinitions.tinytext();
-    cd.$toSQL().should.equal('tinytext');
+    ColumnDefinitions.mediumtext()
+      .$toSQL().should.equal('mediumtext');
 
-    cd = ColumnDefinitions.mediumtext();
-    cd.$toSQL().should.equal('mediumtext');
+    ColumnDefinitions.longtext()
+      .$toSQL().should.equal('longtext');
 
-    cd = ColumnDefinitions.longtext();
-    cd.$toSQL().should.equal('longtext');
+    ColumnDefinitions.binary()
+      .$toSQL().should.equal('binary');
 
-    cd = ColumnDefinitions.binary();
-    cd.$toSQL().should.equal('binary');
+    ColumnDefinitions.varbinary(1)
+      .$toSQL().should.equal('varbinary(1)');
 
-    cd = ColumnDefinitions.varbinary(1);
-    cd.$toSQL().should.equal('varbinary(1)');
+    ColumnDefinitions.blob()
+      .$toSQL().should.equal('blob');
 
-    cd = ColumnDefinitions.blob();
-    cd.$toSQL().should.equal('blob');
+    ColumnDefinitions.tinyblob()
+      .$toSQL().should.equal('tinyblob');
 
-    cd = ColumnDefinitions.tinyblob();
-    cd.$toSQL().should.equal('tinyblob');
+    ColumnDefinitions.mediumblob()
+      .$toSQL().should.equal('mediumblob');
 
-    cd = ColumnDefinitions.mediumblob();
-    cd.$toSQL().should.equal('mediumblob');
+    ColumnDefinitions.longblob()
+      .$toSQL().should.equal('longblob');
 
-    cd = ColumnDefinitions.longblob();
-    cd.$toSQL().should.equal('longblob');
+    ColumnDefinitions.enum('value')
+      .$toSQL().should.equal("enum('value')");
 
-    cd = ColumnDefinitions.enum('value');
-    cd.$toSQL().should.equal("enum('value')");
-
-    cd = ColumnDefinitions.set('value');
-    cd.$toSQL().should.equal("set('value')");
+    ColumnDefinitions.set('value')
+      .$toSQL().should.equal("set('value')");
 
     ColumnDefinitions.json()
       .$toSQL().should.equal('json');
@@ -280,157 +278,149 @@ describe('ColumnDefinitions', () => {
 
 
   it('should generate SQL with lengths for certain types', () => {
-    var cd;
+    ColumnDefinitions.tinyint(1)
+      .$toSQL().should.equal('tinyint(1)');
 
-    cd = ColumnDefinitions.tinyint(1);
-    cd.$toSQL().should.equal('tinyint(1)');
+    ColumnDefinitions.smallint(1)
+      .$toSQL().should.equal('smallint(1)');
 
-    cd = ColumnDefinitions.smallint(1);
-    cd.$toSQL().should.equal('smallint(1)');
+    ColumnDefinitions.mediumint(1)
+      .$toSQL().should.equal('mediumint(1)');
 
-    cd = ColumnDefinitions.mediumint(1);
-    cd.$toSQL().should.equal('mediumint(1)');
+    ColumnDefinitions.int(1)
+      .$toSQL().should.equal('int(1)');
 
-    cd = ColumnDefinitions.int(1);
-    cd.$toSQL().should.equal('int(1)');
+    ColumnDefinitions.integer(1)
+      .$toSQL().should.equal('integer(1)');
 
-    cd = ColumnDefinitions.integer(1);
-    cd.$toSQL().should.equal('integer(1)');
+    ColumnDefinitions.bigint(1)
+      .$toSQL().should.equal('bigint(1)');
 
-    cd = ColumnDefinitions.bigint(1);
-    cd.$toSQL().should.equal('bigint(1)');
+    ColumnDefinitions.float(1)
+      .$toSQL().should.equal('float(1)');
 
-    cd = ColumnDefinitions.float(1);
-    cd.$toSQL().should.equal('float(1)');
+    ColumnDefinitions.double(1)
+      .$toSQL().should.equal('double(1)');
 
-    cd = ColumnDefinitions.double(1);
-    cd.$toSQL().should.equal('double(1)');
+    ColumnDefinitions.decimal(1)
+      .$toSQL().should.equal('decimal(1)');
 
-    cd = ColumnDefinitions.decimal(1);
-    cd.$toSQL().should.equal('decimal(1)');
+    ColumnDefinitions.dec(1)
+      .$toSQL().should.equal('dec(1)');
 
-    cd = ColumnDefinitions.dec(1);
-    cd.$toSQL().should.equal('dec(1)');
+    ColumnDefinitions.numeric(1)
+      .$toSQL().should.equal('numeric(1)');
 
-    cd = ColumnDefinitions.numeric(1);
-    cd.$toSQL().should.equal('numeric(1)');
+    ColumnDefinitions.fixed(1)
+      .$toSQL().should.equal('fixed(1)');
 
-    cd = ColumnDefinitions.fixed(1);
-    cd.$toSQL().should.equal('fixed(1)');
+    ColumnDefinitions.float(1, 2)
+      .$toSQL().should.equal('float(1,2)');
 
-    cd = ColumnDefinitions.float(1, 2);
-    cd.$toSQL().should.equal('float(1,2)');
+    ColumnDefinitions.double(1, 2)
+      .$toSQL().should.equal('double(1,2)');
 
-    cd = ColumnDefinitions.double(1, 2);
-    cd.$toSQL().should.equal('double(1,2)');
+    ColumnDefinitions.decimal(1, 2)
+      .$toSQL().should.equal('decimal(1,2)');
 
-    cd = ColumnDefinitions.decimal(1, 2);
-    cd.$toSQL().should.equal('decimal(1,2)');
+    ColumnDefinitions.dec(1, 2)
+      .$toSQL().should.equal('dec(1,2)');
 
-    cd = ColumnDefinitions.dec(1, 2);
-    cd.$toSQL().should.equal('dec(1,2)');
+    ColumnDefinitions.numeric(1, 2)
+      .$toSQL().should.equal('numeric(1,2)');
 
-    cd = ColumnDefinitions.numeric(1, 2);
-    cd.$toSQL().should.equal('numeric(1,2)');
+    ColumnDefinitions.fixed(1, 2)
+      .$toSQL().should.equal('fixed(1,2)');
 
-    cd = ColumnDefinitions.fixed(1, 2);
-    cd.$toSQL().should.equal('fixed(1,2)');
+    ColumnDefinitions.bit(1)
+      .$toSQL().should.equal('bit(1)');
 
-    cd = ColumnDefinitions.bit(1);
-    cd.$toSQL().should.equal('bit(1)');
+    ColumnDefinitions.datetime(1)
+      .$toSQL().should.equal('datetime(1)');
 
-    cd = ColumnDefinitions.datetime(1);
-    cd.$toSQL().should.equal('datetime(1)');
+    ColumnDefinitions.timestamp(1)
+      .$toSQL().should.equal('timestamp(1)');
 
-    cd = ColumnDefinitions.timestamp(1);
-    cd.$toSQL().should.equal('timestamp(1)');
+    ColumnDefinitions.time(1)
+      .$toSQL().should.equal('time(1)');
 
-    cd = ColumnDefinitions.time(1);
-    cd.$toSQL().should.equal('time(1)');
+    ColumnDefinitions.char(1)
+      .$toSQL().should.equal('char(1)');
 
-    cd = ColumnDefinitions.char(1);
-    cd.$toSQL().should.equal('char(1)');
+    ColumnDefinitions.varchar(1)
+      .$toSQL().should.equal('varchar(1)');
 
-    cd = ColumnDefinitions.varchar(1);
-    cd.$toSQL().should.equal('varchar(1)');
+    ColumnDefinitions.text(1)
+      .$toSQL().should.equal('text(1)');
 
-    cd = ColumnDefinitions.text(1);
-    cd.$toSQL().should.equal('text(1)');
+    ColumnDefinitions.binary(1)
+      .$toSQL().should.equal('binary(1)');
 
-    cd = ColumnDefinitions.binary(1);
-    cd.$toSQL().should.equal('binary(1)');
+    ColumnDefinitions.varbinary(1)
+      .$toSQL().should.equal('varbinary(1)');
 
-    cd = ColumnDefinitions.varbinary(1);
-    cd.$toSQL().should.equal('varbinary(1)');
-
-    cd = ColumnDefinitions.blob(1);
-    cd.$toSQL().should.equal('blob(1)');
+    ColumnDefinitions.blob(1)
+      .$toSQL().should.equal('blob(1)');
   });
 
 
   describe('all data types', () => {
 
     it('should be able to generate SQL with the DEFAULT or NOT NULL attributes', () => {
-      var cd;
+      ColumnDefinitions.int().notNull().default(1)
+        .$toSQL().should.equal('int NOT NULL DEFAULT 1');
 
-      cd = ColumnDefinitions.int().notNull().default(1);
-      cd.$toSQL().should.equal('int NOT NULL DEFAULT 1');
+      ColumnDefinitions.char().notNull().default('1')
+        .$toSQL().should.equal('char NOT NULL DEFAULT \'1\'');
 
-      cd = ColumnDefinitions.char().notNull().default('1');
-      cd.$toSQL().should.equal('char NOT NULL DEFAULT \'1\'');
+      ColumnDefinitions.blob().notNull().default('1')
+        .$toSQL().should.equal('blob NOT NULL DEFAULT \'1\'');
 
-      cd = ColumnDefinitions.blob().notNull().default('1');
-      cd.$toSQL().should.equal('blob NOT NULL DEFAULT \'1\'');
+      ColumnDefinitions.timestamp().default('CURRENT_TIMESTAMP')
+        .$toSQL().should.equal('timestamp DEFAULT \'CURRENT_TIMESTAMP\'');
 
-      cd = ColumnDefinitions.timestamp().default('CURRENT_TIMESTAMP');
-      cd.$toSQL().should.equal('timestamp DEFAULT \'CURRENT_TIMESTAMP\'');
-
-      cd = ColumnDefinitions.datetime().default('1970-01-01 00:00:01');
-      cd.$toSQL().should.equal('datetime DEFAULT \'1970-01-01 00:00:01\'');
+      ColumnDefinitions.datetime().default('1970-01-01 00:00:01')
+        .$toSQL().should.equal('datetime DEFAULT \'1970-01-01 00:00:01\'');
     });
 
     it('should allow the columns to be defined as keys, but not change the SQL', () => {
-      var cd;
+      ColumnDefinitions.int().notNull().default(1).index()
+        .$toSQL().should.equal('int NOT NULL DEFAULT 1');
 
-      cd = ColumnDefinitions.int().notNull().default(1).index();
-      cd.$toSQL().should.equal('int NOT NULL DEFAULT 1');
+      ColumnDefinitions.char().notNull().default('1').index()
+        .$toSQL().should.equal('char NOT NULL DEFAULT \'1\'');
 
-      cd = ColumnDefinitions.char().notNull().default('1').index();
-      cd.$toSQL().should.equal('char NOT NULL DEFAULT \'1\'');
+      ColumnDefinitions.blob().notNull().default('1').index()
+        .$toSQL().should.equal('blob NOT NULL DEFAULT \'1\'');
 
-      cd = ColumnDefinitions.blob().notNull().default('1').index();
-      cd.$toSQL().should.equal('blob NOT NULL DEFAULT \'1\'');
+      ColumnDefinitions.int().unique()
+        .$toSQL().should.equal('int');
 
-      cd = ColumnDefinitions.int().unique();
-      cd.$toSQL().should.equal('int');
+      ColumnDefinitions.char().unique()
+        .$toSQL().should.equal('char');
 
-      cd = ColumnDefinitions.char().unique();
-      cd.$toSQL().should.equal('char');
-
-      cd = ColumnDefinitions.blob().unique();
-      cd.$toSQL().should.equal('blob');
+      ColumnDefinitions.blob().unique()
+        .$toSQL().should.equal('blob');
     });
 
     it('should allow the columns to be defined as primary keys, but not change the SQL, except for forcing the column to be NOT NULL', () => {
-      var cd;
+      ColumnDefinitions.int().notNull().default(1).primaryKey()
+        .$toSQL().should.equal('int NOT NULL DEFAULT 1');
 
-      cd = ColumnDefinitions.int().notNull().default(1).primaryKey();
-      cd.$toSQL().should.equal('int NOT NULL DEFAULT 1');
+      ColumnDefinitions.char().notNull().default('1').primaryKey()
+        .$toSQL().should.equal('char NOT NULL DEFAULT \'1\'');
 
-      cd = ColumnDefinitions.char().notNull().default('1').primaryKey();
-      cd.$toSQL().should.equal('char NOT NULL DEFAULT \'1\'');
+      ColumnDefinitions.blob().notNull().default('1').primaryKey()
+        .$toSQL().should.equal('blob NOT NULL DEFAULT \'1\'');
 
-      cd = ColumnDefinitions.blob().notNull().default('1').primaryKey();
-      cd.$toSQL().should.equal('blob NOT NULL DEFAULT \'1\'');
+      ColumnDefinitions.int().primaryKey()
+        .$toSQL().should.equal('int NOT NULL');
 
-      cd = ColumnDefinitions.int().primaryKey();
-      cd.$toSQL().should.equal('int NOT NULL');
+      ColumnDefinitions.char().primaryKey()
+        .$toSQL().should.equal('char NOT NULL');
 
-      cd = ColumnDefinitions.char().primaryKey();
-      cd.$toSQL().should.equal('char NOT NULL');
-
-      cd = ColumnDefinitions.blob().primaryKey();
-      cd.$toSQL().should.equal('blob NOT NULL');
+      ColumnDefinitions.blob().primaryKey()
+        .$toSQL().should.equal('blob NOT NULL');
     });
 
     it('should allow columns to have their old column name specified but not change the SQL', () => {
@@ -453,19 +443,17 @@ describe('ColumnDefinitions', () => {
   describe('number data types', () => {
 
     it('should provide number-specific definition methods', () => {
-      var cd;
+      ColumnDefinitions.integer().unsigned()
+        .$toSQL().should.equal('integer unsigned');
 
-      cd = ColumnDefinitions.integer().unsigned();
-      cd.$toSQL().should.equal('integer unsigned');
+      ColumnDefinitions.integer().unsigned().zerofill()
+        .$toSQL().should.equal('integer unsigned zerofill');
 
-      cd = ColumnDefinitions.integer().unsigned().zerofill();
-      cd.$toSQL().should.equal('integer unsigned zerofill');
+      ColumnDefinitions.integer().zerofill()
+        .$toSQL().should.equal('integer unsigned zerofill');
 
-      cd = ColumnDefinitions.integer().zerofill();
-      cd.$toSQL().should.equal('integer unsigned zerofill');
-
-      cd = ColumnDefinitions.integer().unsigned().autoIncrement();
-      cd.$toSQL().should.equal('integer unsigned AUTO_INCREMENT');
+      ColumnDefinitions.integer().unsigned().autoIncrement()
+        .$toSQL().should.equal('integer unsigned AUTO_INCREMENT');
     });
 
   });
@@ -474,16 +462,14 @@ describe('ColumnDefinitions', () => {
   describe('string data types', () => {
 
     it('should provide string-specific definition methods', () => {
-      var cd;
+      ColumnDefinitions.char().charset('utf8')
+        .$toSQL().should.equal('char CHARACTER SET utf8');
 
-      cd = ColumnDefinitions.char().charset('utf8');
-      cd.$toSQL().should.equal('char CHARACTER SET utf8');
+      ColumnDefinitions.char().collate('utf8_general_ci')
+        .$toSQL().should.equal('char COLLATE utf8_general_ci');
 
-      cd = ColumnDefinitions.char().collate('utf8_general_ci');
-      cd.$toSQL().should.equal('char COLLATE utf8_general_ci');
-
-      cd = ColumnDefinitions.char().charset('utf8').collate('utf8_general_ci');
-      cd.$toSQL().should.equal('char CHARACTER SET utf8 COLLATE utf8_general_ci');
+      ColumnDefinitions.char().charset('utf8').collate('utf8_general_ci')
+        .$toSQL().should.equal('char CHARACTER SET utf8 COLLATE utf8_general_ci');
     });
 
   });
@@ -500,13 +486,11 @@ describe('ColumnDefinitions', () => {
     });
 
     it('should provide the onUpdateCurrentTimestamp() method', () => {
-      var cd;
+      ColumnDefinitions.datetime().onUpdateCurrentTimestamp()
+        .$toSQL().should.equal('datetime ON UPDATE CURRENT_TIMESTAMP');
 
-      cd = ColumnDefinitions.datetime().onUpdateCurrentTimestamp();
-      cd.$toSQL().should.equal('datetime ON UPDATE CURRENT_TIMESTAMP');
-
-      cd = ColumnDefinitions.timestamp().onUpdateCurrentTimestamp();
-      cd.$toSQL().should.equal('timestamp ON UPDATE CURRENT_TIMESTAMP');
+      ColumnDefinitions.timestamp().onUpdateCurrentTimestamp()
+        .$toSQL().should.equal('timestamp ON UPDATE CURRENT_TIMESTAMP');
     });
 
   });
@@ -530,19 +514,17 @@ describe('ColumnDefinitions', () => {
   describe('enums and sets', () => {
 
     it('should generate SQL with allowed values for certain types', () => {
-      var cd;
+      ColumnDefinitions.enum('a')
+        .$toSQL().should.equal("enum('a')");
 
-      cd = ColumnDefinitions.enum('a');
-      cd.$toSQL().should.equal("enum('a')");
+      ColumnDefinitions.enum('a', 'b', 'c')
+        .$toSQL().should.equal("enum('a', 'b', 'c')");
 
-      cd = ColumnDefinitions.enum('a', 'b', 'c');
-      cd.$toSQL().should.equal("enum('a', 'b', 'c')");
+      ColumnDefinitions.set('a')
+        .$toSQL().should.equal("set('a')");
 
-      cd = ColumnDefinitions.set('a');
-      cd.$toSQL().should.equal("set('a')");
-
-      cd = ColumnDefinitions.set('a', 'b', 'c');
-      cd.$toSQL().should.equal("set('a', 'b', 'c')");
+      ColumnDefinitions.set('a', 'b', 'c')
+        .$toSQL().should.equal("set('a', 'b', 'c')");
     });
 
     it('should throw if no values are provided when creating the column definition', () => {
