@@ -930,7 +930,7 @@ Used to define the table's indexes. Its value is an array where the elements are
 
 ### Foreign Keys
 
-Foreign keys are defined using the `foreignKeys` property, which is an object that maps column names to a reference table column. The reference table column can be specified with either an object or a string of the form `<table name>.<column name>`. If an object, the following properties may be set: `table` (required), `column` (required), `onDelete`, `onUpdate`.
+Foreign keys are defined using the `foreignKeys` property, which is an object that maps column names to a reference table column. The reference table column can be specified with either an object or a string of the form `'<table name>.<column name>'`. If an object, the following properties may be set: `table` (required), `column` (required), `onDelete`, `onUpdate`.
 
 **Example:**
 ```js
@@ -962,9 +962,9 @@ Foreign keys are defined using the `foreignKeys` property, which is an object th
 }
 ```
 
-**Note:** Foreign keys aren't actually keys, but "constraints". When defining foreign key constraints, the columns that make up the constraints should also be keys.
+**Note:** Foreign key definitions don't define keys, but [_constraints_](https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_foreign_key_constraint). When defining foreign key constraints, the columns that make up the constraints should also be keys.
 
-**Example:** Keys required for the example above
+Keys required for the example above:
 ```js
 {
   primaryKey: 'id',
