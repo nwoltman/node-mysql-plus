@@ -49,7 +49,7 @@ describe('PoolPlus', () => {
       );
     });
 
-    // TODO: Remove after v0.6.0 is released
+    // TODO: Remove before v0.7.0 is released
     it('should throw if the PoolPlus options are not in the `plusOptions` property', () => {
       should.throws(() => new PoolPlus({migrationStrategy: 'alter'}));
       should.throws(() => new PoolPlus({allowAlterInProduction: false}));
