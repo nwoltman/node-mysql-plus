@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.6.1 (2017-02-11)
+
+### New Features
++ lib: Support spatial indexes ([`9a4a2be`](https://github.com/nwoltman/node-mysql-plus/commit/9a4a2be169294c49bb2be9318a3eead342626148))
++ ColumnDefinitions: Add support for spatial data (geometry) and JSON column types ([`46f3034`](https://github.com/nwoltman/node-mysql-plus/commit/46f3034b24fe25c718522b17e1aad42b0d1e63a6))
+
 ## 0.6.0 (2017-02-09)
 
 ### Breaking Changes
