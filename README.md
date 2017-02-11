@@ -928,6 +928,22 @@ Used to define the table's indexes. Its value is an array where the elements are
 }
 ```
 
+#### `spatialIndexes` : `string[]`
+
+Used to define the table's spatial indexes. Its value is an array where the elements are the column name for each index.
+
+Note that spatial indexes may each only have 1 column and they may only be defined for geometrical type columns.
+
+**Example:**
+```js
+{
+  spatialIndexes: [
+    'coordinates',
+    'line',
+  ],
+}
+```
+
 ### Foreign Keys
 
 Foreign keys are defined using the `foreignKeys` property, which is an object that maps column names to a reference table column. The reference table column can be specified with either an object or a string of the form `'<table name>.<column name>'`. If an object, the following properties may be set: `table` (required), `column` (required), `onDelete`, `onUpdate`.
@@ -1062,10 +1078,10 @@ This class is what is used to define the column's attributes. These attributes c
   + Examples:
     + `.default('Hello')` produces `DEFAULT 'Hello'`
     + `.default(null)` produces `DEFAULT NULL`
-  + __Note:__ `*blob`, `*text`, `json`, and spacial data (`geometry` and lower) columns cannot be assigned a default value.
+  + __Note:__ `*blob`, `*text`, `json`, and geometrical columns cannot be assigned a default value other than `null`.
 + `primaryKey()` - Declares the column to be the table's primary key
-+ `unique()` - Declares the column as a unique index
-+ `index()` - Declares the column as an index
++ `unique()` - Creates a unique index for the column
++ `index()` - Creates an index for the column
 + `oldName(name: string)` - The previous/current column name. If a column with this name exists, it will be renamed to the column name associated with the column defintion so that the data in that column will not be lost.
 
 All `ColumnDefinition` methods return the `ColumnDefinition`, so they are chainable.
@@ -1125,7 +1141,19 @@ Compatible types:
 + `datetime`
 + `timestamp`
 
+#### GeometricalColumnDefinition
 
-# Roadmap
+Methods:
 
-+ Prepared statements
++ `spatialIndex()` - Creates a spatial index for the column
+
+Compatible types:
+
++ `geometry`
++ `point`
++ `linestring`
++ `polygon`
++ `multipoint`
++ `multilinestring`
++ `multipolygon`
++ `geometrycollection`

@@ -401,6 +401,12 @@ describe('ColumnDefinitions', () => {
 
       ColumnDefinitions.blob().unique()
         .$toSQL().should.equal('blob');
+
+      ColumnDefinitions.geometry().spatialIndex()
+        .$toSQL().should.equal('geometry');
+
+      ColumnDefinitions.point().notNull().index().spatialIndex()
+        .$toSQL().should.equal('point NOT NULL');
     });
 
     it('should allow the columns to be defined as primary keys, but not change the SQL, except for forcing the column to be NOT NULL', () => {
@@ -530,6 +536,37 @@ describe('ColumnDefinitions', () => {
     it('should throw if no values are provided when creating the column definition', () => {
       should.throws(() => ColumnDefinitions.enum(), /provide at least one possible enum value/);
       should.throws(() => ColumnDefinitions.set(), /provide at least one possible set value/);
+    });
+
+  });
+
+
+  describe('geometrical data types', () => {
+
+    it('should be able to create spatial indexes', () => {
+      ColumnDefinitions.geometry().spatialIndex()
+        .$toSQL().should.equal('geometry');
+
+      ColumnDefinitions.point().spatialIndex()
+        .$toSQL().should.equal('point');
+
+      ColumnDefinitions.linestring().spatialIndex()
+        .$toSQL().should.equal('linestring');
+
+      ColumnDefinitions.polygon().spatialIndex()
+        .$toSQL().should.equal('polygon');
+
+      ColumnDefinitions.multipoint().spatialIndex()
+        .$toSQL().should.equal('multipoint');
+
+      ColumnDefinitions.multilinestring().spatialIndex()
+        .$toSQL().should.equal('multilinestring');
+
+      ColumnDefinitions.multipolygon().spatialIndex()
+        .$toSQL().should.equal('multipolygon');
+
+      ColumnDefinitions.geometrycollection().spatialIndex()
+        .$toSQL().should.equal('geometrycollection');
     });
 
   });

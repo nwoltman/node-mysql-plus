@@ -27,7 +27,8 @@ describe('MySQLPlus', function() {
       myenum: ColTypes.enum('A', 'B', 'C').default('A'),
       myset: ColTypes.set('ONE', 'TWO'),
       jdoc: ColTypes.json(),
-      location: ColTypes.point().notNull(),
+      location: ColTypes.point().notNull().spatialIndex(),
+      line: ColTypes.linestring(),
     },
     uniqueKeys: [
       ['name', 'letter'],
@@ -50,11 +51,13 @@ describe('MySQLPlus', function() {
     '  `myset` set(\'ONE\',\'TWO\') DEFAULT NULL,\n' +
     '  `jdoc` json DEFAULT NULL,\n' +
     '  `location` point NOT NULL,\n' +
+    '  `line` linestring DEFAULT NULL,\n' +
     '  PRIMARY KEY (`id`),\n' +
     '  UNIQUE KEY `unique_big_table_email` (`email`),\n' +
     '  UNIQUE KEY `unique_big_table_name_letter` (`name`,`letter`),\n' +
     '  UNIQUE KEY `unique_big_table_created` (`created`),\n' +
-    '  KEY `index_big_table_letter` (`letter`)\n' +
+    '  KEY `index_big_table_letter` (`letter`),\n' +
+    '  SPATIAL KEY `spatial_big_table_location` (`location`)\n' +
     ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
 
   const autoIncTableName = 'auto_inc_table';
@@ -301,6 +304,47 @@ describe('MySQLPlus', function() {
     '  KEY `index_indexes_table_b` (`b`)\n' +
     ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
 
+  const spatialIndexesTableName = 'spatial_table';
+  const spatialIndexesTableSchema = {
+    columns: {
+      a: ColTypes.geometry().notNull(),
+      b: ColTypes.point().notNull(),
+      c: ColTypes.multipolygon().notNull(),
+    },
+    spatialIndexes: [
+      'a',
+      'b',
+    ],
+  };
+  const spatialIndexesTableExpectedSQL =
+    'CREATE TABLE `spatial_table` (\n' +
+    '  `a` geometry NOT NULL,\n' +
+    '  `b` point NOT NULL,\n' +
+    '  `c` multipolygon NOT NULL,\n' +
+    '  SPATIAL KEY `spatial_spatial_table_a` (`a`),\n' +
+    '  SPATIAL KEY `spatial_spatial_table_b` (`b`)\n' +
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+
+  const spatialIndexesTableMigragedSchema = {
+    columns: {
+      a: ColTypes.geometry().notNull(),
+      b: ColTypes.point().notNull(),
+      c: ColTypes.multipolygon().notNull(),
+    },
+    spatialIndexes: [
+      'a',
+      'c',
+    ],
+  };
+  const spatialIndexesTableMigratedExpectedSQL =
+    'CREATE TABLE `spatial_table` (\n' +
+    '  `a` geometry NOT NULL,\n' +
+    '  `b` point NOT NULL,\n' +
+    '  `c` multipolygon NOT NULL,\n' +
+    '  SPATIAL KEY `spatial_spatial_table_a` (`a`),\n' +
+    '  SPATIAL KEY `spatial_spatial_table_c` (`c`)\n' +
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+
   const foreignKeysTableName = 'fk_table';
   const foreignKeysTableSchema = {
     columns: {
@@ -495,6 +539,7 @@ describe('MySQLPlus', function() {
       pool.defineTable(primaryKeyTableName, primaryKeyTableSchema);
       pool.defineTable(uniqueKeysTableName, uniqueKeysTableSchema);
       pool.defineTable(indexesTableName, indexesTableSchema);
+      pool.defineTable(spatialIndexesTableName, spatialIndexesTableSchema);
       pool.defineTable(foreignKeysTableName, foreignKeysTableSchema);
       pool.defineTable(optionsTableName, optionsTableSchema);
       pool.defineTable(textTableName, textTableSchema);
@@ -557,6 +602,13 @@ describe('MySQLPlus', function() {
         cb7();
       });
 
+      const cbSpatial = cbManager.registerCallback();
+      pool.query(`SHOW CREATE TABLE \`${spatialIndexesTableName}\``, (err, result) => {
+        if (err) throw err;
+        result[0]['Create Table'].should.equal(spatialIndexesTableExpectedSQL);
+        cbSpatial();
+      });
+
       const cb8 = cbManager.registerCallback();
       pool.query(`SHOW CREATE TABLE \`${foreignKeysTableName}\``, (err, result) => {
         if (err) throw err;
@@ -595,6 +647,7 @@ describe('MySQLPlus', function() {
       pool.defineTable(primaryKeyTableName, primaryKeyTableSchema);
       pool.defineTable(uniqueKeysTableName, uniqueKeysTableSchema);
       pool.defineTable(indexesTableName, indexesTableSchema);
+      pool.defineTable(spatialIndexesTableName, spatialIndexesTableSchema);
       pool.defineTable(foreignKeysTableName, foreignKeysTableSchema);
       pool.defineTable(optionsTableName, optionsTableSchema);
       pool.defineTable(textTableName, textTableSchema);
@@ -662,6 +715,13 @@ describe('MySQLPlus', function() {
         cb7();
       });
 
+      const cbSpatial = cbManager.registerCallback();
+      pool.query(`SHOW CREATE TABLE \`${spatialIndexesTableName}\``, (err, result) => {
+        if (err) throw err;
+        result[0]['Create Table'].should.equal(spatialIndexesTableExpectedSQL);
+        cbSpatial();
+      });
+
       const cb8 = cbManager.registerCallback();
       pool.query(`SHOW CREATE TABLE \`${foreignKeysTableName}\``, (err, result) => {
         if (err) throw err;
@@ -700,6 +760,7 @@ describe('MySQLPlus', function() {
       pool.defineTable(primaryKeyTableName, primaryKeyTableSchema);
       pool.defineTable(uniqueKeysTableName, uniqueKeysTableSchema);
       pool.defineTable(indexesTableName, indexesTableSchema);
+      pool.defineTable(spatialIndexesTableName, spatialIndexesTableSchema);
       pool.defineTable(foreignKeysTableName, foreignKeysTableSchema);
       pool.defineTable(optionsTableName, optionsTableSchema);
       pool.defineTable(textTableName, textTableSchema);
@@ -762,6 +823,13 @@ describe('MySQLPlus', function() {
         cb7();
       });
 
+      const cbSpatial = cbManager.registerCallback();
+      pool.query(`SHOW CREATE TABLE \`${spatialIndexesTableName}\``, (err, result) => {
+        if (err) throw err;
+        result[0]['Create Table'].should.equal(spatialIndexesTableExpectedSQL);
+        cbSpatial();
+      });
+
       const cb8 = cbManager.registerCallback();
       pool.query(`SHOW CREATE TABLE \`${foreignKeysTableName}\``, (err, result) => {
         if (err) throw err;
@@ -799,6 +867,7 @@ describe('MySQLPlus', function() {
       pool.defineTable(primaryKeyTableName, primaryKeyTableMigratedSchema);
       pool.defineTable(uniqueKeysTableName, uniqueKeysTableMigragedSchema);
       pool.defineTable(indexesTableName, indexesTableMigragedSchema);
+      pool.defineTable(spatialIndexesTableName, spatialIndexesTableMigragedSchema);
       pool.defineTable(foreignKeysTableName, foreignKeysTableMigratedSchema);
       pool.defineTable(optionsTableName, optionsTableMigratedSchema);
 
@@ -867,6 +936,13 @@ describe('MySQLPlus', function() {
         if (err) throw err;
         result[0]['Create Table'].should.equal(indexesTableMigratedExpectedSQL);
         cb7();
+      });
+
+      const cbSpatial = cbManager.registerCallback();
+      pool.query(`SHOW CREATE TABLE \`${spatialIndexesTableName}\``, (err, result) => {
+        if (err) throw err;
+        result[0]['Create Table'].should.equal(spatialIndexesTableMigratedExpectedSQL);
+        cbSpatial();
       });
 
       const cb8 = cbManager.registerCallback();

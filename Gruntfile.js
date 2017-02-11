@@ -37,6 +37,7 @@ module.exports = function(grunt) {
         src: 'test/integration/*.js',
       },
       options: {
+        bail: grunt.option('bail'),
         colors: true,
         require: ['should', 'should-sinon'],
       },
