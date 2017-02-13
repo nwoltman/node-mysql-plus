@@ -75,8 +75,8 @@ describe('ColumnDefinitions', () => {
     a.$equals(b, {charset: 'utf8'}).should.be.true();
 
     a = ColumnDefinitions.char();
-    b = ColumnDefinitions.char().collate('utf8mb4_unicode_ci');
-    a.$equals(b, {collate: 'utf8mb4_unicode_ci'}).should.be.true();
+    b = ColumnDefinitions.char().collate('utf8mb4_unicode_520_ci');
+    a.$equals(b, {collate: 'utf8mb4_unicode_520_ci'}).should.be.true();
 
     a = ColumnDefinitions.char().charset('utf8');
     b = ColumnDefinitions.char().collate('utf8_bin');

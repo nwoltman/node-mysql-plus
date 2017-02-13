@@ -510,21 +510,21 @@ describe('MySQLPlus', function() {
     columns: {
       a: ColTypes.char(1),
       b: ColTypes.char(1).charset('utf8mb4'),
-      c: ColTypes.char(1).charset('utf8mb4').collate('utf8mb4_unicode_ci'),
-      d: ColTypes.char(1).collate('utf8mb4_unicode_ci'),
+      c: ColTypes.char(1).charset('utf8mb4').collate('utf8mb4_unicode_520_ci'),
+      d: ColTypes.char(1).collate('utf8mb4_unicode_520_ci'),
       e: ColTypes.char(1).collate('utf8mb4_bin'),
     },
     charset: 'utf8mb4',
-    collate: 'utf8mb4_unicode_ci',
+    collate: 'utf8mb4_unicode_520_ci',
   };
   const textTableExpectedSQL =
     'CREATE TABLE `text_table` (\n' +
-    '  `a` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n' +
+    '  `a` char(1) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,\n' +
     '  `b` char(1) CHARACTER SET utf8mb4 DEFAULT NULL,\n' +
-    '  `c` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n' +
-    '  `d` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n' +
+    '  `c` char(1) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,\n' +
+    '  `d` char(1) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,\n' +
     '  `e` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci';
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci';
 
 
   describe('when creating new tables', () => {
