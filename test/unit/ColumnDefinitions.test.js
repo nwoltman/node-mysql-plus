@@ -34,12 +34,28 @@ describe('ColumnDefinitions', () => {
     b = ColumnDefinitions.blob().default('a');
     a.$equals(b).should.be.true();
 
+    a = ColumnDefinitions.smallint().default(1);
+    b = ColumnDefinitions.smallint().default(1);
+    a.$equals(b).should.be.true();
+
+    a = ColumnDefinitions.bool().default(true);
+    b = ColumnDefinitions.bool().default(true);
+    a.$equals(b).should.be.true();
+
     a = ColumnDefinitions.blob().notNull();
     b = ColumnDefinitions.blob().notNull().default('a');
     a.$equals(b).should.be.false();
 
     a = ColumnDefinitions.blob().notNull().default('a');
     b = ColumnDefinitions.blob().notNull().default('b');
+    a.$equals(b).should.be.false();
+
+    a = ColumnDefinitions.smallint().notNull().default(1);
+    b = ColumnDefinitions.smallint().notNull().default(2);
+    a.$equals(b).should.be.false();
+
+    a = ColumnDefinitions.bool().notNull().default(true);
+    b = ColumnDefinitions.bool().notNull().default(false);
     a.$equals(b).should.be.false();
 
     a = ColumnDefinitions.int().unsigned().zerofill().notNull().default(2).autoIncrement();
@@ -367,8 +383,14 @@ describe('ColumnDefinitions', () => {
   describe('all data types', () => {
 
     it('should be able to generate SQL with the DEFAULT or NOT NULL attributes', () => {
+      ColumnDefinitions.bool().notNull().default(true)
+        .$toSQL().should.equal('bool NOT NULL DEFAULT \'1\'');
+
+      ColumnDefinitions.bool().notNull().default(false)
+        .$toSQL().should.equal('bool NOT NULL DEFAULT \'0\'');
+
       ColumnDefinitions.int().notNull().default(1)
-        .$toSQL().should.equal('int NOT NULL DEFAULT 1');
+        .$toSQL().should.equal('int NOT NULL DEFAULT \'1\'');
 
       ColumnDefinitions.char().notNull().default('1')
         .$toSQL().should.equal('char NOT NULL DEFAULT \'1\'');
@@ -385,7 +407,7 @@ describe('ColumnDefinitions', () => {
 
     it('should allow the columns to be defined as keys, but not change the SQL', () => {
       ColumnDefinitions.int().notNull().default(1).index()
-        .$toSQL().should.equal('int NOT NULL DEFAULT 1');
+        .$toSQL().should.equal('int NOT NULL DEFAULT \'1\'');
 
       ColumnDefinitions.char().notNull().default('1').index()
         .$toSQL().should.equal('char NOT NULL DEFAULT \'1\'');
@@ -411,7 +433,7 @@ describe('ColumnDefinitions', () => {
 
     it('should allow the columns to be defined as primary keys, but not change the SQL, except for forcing the column to be NOT NULL', () => {
       ColumnDefinitions.int().notNull().default(1).primaryKey()
-        .$toSQL().should.equal('int NOT NULL DEFAULT 1');
+        .$toSQL().should.equal('int NOT NULL DEFAULT \'1\'');
 
       ColumnDefinitions.char().notNull().default('1').primaryKey()
         .$toSQL().should.equal('char NOT NULL DEFAULT \'1\'');

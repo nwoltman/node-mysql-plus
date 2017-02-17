@@ -132,7 +132,7 @@ describe('MySQLPlus', function() {
   const columnsTableName = 'columns_table';
   const columnsTableSchema = {
     columns: {
-      id: ColTypes.int().unsigned().notNull().primaryKey(),
+      id: ColTypes.int().unsigned().notNull().primaryKey().default(1),
       uuid: ColTypes.char(44).unique(),
       email: ColTypes.char(255),
       fp: ColTypes.float(7, 4),
@@ -146,7 +146,7 @@ describe('MySQLPlus', function() {
   };
   const columnsTableExpectedSQL =
     'CREATE TABLE `columns_table` (\n' +
-    '  `id` int(10) unsigned NOT NULL,\n' +
+    '  `id` int(10) unsigned NOT NULL DEFAULT \'1\',\n' +
     '  `uuid` char(44) DEFAULT NULL,\n' +
     '  `email` char(255) DEFAULT NULL,\n' +
     '  `fp` float(7,4) DEFAULT NULL,\n' +
@@ -163,7 +163,7 @@ describe('MySQLPlus', function() {
 
   const columnsTableMigratedSchema = {
     columns: {
-      id: ColTypes.bigint(5).unsigned().notNull().primaryKey(),
+      id: ColTypes.bigint(5).unsigned().notNull().primaryKey().default(2),
       uuid: ColTypes.char(44).unique(),
       email: ColTypes.varchar(255).notNull(),
       fp: ColTypes.float(8, 3),
@@ -178,7 +178,7 @@ describe('MySQLPlus', function() {
   };
   const columnsTableMigratedExpectedSQL =
     'CREATE TABLE `columns_table` (\n' +
-    '  `id` bigint(5) unsigned NOT NULL,\n' +
+    '  `id` bigint(5) unsigned NOT NULL DEFAULT \'2\',\n' +
     '  `uuid` char(44) DEFAULT NULL,\n' +
     '  `email` varchar(255) NOT NULL,\n' +
     '  `fp` float(8,3) DEFAULT NULL,\n' +
