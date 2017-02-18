@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.6.2 (2017-02-18)
+
+### Bug Fixes
++ lib: Fix foreign key bug introduced in [`d43235a`](https://github.com/nwoltman/node-mysql-plus/commit/d43235a56772115ac1b945cc670f7ffd8f76c447) ([`03374e4`](https://github.com/nwoltman/node-mysql-plus/commit/03374e4746cc606e92d5d4676cce1c122cf559c9))
++ lib: Fix bug caused by columns with a default value ([`8f1e963`](https://github.com/nwoltman/node-mysql-plus/commit/8f1e963c5c9b3ca85959b75f5bbe9eb2994c72bb))
+
 ## 0.6.1 (2017-02-11)
 
 ### New Features
