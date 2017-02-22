@@ -45,7 +45,38 @@ describe('diffKeys()', () => {
       addedKeys: [],
       removedKeys: [],
     });
+  });
 
+  it('should accept null/undefined for either input parameter', () => {
+    diffKeys(null, [1, 2]).should.deepEqual({
+      addedKeys: [1, 2],
+      removedKeys: [],
+    });
+
+    diffKeys(undefined, [1, 2]).should.deepEqual({
+      addedKeys: [1, 2],
+      removedKeys: [],
+    });
+
+    diffKeys([1, 2], null).should.deepEqual({
+      addedKeys: [],
+      removedKeys: [1, 2],
+    });
+
+    diffKeys([1, 2], undefined).should.deepEqual({
+      addedKeys: [],
+      removedKeys: [1, 2],
+    });
+
+    diffKeys(null, null).should.deepEqual({
+      addedKeys: [],
+      removedKeys: [],
+    });
+
+    diffKeys().should.deepEqual({
+      addedKeys: [],
+      removedKeys: [],
+    });
   });
 
 });
