@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 0.6.3 (2017-02-25)
+
+### New Features
++ PoolPlus: Add debugging to #sync() and fix incorrect documentation ([`bdbce55`](https://github.com/nwoltman/node-mysql-plus/commit/bdbce554b12f89bc1bfcd7d22e43a1339a476e6d))
++ perf: Add fast path in diffKeys() for when either input is null ([`d3b66eb`](https://github.com/nwoltman/node-mysql-plus/commit/d3b66eb27b9bf42148009c6f7d2649fd779d2e72))
+
+### Bug Fixes
++ lib: Fix bug when altering a multi-column index and the first column in that index has a foreign key ([`585b7dc`](https://github.com/nwoltman/node-mysql-plus/commit/585b7dc9ac1d43ba4cf6b8bca5cc3ec50004c8fc))
+
 ## 0.6.2 (2017-02-18)
 
 ### Bug Fixes
