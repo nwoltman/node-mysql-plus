@@ -196,6 +196,35 @@ describe('PoolPlus', () => {
 
     });
 
+
+    describe('if an error occurs while running the sync operations', () => {
+
+      const error = new Error('test error');
+
+      before(() => {
+        sinon.stub(Connection.prototype, 'query', function() {
+          const cb = arguments.length > 0 && arguments[arguments.length - 1];
+          process.nextTick(() => cb(error));
+        });
+        sinon.stub(TableDefinition.prototype, 'genSyncOperations', function(cb) {
+          process.nextTick(() => cb(null, [{sql: 'pretend sql', type: -1}, {sql: '', type: 0}]));
+        });
+      });
+
+      after(() => {
+        Connection.prototype.query.restore();
+        TableDefinition.prototype.genSyncOperations.restore();
+      });
+
+      it('should call the callback with an error', done => {
+        pool.sync(err => {
+          err.should.equal(error);
+          done();
+        });
+      });
+
+    });
+
   });
 
 

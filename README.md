@@ -308,11 +308,12 @@ const userTable = pool.defineTable('user', {
 
 ### poolPlus.sync(cb) ⇒ <code>void</code>
 Syncs the defined tables to the database by creating new tables and dropping
-or migrating existing tables (depending on the migration setting). If an
-error occurs while syncing the tables, all changes are rolled back so the
-database will be in the same state as it was before the attempted sync.
+or migrating existing tables (depending on the migration setting).
 
 Generally, this should only be called once when starting up a server.
+
+__Warning:__ If an error occurs while syncing, the database will be in an unknown state.
+Always keep a backup of your database so you can restore it to the latest working state.
 
 
 | Param | Type | Description |
