@@ -79,11 +79,10 @@ describe('TableDefinition', () => {
       const expectedOperations = [
         {
           type: Operation.Types.CREATE_TABLE,
-          sql:
-            'CREATE TABLE `' + tableName + '` (' +
-              '`id` int unsigned NOT NULL,' +
-              'PRIMARY KEY (`id`)' +
-            ')',
+          sql: 'CREATE TABLE `' + tableName + '` (\n' +
+          '       `id` int unsigned NOT NULL,\n' +
+          '       PRIMARY KEY (`id`)\n' +
+          '     )',
         },
       ];
 
@@ -163,7 +162,10 @@ describe('TableDefinition', () => {
           },
           {
             type: Operation.Types.CREATE_TABLE,
-            sql: 'CREATE TABLE `' + existingTableName + '` (`id` int unsigned NOT NULL,`newCol` tinyint)',
+            sql: 'CREATE TABLE `' + existingTableName + '` (\n' +
+            '       `id` int unsigned NOT NULL,\n' +
+            '       `newCol` tinyint\n' +
+            '     )',
           },
         ];
         new TableDefinition(existingTableName, newSchema, mockPool, 'drop')
