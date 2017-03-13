@@ -136,18 +136,12 @@ describe('TableDefinition', () => {
       it('should generate table migration operations', () => {
         const expectedOperations = [
           {
-            type: Operation.Types.MODIFY_COLUMN,
-            sql: 'ALTER TABLE `' + existingTableName + '` MODIFY COLUMN `id` int unsigned NOT NULL',
-            columns: ['id'],
-          },
-          {
-            type: Operation.Types.ADD_COLUMN,
-            sql: 'ALTER TABLE `' + existingTableName + '` ADD COLUMN `newCol` tinyint',
-          },
-          {
-            type: Operation.Types.DROP_KEY,
-            sql: 'ALTER TABLE `' + existingTableName + '` DROP PRIMARY KEY',
-            columns: 'id',
+            type: Operation.Types.ALTER_TABLE,
+            sql: 'ALTER TABLE `' + existingTableName + '`\n' +
+              '       DROP PRIMARY KEY,\n' +
+              '       MODIFY COLUMN `id` int unsigned NOT NULL,\n' +
+              '       ADD COLUMN `newCol` tinyint',
+            columns: undefined,
           },
         ];
         new TableDefinition(existingTableName, newSchema, mockPool, 'alter')
