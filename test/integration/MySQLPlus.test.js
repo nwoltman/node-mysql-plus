@@ -663,7 +663,7 @@ describe('MySQLPlus', function() {
       pool._runOperations.should.be.calledOnce().and.be.calledWith([]);
     });
 
-    it('should not alter any of the tables\' structure', done => {
+    it('should not alter any tables\' structure', done => {
       const cbManager = new CallbackManager(done);
 
       const cb1 = cbManager.registerCallback();
@@ -771,7 +771,7 @@ describe('MySQLPlus', function() {
       pool.end(done);
     });
 
-    it('should not alter any of the tables\' structure', done => {
+    it('should not alter any tables\' structure', done => {
       const cbManager = new CallbackManager(done);
 
       const cb1 = cbManager.registerCallback();
