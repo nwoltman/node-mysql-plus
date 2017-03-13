@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 0.7.0 (2017-03-13)
+
+### Breaking Changes
++ PoolPlus: Remove deprecation error in constructor ([`d9c416f`](https://github.com/nwoltman/node-mysql-plus/commit/d9c416fd1bad51acd0f960d9b0ce44692ee27722))
+
+### New Features
++ deps: mysql@2.13.0 ([`9d95934`](https://github.com/nwoltman/node-mysql-plus/commit/9d95934b11ab748f72d9dcf03ab551cce00be696))
++ TableDefinition: Beautify CREATE TABLE statements to make debugging easier ([`40d93e1`](https://github.com/nwoltman/node-mysql-plus/commit/40d93e1442cf41f84b4674da4150e5be995c2310))
++ lib: Make debugging section separators the same length ([`4d92886`](https://github.com/nwoltman/node-mysql-plus/commit/4d92886b0ff18ea064ce67577fb962b5711e6302))
+
+### Bug Fixes
++ lib: Combine all ALTER statements into a single statement before running the query ([`a92e330`](https://github.com/nwoltman/node-mysql-plus/commit/a92e3304972675fe61e4a0e953f3283d140ff526))
+  + Fixes issues with migrating tables with an AUTO_INCREMENT column
++ PoolPlus: Fix bug in debug mode where the sync callback would not get called ([`231e7ec`](https://github.com/nwoltman/node-mysql-plus/commit/231e7ec62a5f45612fa2056c0106d2d39b6fe214))
+
 ## 0.6.3 (2017-02-25)
 
 ### New Features
