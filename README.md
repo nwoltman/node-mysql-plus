@@ -145,7 +145,7 @@ and perform queries and transactions using promises.</p>
 ## mysql-plus ⇐ <code>mysql</code>
 This module.
 
-**Extends:** <code>mysql</code>  
+**Extends**: <code>mysql</code>  
 **See**: [mysql](https://github.com/mysqljs/mysql#mysql)  
 
 * [mysql-plus](#module_mysql-plus) ⇐ <code>mysql</code>
@@ -235,7 +235,7 @@ A function called with the results of a query.
 A class that extends the `mysql` module's `Pool` class with the ability to define tables
 and perform queries and transactions using promises.
 
-**Extends:** <code>Pool</code>  
+**Extends**: <code>Pool</code>  
 **See**: [Pool](https://github.com/mysqljs/mysql#pooling-connections)  
 
 * [PoolPlus](#PoolPlus) ⇐ <code>Pool</code>
