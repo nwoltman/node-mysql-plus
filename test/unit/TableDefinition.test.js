@@ -77,31 +77,32 @@ describe('TableDefinition', () => {
         },
       };
       const expectedOperations = [
-        Operation.create(
-          Operation.Types.CREATE_TABLE,
-          'CREATE TABLE `' + tableName + '` (' +
-            '`id` int unsigned NOT NULL,' +
-            'PRIMARY KEY (`id`)' +
-          ')'
-        ),
+        {
+          type: Operation.Types.CREATE_TABLE,
+          sql:
+            'CREATE TABLE `' + tableName + '` (' +
+              '`id` int unsigned NOT NULL,' +
+              'PRIMARY KEY (`id`)' +
+            ')',
+        },
       ];
 
       new TableDefinition(tableName, schema, mockPool, 'safe')
         .genSyncOperations((err, operations) => {
           if (err) throw err;
-          operations.should.deepEqual(expectedOperations);
+          operations.should.containDeep(expectedOperations);
         });
 
       new TableDefinition(tableName, schema, mockPool, 'alter')
         .genSyncOperations((err, operations) => {
           if (err) throw err;
-          operations.should.deepEqual(expectedOperations);
+          operations.should.containDeep(expectedOperations);
         });
 
       new TableDefinition(tableName, schema, mockPool, 'drop')
         .genSyncOperations((err, operations) => {
           if (err) throw err;
-          operations.should.deepEqual(expectedOperations);
+          operations.should.containDeep(expectedOperations);
         });
     });
 
@@ -134,25 +135,25 @@ describe('TableDefinition', () => {
 
       it('should generate table migration operations', () => {
         const expectedOperations = [
-          Operation.create(
-            Operation.Types.MODIFY_COLUMN,
-            'ALTER TABLE `' + existingTableName + '` MODIFY COLUMN `id` int unsigned NOT NULL',
-            ['id']
-          ),
-          Operation.create(
-            Operation.Types.ADD_COLUMN,
-            'ALTER TABLE `' + existingTableName + '` ADD COLUMN `newCol` tinyint'
-          ),
-          Operation.create(
-            Operation.Types.DROP_KEY,
-            'ALTER TABLE `' + existingTableName + '` DROP PRIMARY KEY',
-            'id'
-          ),
+          {
+            type: Operation.Types.MODIFY_COLUMN,
+            sql: 'ALTER TABLE `' + existingTableName + '` MODIFY COLUMN `id` int unsigned NOT NULL',
+            columns: ['id'],
+          },
+          {
+            type: Operation.Types.ADD_COLUMN,
+            sql: 'ALTER TABLE `' + existingTableName + '` ADD COLUMN `newCol` tinyint',
+          },
+          {
+            type: Operation.Types.DROP_KEY,
+            sql: 'ALTER TABLE `' + existingTableName + '` DROP PRIMARY KEY',
+            columns: 'id',
+          },
         ];
         new TableDefinition(existingTableName, newSchema, mockPool, 'alter')
           .genSyncOperations((err, operations) => {
             if (err) throw err;
-            operations.should.deepEqual(expectedOperations);
+            operations.should.containDeep(expectedOperations);
           });
       });
 
@@ -162,19 +163,19 @@ describe('TableDefinition', () => {
 
       it('should generate a DROP and a CREATE TABLE operation (when no foreign keys are present)', () => {
         const expectedOperations = [
-          Operation.create(
-            Operation.Types.DROP_TABLE,
-            'DROP TABLE `' + existingTableName + '`'
-          ),
-          Operation.create(
-            Operation.Types.CREATE_TABLE,
-            'CREATE TABLE `' + existingTableName + '` (`id` int unsigned NOT NULL,`newCol` tinyint)'
-          ),
+          {
+            type: Operation.Types.DROP_TABLE,
+            sql: 'DROP TABLE `' + existingTableName + '`',
+          },
+          {
+            type: Operation.Types.CREATE_TABLE,
+            sql: 'CREATE TABLE `' + existingTableName + '` (`id` int unsigned NOT NULL,`newCol` tinyint)',
+          },
         ];
         new TableDefinition(existingTableName, newSchema, mockPool, 'drop')
           .genSyncOperations((err, operations) => {
             if (err) throw err;
-            operations.should.deepEqual(expectedOperations);
+            operations.should.containDeep(expectedOperations);
           });
       });
 

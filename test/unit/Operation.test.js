@@ -10,21 +10,21 @@ describe('Operation', () => {
       Operation.create(
         Operation.Types.ADD_COLUMN,
         'some SQL'
-      ).should.deepEqual({
+      ).should.containDeep({
         type: Operation.Types.ADD_COLUMN,
         sql: 'some SQL',
         columns: undefined,
-      });
+      }).and.have.property('position').with.type('number');
 
       Operation.create(
         Operation.Types.MODIFY_TABLE_OPTIONS,
         'SQL',
         ['column', 'names']
-      ).should.deepEqual({
+      ).should.containDeep({
         type: Operation.Types.MODIFY_TABLE_OPTIONS,
         sql: 'SQL',
         columns: ['column', 'names'],
-      });
+      }).and.have.property('position').with.type('number');
     });
 
   });
