@@ -144,12 +144,9 @@ describe('PoolPlus', () => {
       const error = new Error('test error');
 
       before(() => {
-        sinon.stub(pool, 'getConnection', function(cb) {
-          process.nextTick(() => cb(error));
-        });
-        sinon.stub(TableDefinition.prototype, 'genSyncOperations', function(cb) {
-          process.nextTick(() => cb(null, [{sql: 'pretend sql', type: -1}]));
-        });
+        sinon.stub(pool, 'getConnection').yieldsAsync(error);
+        sinon.stub(TableDefinition.prototype, 'genSyncOperations')
+          .yieldsAsync(null, [{sql: 'pretend sql', type: -1}]);
       });
 
       after(() => {
@@ -172,9 +169,7 @@ describe('PoolPlus', () => {
       const error = new Error('test error');
 
       before(() => {
-        sinon.stub(TableDefinition.prototype, 'genSyncOperations', function(cb) {
-          process.nextTick(() => cb(error));
-        });
+        sinon.stub(TableDefinition.prototype, 'genSyncOperations').yieldsAsync(error);
       });
 
       after(() => {
@@ -196,13 +191,9 @@ describe('PoolPlus', () => {
       const error = new Error('test error');
 
       before(() => {
-        sinon.stub(Connection.prototype, 'query', function() {
-          const cb = arguments.length > 0 && arguments[arguments.length - 1];
-          process.nextTick(() => cb(error));
-        });
-        sinon.stub(TableDefinition.prototype, 'genSyncOperations', function(cb) {
-          process.nextTick(() => cb(null, [{sql: 'pretend sql', type: -1}, {sql: '', type: 0}]));
-        });
+        sinon.stub(Connection.prototype, 'query').yieldsAsync(error);
+        sinon.stub(TableDefinition.prototype, 'genSyncOperations')
+          .yieldsAsync(null, [{sql: 'pretend sql', type: -1}, {sql: '', type: 0}]);
       });
 
       after(() => {
@@ -229,7 +220,7 @@ describe('PoolPlus', () => {
       const expectedValues = ['solution'];
       function expectedCb() { /* no-op */ }
 
-      sinon.stub(pool, 'query', function(sql, values, cb) {
+      sinon.stub(pool, 'query').callsFake((sql, values, cb) => {
         sql.should.equal(expectedSql);
         values.should.equal(expectedValues);
         cb.should.equal(expectedCb);
@@ -425,9 +416,7 @@ describe('PoolPlus', () => {
         const error = new Error('test error');
 
         before(() => {
-          sinon.stub(pool, 'getConnection', function(cb) {
-            process.nextTick(() => cb(error));
-          });
+          sinon.stub(pool, 'getConnection').yieldsAsync(error);
         });
 
         after(() => {
@@ -454,9 +443,7 @@ describe('PoolPlus', () => {
         const error = new Error('test error');
 
         before(() => {
-          sinon.stub(Connection.prototype, 'beginTransaction', function(cb) {
-            process.nextTick(() => cb(error));
-          });
+          sinon.stub(Connection.prototype, 'beginTransaction').yieldsAsync(error);
         });
 
         after(() => {
@@ -483,9 +470,7 @@ describe('PoolPlus', () => {
         const error = new Error('test error');
 
         before(() => {
-          sinon.stub(Connection.prototype, 'commit', function(cb) {
-            process.nextTick(() => cb(error));
-          });
+          sinon.stub(Connection.prototype, 'commit').yieldsAsync(error);
         });
 
         after(() => {
@@ -534,7 +519,7 @@ describe('PoolPlus', () => {
       sinon.stub(require.cache[require.resolve('../../lib/TableDefinition')], 'exports');
 
       // Prevent checking for duplicate table definitions
-      sinon.stub(Map.prototype, 'has', () => false);
+      sinon.stub(Map.prototype, 'has').returns(false);
 
       MockPool = require('../../lib/PoolPlus');
       TableDefinitionStub = require('../../lib/TableDefinition');

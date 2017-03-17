@@ -36,7 +36,7 @@
     "semver": "^5.1.0",
     "should": "^11.1.0",
     "should-sinon": "0.0.5",
-    "sinon": "^1.17.3"
+    "sinon": "^2.0.0"
   },
   "scripts": {
     "test": "grunt"

@@ -15,7 +15,7 @@ describe('Connection', () => {
       const expectedValues = ['solution'];
       function expectedCb() { /* no-op */ }
 
-      sinon.stub(connection, 'query', function(sql, values, cb) {
+      sinon.stub(connection, 'query').callsFake((sql, values, cb) => {
         sql.should.equal(expectedSql);
         values.should.equal(expectedValues);
         cb.should.equal(expectedCb);
