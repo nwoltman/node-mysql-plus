@@ -68,11 +68,9 @@ const userTable = db.defineTable('user', {
 
 const User = {
   insertAndSelectExample() {
-    userTable.insert({email: 'newuser@email.com', name: 'newuser'}, (err, result) => {
-      if (err) throw err;
-
-      userTable.select('*', 'WHERE `id` = ' + result.insertId, (err, rows) => {
-        if (err) throw err;
+    userTable.insert({email: 'newuser@email.com', name: 'newuser'})
+      .then(result => userTable.select('*', 'WHERE `id` = ?', [result.insertId]))
+      .then(rows => {
         console.log(rows);
         /*
           [{
@@ -81,8 +79,8 @@ const User = {
             name: 'newuser'
           }]
         */
-      });
-    });
+      })
+      .catch(err => console.error(err));
   }
 };
 
