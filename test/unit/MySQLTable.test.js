@@ -281,6 +281,19 @@ describe('MySQLTable', () => {
         });
       });
 
+      it('should allow the first parameter to be a string', done => {
+        testTable.insert("(`email`) VALUES ('six@email.com'), ('seven@email.com')", (err, result1) => {
+          if (err) throw err;
+          result1.affectedRows.should.equal(2);
+
+          testTable.insert('SET ?? = ?', ['email', 'eight@email.com'], (err, result2) => {
+            if (err) throw err;
+            result2.affectedRows.should.equal(1);
+            done();
+          });
+        });
+      });
+
     });
 
 
@@ -340,6 +353,16 @@ describe('MySQLTable', () => {
           .then(result => {
             result.affectedRows.should.equal(2);
           });
+      });
+
+      it('should allow the first parameter to be a string', () => {
+        return Promise.all([
+          testTable.insert("(`email`) VALUES ('six@email.com'), ('seven@email.com')"),
+          testTable.insert('SET ?? = ?', ['email', 'eight@email.com']),
+        ]).then(results => {
+          results[0].affectedRows.should.equal(2);
+          results[1].affectedRows.should.equal(1);
+        });
       });
 
     });

@@ -523,7 +523,7 @@ A class that provides convenient methods for performing queries.
     * [.pool](#MySQLTable+pool) : <code>[PoolPlus](#PoolPlus)</code>
     * [.trxn](#MySQLTable+trxn) : <code>?[Connection](#Connection)</code>
     * [.select(columns, [sqlString], [values], [cb])](#MySQLTable+select) ⇒ <code>Promise</code>
-    * [.insert(data, [sqlString], [values], [cb])](#MySQLTable+insert) ⇒ <code>Promise</code>
+    * [.insert([data], [sqlString], [values], [cb])](#MySQLTable+insert) ⇒ <code>Promise</code>
     * [.update([data], [sqlString], [values], [cb])](#MySQLTable+update) ⇒ <code>Promise</code>
     * [.delete([sqlString], [values], [cb])](#MySQLTable+delete) ⇒ <code>Promise</code>
     * [.query()](#MySQLTable+query) ⇒ <code>Promise</code>
@@ -631,14 +631,17 @@ userTable.select('COUNT(*) AS `highScorers`', 'WHERE `points` > 10000', (err, ro
 
 <a name="MySQLTable+insert"></a>
 
-### mySQLTable.insert(data, [sqlString], [values], [cb]) ⇒ <code>Promise</code>
+### mySQLTable.insert([data], [sqlString], [values], [cb]) ⇒ <code>Promise</code>
 Inserts data into a new row in the table.
+
+__Note:__ The `data` and `sqlString` arguments are individually
+optional but at least one of them must be specified.
 
 
 | Param | Type | Description |
 |:--- |:--- |:--- |
-| data | <code>Object</code> &#124; <code>Array</code> | An object of (column name)-(data value) pairs or     an array containing either 1) an array of arrays of data values or 2) an array     of column names and the data array from 1). |
-| [sqlString] | <code>string</code> | SQL to be appended to the query.<br>This would only be used to add     an `ON DUPLICATE KEY UPDATE` clause. |
+| [data] | <code>Object</code> &#124; <code>Array</code> | An object of (column name)-(data value) pairs or     an array containing either 1) an array of arrays of data values or 2) an array     of column names and the data array from 1). |
+| [sqlString] | <code>string</code> | SQL to be appended to the query. If `data` is provided, it is appended     directly after the formatted data, otherwise it is appended after `"INSERT INTO tableName"`. |
 | [values] | <code>Array</code> | Values to replace the placeholders in `sqlString`. |
 | [cb] | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | A callback that gets called with the results of the query. |
 
