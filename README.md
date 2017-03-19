@@ -587,43 +587,48 @@ userTable.select('*', (err, rows) => {
   if (err) throw err;
   // rows contains all data for all users
 });
+
+// SELECT * FROM `user`;
 ```
 
 **Example**: Select specific columns
 ```js
 userTable.select(['email', 'name'], 'WHERE `points` > 10000', (err, rows) => {
   if (err) throw err;
-  console.log(rows); // -> [{email: 'email@example.com', name: 'John Doe'}, etc.]
+  console.log(rows); // -> [{email: 'email@example.com', name: 'John Doe'}, ...]
 });
+
+// SELECT `email`, `name` FROM `user` WHERE `points` > 10000;
 ```
 
 **Example**: Select with placeholders
 ```js
-userTable.select(['email'], 'WHERE `id` = ?', [5], (err, rows) => {
-  if (err) throw err;
-  console.log(rows); // -> [{email: 'email@example.com'}]
-});
+userTable.select(['email'], 'WHERE `id` = ?', [5])
+  .then(rows => console.log(rows)); // -> [{email: 'email@example.com'}]
 
-userTable.select('??', 'WHERE ?', ['email', {id: 5}], (err, rows) => {
-  if (err) throw err;
-  console.log(rows); // -> [{email: 'email@example.com'}]
-});
+// SELECT `email` FROM `user` WHERE `id` = 5;
+
+
+userTable.select('??', 'WHERE ?', ['email', {id: 5}])
+  .then(rows => console.log(rows)); // -> [{email: 'email@example.com'}]
+
+// SELECT `email` FROM `user` WHERE `id` = 5;
 ```
 
 **Example**: Select columns with aliases
 ```js
-userTable.select('`display_name` AS `name`', 'WHERE `points` > 10000', (err, rows) => {
-  if (err) throw err;
-  console.log(rows); // -> [{name: 'JohnD'}, etc.]
-});
+userTable.select('`name` AS `fullName`', 'WHERE `points` > 10000')
+  .then(rows => console.log(rows)); // -> [{fullName: 'John Doe'}, ...]
+
+// SELECT `name` AS `fullName` FROM `user` WHERE `points` > 10000;
 ```
 
 **Example**: Select using a function
 ```js
-userTable.select('COUNT(*) AS `highScorers`', 'WHERE `points` > 10000', (err, rows) => {
-  if (err) throw err;
-  console.log(rows); // -> [{highScorers: 27}]
-});
+userTable.select('COUNT(*) AS `highScorers`', 'WHERE `points` > 10000')
+  .then(rows => console.log(rows)); // -> [{highScorers: 27}]
+
+// SELECT COUNT(*) AS `highScorers` FROM `user` WHERE `points` > 10000;
 ```
 
 
@@ -650,10 +655,11 @@ optional but at least one of them must be specified.
 
 **Example**: Insert a new user
 ```js
-userTable.insert({email: 'email@example.com', name: 'John Doe'}, (err, result) => {
-  if (err) throw err;
-  // data inserted!
-});
+userTable.insert({email: 'email@example.com', name: 'John Doe'})
+  .then(result => result.affectedRows); // 1
+
+// INSERT INTO `user`
+// SET `email` = 'email@example.com', `name` = 'John Doe';
 ```
 
 **Example**: Insert or update
@@ -661,10 +667,20 @@ userTable.insert({email: 'email@example.com', name: 'John Doe'}, (err, result) =
 const data = {id: 5, points: 100};
 // If duplicate key (id), add the points
 const onDuplicateKeySQL = 'ON DUPLICATE KEY UPDATE `points` = `points` + ?';
-userTable.insert(data, onDuplicateKeySQL, [data.points], (err, result) => {
-  if (err) throw err;
-  // data inserted or updated!
-});
+userTable.insert(data, onDuplicateKeySQL, [data.points])
+  .then(result => result.affectedRows); // 1 if inserted, 2 if updated
+
+// INSERT INTO `user` SET `id` = 5, `points` = 100
+// ON DUPLICATE KEY UPDATE `points` = `points` + 100;
+```
+
+**Example**: With only the `sqlString` argument
+```js
+placeTable.insert('`location` = POINT(0, 0)');
+// INSERT INTO `place` SET `location` = POINT(0, 0);
+
+placeTable.insert('`location` = POINT(?, ?)', [8, 2]);
+// INSERT INTO `place` SET `location` = POINT(8, 2);
 ```
 
 **Example**: Bulk insert
@@ -673,10 +689,12 @@ const users = [
   [1, 'john@email.com', 'John Doe'],
   [2, 'jane@email.com', 'Jane Brown'],
 ];
-userTable.insert([users], (err, result) => {
-  if (err) throw err;
-  // users inserted!
-});
+userTable.insert([users])
+  .then(result => result.insertId); // 2 (ID of the last inserted row)
+
+// INSERT INTO `user` VALUES
+// (1, 'john@email.com', 'John Doe'),
+// (2, 'jane@email.com', 'Jane Brown');
 ```
 
 **Example**: Bulk insert with specified columns
@@ -685,10 +703,12 @@ const users = [
   ['john@email.com', 'John Doe'],
   ['jane@email.com', 'Jane Brown'],
 ];
-userTable.insert([['email', 'name'], users], (err, result) => {
-  if (err) throw err;
-  // users inserted!
-});
+userTable.insert([['email', 'name'], users])
+  .then(result => result.affectedRows); // 2
+
+// INSERT INTO `user` (`email`, `name`) VALUES
+// ('john@email.com', 'John Doe'),
+// ('jane@email.com', 'Jane Brown');
 ```
 
 
@@ -715,31 +735,27 @@ optional but at least one of them must be specified.
 
 **Example**: With both the `data` and `sqlString` arguments
 ```js
-userTable.update({email: 'updated@email.com'}, 'WHERE `id` = ?', [5], (err, result) => {
-  if (err) throw err;
-  // email updated!
-});
+userTable.update({email: 'updated@email.com'}, 'WHERE `id` = ?', [5])
+  .then(result => result.changedRows); // 1
+
+// UPDATE `user` SET `email` = 'updated@email.com'
+// WHERE `id` = 5;
 ```
 
 **Example**: With only the `sqlString` argument
 ```js
-userTable.update("`word` = CONCAT('prefix', `word`)", (err, result) => {
-  if (err) throw err;
-  // prefix added to all words!
-});
+userTable.update("`word` = CONCAT('prefix', `word`)");
+// UPDATE `user` SET `word` = CONCAT('prefix', `word`);
 
-userTable.update('`points` = `points` + ? WHERE `winner` = ?', [1, 1], (err, result) => {
-  if (err) throw err;
-  // 1 point added to all winners!
-});
+userTable.update('`points` = `points` + ? WHERE `winner` = ?', [10, 1]);
+// UPDATE `user` SET `points` = `points` + 10
+// WHERE `winner` = 1;
 ```
 
 **Example**: With only the `data` argument (updates all rows)
 ```js
-userTable.update({points: 1000}, (err, result) => {
-  if (err) throw err;
-  // Now everyone has 1000 points!
-});
+userTable.update({points: 1000});
+// UPDATE `user` SET `points` = 1000;
 ```
 
 
@@ -762,10 +778,10 @@ Deletes data from the table.
 
 **Example**: Delete specific rows
 ```js
-userTable.delete('WHERE `spammer` = 1', (err, result) => {
-  if (err) throw err;
-  // spammers deleted!
-});
+userTable.delete('WHERE `spammer` = 1')
+  .then(result => result.affectedRows); // The number of deleted spammers
+
+// DELETE FROM `user` WHERE `spammer` = 1;
 ```
 
 **Example**: Delete all rows (you probably don't want to do this)
@@ -774,6 +790,8 @@ userTable.delete((err, result) => {
   if (err) throw err;
   // all rows deleted :(
 });
+
+// DELETE FROM `user`;
 ```
 
 
