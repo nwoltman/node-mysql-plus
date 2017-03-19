@@ -237,23 +237,47 @@ describe('MySQLTable', () => {
 
       it('should insert the specified data into the table with an ON DUPLICATE KEY UPDATE clause', done => {
         const data = {id: 1, email: 'one@email.com'};
-        const onDuplicateKey = "ON DUPLICATE KEY UPDATE `email` = 'one2@email.com'";
-        testTable.insert(data, onDuplicateKey, (err, result) => {
+        const onDuplicateKey1 = "ON DUPLICATE KEY UPDATE `email` = 'one2@email.com'";
+
+        testTable.insert(data, onDuplicateKey1, (err, result1) => {
           if (err) throw err;
-          result.affectedRows.should.equal(2); // Updated rows are affected twice
-          result.insertId.should.equal(1);
-          done();
+          result1.affectedRows.should.equal(2); // Updated rows are affected twice
+          result1.insertId.should.equal(1);
+
+          const columns = Object.keys(data);
+          const rows = [
+            [data[columns[0]], data[columns[1]]],
+          ];
+          const onDuplicateKey2 = "ON DUPLICATE KEY UPDATE `email` = 'one2b@email.com'";
+
+          testTable.insert([columns, rows], onDuplicateKey2, (err, result2) => {
+            if (err) throw err;
+            result2.affectedRows.should.equal(2);
+            result2.insertId.should.equal(1);
+            done();
+          });
         });
       });
 
       it('should insert data with question marks into the table when using the `sqlString` and `values` parameters', done => {
         const data = {id: 1, email: '??one?@email.com'};
         const onDuplicateKey = 'ON DUPLICATE KEY UPDATE ?? = ?';
-        testTable.insert(data, onDuplicateKey, ['email', 'one3@email.com'], (err, result) => {
+
+        testTable.insert(data, onDuplicateKey, ['email', 'one3@email.com'], (err, result1) => {
           if (err) throw err;
-          result.affectedRows.should.equal(2); // Updated rows are affected twice
-          result.insertId.should.equal(1);
-          done();
+          result1.affectedRows.should.equal(2); // Updated rows are affected twice
+          result1.insertId.should.equal(1);
+
+          const columns = Object.keys(data);
+          const rows = [
+            [data[columns[0]], data[columns[1]]],
+          ];
+          testTable.insert([columns, rows], onDuplicateKey, ['email', 'one4@email.com'], (err, result2) => {
+            if (err) throw err;
+            result2.affectedRows.should.equal(2);
+            result2.insertId.should.equal(1);
+            done();
+          });
         });
       });
 
@@ -311,24 +335,41 @@ describe('MySQLTable', () => {
 
       it('should insert the specified data into the table with an ON DUPLICATE KEY UPDATE clause', () => {
         const data = {id: 1, email: 'one@email.com'};
-        const onDuplicateKey = "ON DUPLICATE KEY UPDATE `email` = 'one2@email.com'";
+        const columns = Object.keys(data);
+        const rows = [
+          [data[columns[0]], data[columns[1]]],
+        ];
+        const onDuplicateKey1 = "ON DUPLICATE KEY UPDATE `email` = 'one2@email.com'";
+        const onDuplicateKey2 = "ON DUPLICATE KEY UPDATE `email` = 'one2b@email.com'";
 
-        return testTable.insert(data, onDuplicateKey)
-          .then(result => {
-            result.affectedRows.should.equal(2); // Updated rows are affected twice
-            result.insertId.should.equal(1);
-          });
+        return Promise.all([
+          testTable.insert(data, onDuplicateKey1),
+          testTable.insert([columns, rows], onDuplicateKey2),
+        ]).then(results => {
+          results[0].affectedRows.should.equal(2); // Updated rows are affected twice
+          results[0].insertId.should.equal(1);
+          results[1].affectedRows.should.equal(2);
+          results[1].insertId.should.equal(1);
+        });
       });
 
       it('should insert data with question marks into the table when using the `sqlString` and `values` parameters', () => {
         const data = {id: 1, email: '??one?@email.com'};
+        const columns = Object.keys(data);
+        const rows = [
+          [data[columns[0]], data[columns[1]]],
+        ];
         const onDuplicateKey = 'ON DUPLICATE KEY UPDATE ?? = ?';
 
-        return testTable.insert(data, onDuplicateKey, ['email', 'one3@email.com'])
-          .then(result => {
-            result.affectedRows.should.equal(2); // Updated rows are affected twice
-            result.insertId.should.equal(1);
-          });
+        return Promise.all([
+          testTable.insert(data, onDuplicateKey, ['email', 'one3@email.com']),
+          testTable.insert([columns, rows], onDuplicateKey, ['email', 'one3b@email.com']),
+        ]).then(results => {
+          results[0].affectedRows.should.equal(2); // Updated rows are affected twice
+          results[0].insertId.should.equal(1);
+          results[1].affectedRows.should.equal(2);
+          results[1].insertId.should.equal(1);
+        });
       });
 
       it('should be able to perform bulk inserts', () => {
