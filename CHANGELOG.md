@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 0.8.0 (2017-03-21)
+
+### Possibly Breaking Changes
++ MySQLTable: Simplify parsing arguments to [`.insert()`](https://github.com/nwoltman/node-mysql-plus#MySQLTable+insert) and [`.update()`](https://github.com/nwoltman/node-mysql-plus#MySQLTable+update) ([`725cdfa`](https://github.com/nwoltman/node-mysql-plus/commit/725cdfa6b70639f0f1292ca500bd4425454a3f2e))
+  + Should not be a breaking change if you don't pass strings or numbers as the `values` parameter and you don't use `undefined` or `null` to fill in unused arguments (i.e. `.insert({data}, undefined, undefined, callback)`)
+
+### New Features
++ MySQLTable: Implement new [`.insertIfNotExists()`](https://github.com/nwoltman/node-mysql-plus#MySQLTable+insertIfNotExists) method ([`1791688`](https://github.com/nwoltman/node-mysql-plus/commit/17916886b1d1db34c8b37966f6c9e8b4824b342a))
++ MySQLTable: Allow [`.insert()`](https://github.com/nwoltman/node-mysql-plus#MySQLTable+insert) to accept a string as the first parameter ([`f4c9d92`](https://github.com/nwoltman/node-mysql-plus/commit/f4c9d922a6b3a806dee434ea3b080933937ebca6))
++ docs: Show generated SQL in MySQLTable query examples ([`785d853`](https://github.com/nwoltman/node-mysql-plus/commit/785d853ead1692091bc3b2f5966cf7d699b2814b))
+
+### Bug Fixes
++ MySQLTable: Fix bug in [`.insert()`](https://github.com/nwoltman/node-mysql-plus#MySQLTable+insert) where `sqlString` was ignored if data was an array ([`55cc324`](https://github.com/nwoltman/node-mysql-plus/commit/55cc324adccdc6f3b79f45ec8e4a19c09077e79e))
+
 ## 0.7.0 (2017-03-13)
 
 ### Breaking Changes
