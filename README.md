@@ -522,6 +522,7 @@ A class that provides convenient methods for performing queries.
     * [.trxn](#MySQLTable+trxn) : <code>?[Connection](#Connection)</code>
     * [.select(columns, [sqlString], [values], [cb])](#MySQLTable+select) ⇒ <code>Promise</code>
     * [.insert([data], [sqlString], [values], [cb])](#MySQLTable+insert) ⇒ <code>Promise</code>
+    * [.insertIfNotExists(data, keyColumns, [cb])](#MySQLTable+insertIfNotExists) ⇒ <code>Promise</code>
     * [.update([data], [sqlString], [values], [cb])](#MySQLTable+update) ⇒ <code>Promise</code>
     * [.delete([sqlString], [values], [cb])](#MySQLTable+delete) ⇒ <code>Promise</code>
     * [.query()](#MySQLTable+query) ⇒ <code>Promise</code>
@@ -707,6 +708,65 @@ userTable.insert([['email', 'name'], users])
 // INSERT INTO `user` (`email`, `name`) VALUES
 // ('john@email.com', 'John Doe'),
 // ('jane@email.com', 'Jane Brown');
+```
+
+
+---
+
+<a name="MySQLTable+insertIfNotExists"></a>
+
+### mySQLTable.insertIfNotExists(data, keyColumns, [cb]) ⇒ <code>Promise</code>
+Inserts a new row into the table if there are no existing rows in
+the table that have the same values for the specified columns.
+
+This is useful because if the row is not inserted, the table's
+`AUTO_INCREMENT` value is not increased (unlike when an insert
+fails because of a unique key constraint).
+
+
+| Param | Type | Description |
+|:--- |:--- |:--- |
+| data | <code>Object</code> | An object mapping column names to data values to insert.     The values are escaped by default. If you don't want a value to be escaped,     wrap it in a "raw" object (see the last example below). |
+| keyColumns | <code>Array.&lt;string&gt;</code> | The names of columns in the `data` object.     If there is already a row in the table with the same values for these     columns as the values being inserted, the data will not be inserted. |
+| [cb] | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | A callback that gets called with the results of the query. |
+
+**Returns**: <code>?Promise</code> - If the `cb` parameter is omitted, a promise that will
+    resolve with the results of the query is returned.
+
+**Example**: Insert a new user if a user with the same email does not exist
+```js
+userTable.insertIfNotExists({email: 'email@example.com', name: 'John Doe'}, ['email'])
+  .then(result => result.affectedRows);
+  // 0 - If there was a row with `email` = 'email@example.com' (row not inserted)
+  // 1 - If there wasn't (row was inserted)
+
+// INSERT INTO `user` (`email`, `name`)
+// SELECT 'email@example.com', 'John Doe'
+// FROM DUAL WHERE NOT EXISTS (
+//   SELECT 1 FROM `user`
+//   WHERE `email` = 'email@example.com' LIMIT 1
+// );
+```
+
+**Example**: Insert without escaping some values
+```js
+const data = {
+  placeId: 'ChIJK2f-X1bxK4gRkB0jxyh7AwU',
+  type: 'city',
+  // IMPORTANT: You must manually escape any user-input values used in the "raw" object.
+  location: {__raw: 'POINT(-80.5204096, 43.4642578)'},
+};
+placeTable.insertIfNotExists(data, ['placeId', 'type'])
+  .then(result => result.affectedRows);
+  // 0 - If there was a row with the same `placeId` and `type` (row not inserted)
+  // 1 - If there wasn't (row was inserted)
+
+// INSERT INTO `place` (`placeId`, `type`, `location`)
+// SELECT 'ChIJK2f-X1bxK4gRkB0jxyh7AwU', 'city', POINT(-80.5204096, 43.4642578)
+// FROM DUAL WHERE NOT EXISTS (
+//   SELECT 1 FROM `place`
+//   WHERE `placeId` = 'ChIJK2f-X1bxK4gRkB0jxyh7AwU' AND `type` = 'city' LIMIT 1
+// );
 ```
 
 

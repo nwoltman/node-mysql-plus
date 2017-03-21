@@ -1,5 +1,6 @@
 'use strict';
 
+const CallbackManager = require('es6-callback-manager');
 const MySQLTable = require('../../lib/MySQLTable');
 const MySQLPlus = require('../../lib/MySQLPlus');
 
@@ -404,6 +405,131 @@ describe('MySQLTable', () => {
           results[0].affectedRows.should.equal(2);
           results[1].affectedRows.should.equal(1);
         });
+      });
+
+    });
+
+  });
+
+
+  describe('#insertIfNotExists()', () => {
+
+    describe('with a callback', () => {
+
+      before(done => {
+        testTable.insertIfNotExists({email: 'one@email.com'}, ['email'], done);
+      });
+
+      after(resetTable);
+
+      it('should not insert anything and not change the table if a row with the same key already exists', done => {
+        testTable.insertIfNotExists({email: 'one@email.com'}, ['email'], (err, result) => {
+          if (err) throw err;
+          result.affectedRows.should.equal(0);
+
+          testTable.query('SHOW CREATE TABLE ' + testTable.name, (err, result) => {
+            if (err) throw err;
+            result[0]['Create Table'].should.match(/ AUTO_INCREMENT=2 /);
+            done();
+          });
+        });
+      });
+
+      it('should insert the specified data into the table', done => {
+        testTable.insertIfNotExists({email: 'two@email.com'}, ['email'], (err, result) => {
+          if (err) throw err;
+          result.affectedRows.should.equal(1);
+          result.insertId.should.equal(2);
+          done();
+        });
+      });
+
+      it('should accept raw data to insert and not escape it', done => {
+        const cbManager = new CallbackManager(done);
+        const doneOnlyRaw = cbManager.registerCallback();
+        const doneDataAndRaw = cbManager.registerCallback();
+        const doneRowExists = cbManager.registerCallback();
+
+        testTable.insertIfNotExists({email: {__raw: '"three@email.com"'}}, ['email'], (err, result) => {
+          if (err) throw err;
+          result.affectedRows.should.equal(1);
+          result.insertId.should.equal(3);
+
+          testTable.select('email', 'WHERE id = 3', (err, rows) => {
+            if (err) throw err;
+            rows[0].email.should.equal('three@email.com');
+            doneOnlyRaw();
+          });
+
+          testTable.insertIfNotExists({id: 5, email: {__raw: '"five@email.com"'}}, ['id', 'email'], (err, result) => {
+            if (err) throw err;
+            result.affectedRows.should.equal(1);
+            result.insertId.should.equal(5);
+            doneDataAndRaw();
+          });
+        });
+
+        testTable.insertIfNotExists({email: {__raw: '"one@email.com"'}}, ['email'], (err, result) => {
+          if (err) throw err;
+          result.affectedRows.should.equal(0);
+          doneRowExists();
+        });
+      });
+
+    });
+
+
+    describe('with a promise', () => {
+
+      before(
+        () => testTable.insertIfNotExists({email: 'one@email.com'}, ['email'])
+      );
+
+      after(resetTable);
+
+      it('should not insert anything and not change the table if a row with the same key already exists', () => {
+        return testTable.insertIfNotExists({email: 'one@email.com'}, ['email'])
+          .then(result => {
+            result.affectedRows.should.equal(0);
+            return testTable.query('SHOW CREATE TABLE ' + testTable.name);
+          })
+          .then(result => {
+            result[0]['Create Table'].should.match(/ AUTO_INCREMENT=2 /);
+          });
+      });
+
+      it('should insert the specified data into the table', () => {
+        return testTable.insertIfNotExists({email: 'two@email.com'}, ['email'])
+          .then(result => {
+            result.affectedRows.should.equal(1);
+            result.insertId.should.equal(2);
+          });
+      });
+
+      it('should accept raw data to insert and not escape it', () => {
+        const promiseNewRow = testTable.insertIfNotExists({email: {__raw: '"three@email.com"'}}, ['email'])
+          .then(result => {
+            result.affectedRows.should.equal(1);
+            result.insertId.should.equal(3);
+
+            return Promise.all([
+              testTable.select('email', 'WHERE id = 3'),
+              testTable.insertIfNotExists({id: 5, email: {__raw: '"five@email.com"'}}, ['id', 'email']),
+            ]);
+          })
+          .then(results => {
+            results[0][0].email.should.equal('three@email.com');
+
+            results[1].affectedRows.should.equal(1);
+            results[1].insertId.should.equal(5);
+          });
+
+        const promiseRowExists = testTable.insertIfNotExists({email: {__raw: '"one@email.com"'}}, ['email'])
+          .then(result => {
+            result.affectedRows.should.equal(0);
+          });
+
+        return Promise.all([promiseNewRow, promiseRowExists]);
       });
 
     });
