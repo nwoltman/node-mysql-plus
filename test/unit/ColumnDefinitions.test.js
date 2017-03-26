@@ -214,7 +214,7 @@ describe('ColumnDefinitions', () => {
       .$toSQL().should.equal('datetime');
 
     ColumnDefinitions.timestamp()
-      .$toSQL().should.equal('timestamp');
+      .$toSQL().should.equal('timestamp NULL'); // timestamp columns are special
 
     ColumnDefinitions.time()
       .$toSQL().should.equal('time');
@@ -355,7 +355,7 @@ describe('ColumnDefinitions', () => {
       .$toSQL().should.equal('datetime(1)');
 
     ColumnDefinitions.timestamp(1)
-      .$toSQL().should.equal('timestamp(1)');
+      .$toSQL().should.equal('timestamp(1) NULL'); // timestamp columns are special
 
     ColumnDefinitions.time(1)
       .$toSQL().should.equal('time(1)');
@@ -399,7 +399,7 @@ describe('ColumnDefinitions', () => {
         .$toSQL().should.equal('blob NOT NULL DEFAULT \'1\'');
 
       ColumnDefinitions.timestamp().default('CURRENT_TIMESTAMP')
-        .$toSQL().should.equal('timestamp DEFAULT \'CURRENT_TIMESTAMP\'');
+        .$toSQL().should.equal('timestamp NULL DEFAULT \'CURRENT_TIMESTAMP\'');
 
       ColumnDefinitions.datetime().default('1970-01-01 00:00:01')
         .$toSQL().should.equal('datetime DEFAULT \'1970-01-01 00:00:01\'');
@@ -506,11 +506,11 @@ describe('ColumnDefinitions', () => {
   describe('updatable time data types', () => {
 
     it('should provide the defaultCurrentTimestamp() method', () => {
-      ColumnDefinitions.datetime().defaultCurrentTimestamp().$toSQL()
-        .should.equal('datetime DEFAULT CURRENT_TIMESTAMP');
+      ColumnDefinitions.datetime().defaultCurrentTimestamp()
+        .$toSQL().should.equal('datetime DEFAULT CURRENT_TIMESTAMP');
 
-      ColumnDefinitions.timestamp().defaultCurrentTimestamp().$toSQL()
-        .should.equal('timestamp DEFAULT CURRENT_TIMESTAMP');
+      ColumnDefinitions.timestamp().defaultCurrentTimestamp()
+        .$toSQL().should.equal('timestamp NULL DEFAULT CURRENT_TIMESTAMP');
     });
 
     it('should provide the onUpdateCurrentTimestamp() method', () => {
@@ -518,7 +518,27 @@ describe('ColumnDefinitions', () => {
         .$toSQL().should.equal('datetime ON UPDATE CURRENT_TIMESTAMP');
 
       ColumnDefinitions.timestamp().onUpdateCurrentTimestamp()
-        .$toSQL().should.equal('timestamp ON UPDATE CURRENT_TIMESTAMP');
+        .$toSQL().should.equal('timestamp NULL ON UPDATE CURRENT_TIMESTAMP');
+    });
+
+  });
+
+
+  describe('timestamp', () => {
+
+    it('should allow NULL by default', () => {
+      ColumnDefinitions.timestamp()
+        .$toSQL().should.equal('timestamp NULL');
+    });
+
+    it('should default to CURRENT_TIMESTAMP if required to be NOT NULL', () => {
+      ColumnDefinitions.timestamp().notNull()
+        .$toSQL().should.equal('timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP');
+    });
+
+    it('should convert DEFAULT 0 to the equivalent timestamp string', () => {
+      ColumnDefinitions.timestamp().default(0)
+        .$toSQL().should.equal("timestamp NULL DEFAULT '0000-00-00 00:00:00'");
     });
 
   });

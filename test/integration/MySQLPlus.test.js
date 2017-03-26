@@ -526,6 +526,29 @@ describe('MySQLPlus', function() {
     '  `e` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL\n' +
     ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci';
 
+  const timestampTableName = 'timestamp_table';
+  const timestampTableSchema = {
+    columns: {
+      a: ColTypes.timestamp().notNull(),
+      b: ColTypes.timestamp().notNull().defaultCurrentTimestamp(),
+      c: ColTypes.timestamp().notNull().default(0),
+      d: ColTypes.timestamp(),
+      e: ColTypes.timestamp().default(null),
+      f: ColTypes.timestamp().default(0),
+      g: ColTypes.timestamp().default('2017-03-25 12:46:05'),
+    },
+  };
+  const timestampTableExpectedSQL =
+    'CREATE TABLE `timestamp_table` (\n' +
+    '  `a` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n' +
+    '  `b` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n' +
+    "  `c` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',\n" +
+    '  `d` timestamp NULL DEFAULT NULL,\n' +
+    '  `e` timestamp NULL DEFAULT NULL,\n' +
+    "  `f` timestamp NULL DEFAULT '0000-00-00 00:00:00',\n" +
+    "  `g` timestamp NULL DEFAULT '2017-03-25 12:46:05'\n" +
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+
 
   describe('when creating new tables', () => {
 
@@ -543,6 +566,7 @@ describe('MySQLPlus', function() {
       pool.defineTable(foreignKeysTableName, foreignKeysTableSchema);
       pool.defineTable(optionsTableName, optionsTableSchema);
       pool.defineTable(textTableName, textTableSchema);
+      pool.defineTable(timestampTableName, timestampTableSchema);
       pool.sync(done);
     });
 
@@ -629,6 +653,13 @@ describe('MySQLPlus', function() {
         result[0]['Create Table'].should.equal(textTableExpectedSQL);
         cb10();
       });
+
+      const cbTimestamp = cbManager.registerCallback();
+      pool.query(`SHOW CREATE TABLE \`${timestampTableName}\``, (err, result) => {
+        if (err) throw err;
+        result[0]['Create Table'].should.equal(timestampTableExpectedSQL);
+        cbTimestamp();
+      });
     });
 
   });
@@ -651,6 +682,7 @@ describe('MySQLPlus', function() {
       pool.defineTable(foreignKeysTableName, foreignKeysTableSchema);
       pool.defineTable(optionsTableName, optionsTableSchema);
       pool.defineTable(textTableName, textTableSchema);
+      pool.defineTable(timestampTableName, timestampTableSchema);
       pool.sync(done);
     });
 
@@ -742,6 +774,13 @@ describe('MySQLPlus', function() {
         result[0]['Create Table'].should.equal(textTableExpectedSQL);
         cb10();
       });
+
+      const cbTimestamp = cbManager.registerCallback();
+      pool.query(`SHOW CREATE TABLE \`${timestampTableName}\``, (err, result) => {
+        if (err) throw err;
+        result[0]['Create Table'].should.equal(timestampTableExpectedSQL);
+        cbTimestamp();
+      });
     });
 
   });
@@ -764,6 +803,7 @@ describe('MySQLPlus', function() {
       pool.defineTable(foreignKeysTableName, foreignKeysTableSchema);
       pool.defineTable(optionsTableName, optionsTableSchema);
       pool.defineTable(textTableName, textTableSchema);
+      pool.defineTable(timestampTableName, timestampTableSchema);
       pool.sync(done);
     });
 
@@ -849,6 +889,13 @@ describe('MySQLPlus', function() {
         if (err) throw err;
         result[0]['Create Table'].should.equal(textTableExpectedSQL);
         cb10();
+      });
+
+      const cbTimestamp = cbManager.registerCallback();
+      pool.query(`SHOW CREATE TABLE \`${timestampTableName}\``, (err, result) => {
+        if (err) throw err;
+        result[0]['Create Table'].should.equal(timestampTableExpectedSQL);
+        cbTimestamp();
       });
     });
 

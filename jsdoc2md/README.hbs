@@ -428,6 +428,48 @@ Compatible types:
 + `datetime`
 + `timestamp`
 
+#### TimestampColumnDefinition
+
+Compatible types:
+
++ `timestamp`
+
+There aren't any extra methods on this type, but there are some things you should be aware of with `timestamp` columns:
+
+##### NULL Timestamps
+
+Normally, timestamp columns are `NOT NULL` by default, however, mysql-plus defines timestamp columns to be `NULL` by default to keep column definition semantics consistent. Therefore, the following column definition:
+
+```js
+{
+  ts: ColTypes.timestamp(),
+}
+```
+
+would define a column with this SQL:
+
+```sql
+`ts` timestamp NULL DEFAULT NULL
+```
+
+##### Timestamps' DEFAULT value
+
+If you define a timestamp column and use the `notNull()` method, the column's `DEFAULT` value will be set to `CURRENT_TIMESTAMP`. So the following:
+
+```js
+{
+  ts: ColTypes.timestamp().notNull(), // equivalent to `ColTypes.timestamp().notNull().defaultCurrentTimestamp()`
+}
+```
+
+would define a column with this SQL:
+
+```sql
+`ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+```
+
+Normally if the `DEFAULT` is unspecified, MySQL uses `CURRENT_TIMESTAMP` as the `DEFAULT` value of only the first timestamp column and `'0000-00-00 00:00:00'` for subsequent columns, but `mysql-plus` uses `CURRENT_TIMESTAMP` for all timestamp columns for consistency.
+
 #### GeometricalColumnDefinition
 
 Methods:
