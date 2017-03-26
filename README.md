@@ -1101,6 +1101,13 @@ These schema properties configure table-level options. The options currently sup
 
 ## Column Types
 
++ [ColumnDefinition](#columndefinition)
+  + [NumericColumnDefinition](#numericcolumndefinition)
+  + [TextColumnDefinition](#textcolumndefinition)
+  + [UpdatableTimeColumnDefinition](#updatabletimecolumndefinition)
+    + [TimestampColumnDefinition](#timestampcolumndefinition)
+  + [GeometricalColumnDefinition](#geometricalcolumndefinition)
+
 [`mysql.ColTypes`](#module_mysql-plus..ColTypes) and [`pool.ColTypes`](#PoolPlus+ColTypes) both expose the following methods:
 
 + `tinyint([m])`
