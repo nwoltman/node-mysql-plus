@@ -531,22 +531,18 @@ describe('MySQLPlus', function() {
     columns: {
       a: ColTypes.timestamp().notNull(),
       b: ColTypes.timestamp().notNull().defaultCurrentTimestamp(),
-      c: ColTypes.timestamp().notNull().default(0),
-      d: ColTypes.timestamp(),
-      e: ColTypes.timestamp().default(null),
-      f: ColTypes.timestamp().default(0),
-      g: ColTypes.timestamp().default('2017-03-25 12:46:05'),
+      c: ColTypes.timestamp(),
+      d: ColTypes.timestamp().default(null),
+      e: ColTypes.timestamp().default('2017-03-25 12:46:05'),
     },
   };
   const timestampTableExpectedSQL =
     'CREATE TABLE `timestamp_table` (\n' +
     '  `a` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n' +
     '  `b` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n' +
-    "  `c` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',\n" +
+    '  `c` timestamp NULL DEFAULT NULL,\n' +
     '  `d` timestamp NULL DEFAULT NULL,\n' +
-    '  `e` timestamp NULL DEFAULT NULL,\n' +
-    "  `f` timestamp NULL DEFAULT '0000-00-00 00:00:00',\n" +
-    "  `g` timestamp NULL DEFAULT '2017-03-25 12:46:05'\n" +
+    "  `e` timestamp NULL DEFAULT '2017-03-25 12:46:05'\n" +
     ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
 
 
