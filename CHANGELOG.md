@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.9.0 (2017-03-26)
+
+### Breaking Changes
++ ColumnDefinition: Make timestamp columns NULL by default ([`dfcd030`](https://github.com/nwoltman/node-mysql-plus/commit/dfcd030d52ff033f9121062f7048b51d387e5fb0))
+  + See the [TimestampColumnDefinition documentation](https://github.com/nwoltman/node-mysql-plus#timestampcolumndefinition) for details
+
 ## 0.8.0 (2017-03-21)
 
 ### Possibly Breaking Changes
