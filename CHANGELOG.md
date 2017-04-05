@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 0.10.0 (2017-04-05)
+
+### Possibly Breaking Changes
++ feat: When new columns are added during migrations, add them in the same position that they are defined in the `columns` object ([`beddf36`](https://github.com/nwoltman/node-mysql-plus/commit/beddf364263ea56d36c2ed12b103022334f95351))
+  + Only breaking if you directly test the result of `SHOW CREATE TABLE` after migrations
++ PoolPlus: Make [`.defineTable()`](https://github.com/nwoltman/node-mysql-plus#PoolPlus+defineTable) throw a `TypeError` (instead of `Error`) if name is not a string ([`b6489fe`](https://github.com/nwoltman/node-mysql-plus/commit/b6489fe7de666a937f7132112da4450618c9a9e0))
+  + Mostly likely won't break anything
+
+### New Features
++ PoolPlus: Add [`.basicTable()`](https://github.com/nwoltman/node-mysql-plus#PoolPlus+basicTable) method that just creates a `MySQLTable` instance ([`2ca6e43`](https://github.com/nwoltman/node-mysql-plus/commit/2ca6e4389b1c4a13aeec5fbc18b2a49aa3117b1a))
+
 ## 0.9.0 (2017-03-26)
 
 ### Breaking Changes
