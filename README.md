@@ -128,7 +128,8 @@ and perform queries and transactions using promises.</p>
 </dd>
 <dt><a href="#MySQLTable">MySQLTable</a></dt>
 <dd><p>A class that provides convenient methods for performing queries.<br>To create
-an instance, use <a href="#PoolPlus+defineTable"><code>poolPlus.defineTable()</code></a>.</p>
+an instance, use <a href="#PoolPlus+defineTable"><code>poolPlus.defineTable()</code></a> or
+<a href="#PoolPlus+basicTable"><code>poolPlus.basicTable()</code></a>.</p>
 </dd>
 </dl>
 
@@ -240,6 +241,7 @@ and perform queries and transactions using promises.
 * [PoolPlus](#PoolPlus) ⇐ <code>Pool</code>
     * _instance_
         * [.ColTypes](#PoolPlus+ColTypes)
+        * [.basicTable(name)](#PoolPlus+basicTable) ⇒ <code>[MySQLTable](#MySQLTable)</code>
         * [.defineTable(name, schema, [migrationStrategy])](#PoolPlus+defineTable) ⇒ <code>[MySQLTable](#MySQLTable)</code>
         * [.sync(cb)](#PoolPlus+sync) ⇒ <code>void</code>
         * [.pquery(sql, [values], [cb])](#PoolPlus+pquery) ⇒ <code>Promise</code>
@@ -274,6 +276,21 @@ const userTable = pool.defineTable('user', {
 
 ---
 
+<a name="PoolPlus+basicTable"></a>
+
+### poolPlus.basicTable(name) ⇒ <code>[MySQLTable](#MySQLTable)</code>
+Simply returns an instance of [`MySQLTable`](#MySQLTable)
+for querying the table with the given `name`.
+
+
+| Param | Type | Description |
+|:--- |:--- |:--- |
+| name | <code>string</code> | The name of the table. |
+
+**Returns**: <code>[MySQLTable](#MySQLTable)</code> - A `MySQLTable` instance.  
+
+---
+
 <a name="PoolPlus+defineTable"></a>
 
 ### poolPlus.defineTable(name, schema, [migrationStrategy]) ⇒ <code>[MySQLTable](#MySQLTable)</code>
@@ -286,7 +303,7 @@ Defines a table to be created or updated in the database.
 | schema | <code>Object</code> | An object that defines the table's schema.     See the [Defining Table Schemas](#defining-table-schemas) section. |
 | [migrationStrategy] | <code>string</code> | One of `safe`, `alter`, or `drop`. This will override     the `migrationStrategy` value from the [`config`](#module_mysql-plus..createPool)     (but is still subject to the same restrictions in production environments). |
 
-**Returns**: <code>[MySQLTable](#MySQLTable)</code> - A `MySQLTable` instance that lets you perform operations on the table.  
+**Returns**: <code>[MySQLTable](#MySQLTable)</code> - A `MySQLTable` instance that lets you perform queries on the table.  
 **See**: [Defining Table Schemas](#defining-table-schemas)
 
 **Example**:
@@ -513,7 +530,8 @@ connection.pquery('SELECT * FROM `books` WHERE `author` = "David"')
 
 ## MySQLTable
 A class that provides convenient methods for performing queries.<br>To create
-an instance, use [`poolPlus.defineTable()`](#PoolPlus+defineTable).
+an instance, use [`poolPlus.defineTable()`](#PoolPlus+defineTable) or
+[`poolPlus.basicTable()`](#PoolPlus+basicTable).
 
 **See**: [https://github.com/mysqljs/mysql#performing-queries](https://github.com/mysqljs/mysql#performing-queries)  
 

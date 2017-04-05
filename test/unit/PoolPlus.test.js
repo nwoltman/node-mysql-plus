@@ -69,6 +69,25 @@ describe('PoolPlus', () => {
   });
 
 
+  describe('#basicTable()', () => {
+
+    it('should return a MySQLTable instance', () => {
+      const table = pool.basicTable(TEST_TABLE_NAME, TEST_TABLE_SCHEMA);
+      table.should.be.an.instanceOf(MySQLTable);
+      table.name.should.equal(TEST_TABLE_NAME);
+      should.strictEqual(table.schema, undefined);
+      table.pool.should.equal(pool);
+    });
+
+    it('should throw if the table name is not a string', () => {
+      (() => pool.basicTable()).should.throw(TypeError);
+      (() => pool.basicTable()).should.throw(/The table name must be a string/);
+      (() => pool.basicTable(/table/)).should.throw(/The table name must be a string/);
+    });
+
+  });
+
+
   describe('#defineTable()', () => {
 
     it('should return a MySQLTable instance', () => {
@@ -76,6 +95,7 @@ describe('PoolPlus', () => {
       table.should.be.an.instanceOf(MySQLTable);
       table.name.should.equal(TEST_TABLE_NAME);
       table.schema.should.equal(TEST_TABLE_SCHEMA);
+      table.pool.should.equal(pool);
     });
 
     it('should throw if no arguments are provided', () => {
