@@ -103,7 +103,8 @@ describe('PoolPlus', () => {
     });
 
     it('should throw if the table name is not a string', () => {
-      should.throws(() => pool.defineTable(/table/), /The table name must be a string/);
+      (() => pool.defineTable(/table/)).should.throw(TypeError);
+      (() => pool.defineTable(/table/)).should.throw(/The table name must be a string/);
     });
 
     it('should throw if no columns are provided', () => {
