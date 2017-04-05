@@ -454,11 +454,11 @@ describe('MySQLPlus', function() {
     '  `c` bigint(20) unsigned DEFAULT NULL,\n' +
     '  `d` bigint(5) unsigned NOT NULL,\n' +
     '  `ai` int(11) DEFAULT NULL,\n' +
+    '  `ci` char(1) DEFAULT NULL,\n' +
     '  `eb` varchar(63) DEFAULT NULL,\n' +
     '  `fb` char(1) DEFAULT \'a\',\n' +
     '  `gc` bigint(5) unsigned NOT NULL,\n' +
     '  `hc` varchar(255) NOT NULL,\n' +
-    '  `ci` char(1) DEFAULT NULL,\n' +
     '  UNIQUE KEY `unique_fk_table_eb_fb` (`eb`,`fb`),\n' +
     '  KEY `index_fk_table_c` (`c`),\n' +
     '  KEY `index_fk_table_d` (`d`),\n' +

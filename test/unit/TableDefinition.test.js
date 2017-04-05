@@ -139,7 +139,7 @@ describe('TableDefinition', () => {
             sql: 'ALTER TABLE `' + existingTableName + '`\n' +
               '       DROP PRIMARY KEY,\n' +
               '       MODIFY COLUMN `id` int unsigned NOT NULL,\n' +
-              '       ADD COLUMN `newCol` tinyint',
+              '       ADD COLUMN `newCol` tinyint AFTER `id`',
             columns: undefined,
           },
         ];
