@@ -127,7 +127,8 @@ and perform queries and transactions using promises.</p>
   passed to <a href="#PoolPlus..transactionHandler"><code>transactionHandler</code></a>.</p>
 </dd>
 <dt><a href="#MySQLTable">MySQLTable</a></dt>
-<dd><p>A class that provides convenient methods for performing queries.</p>
+<dd><p>A class that provides convenient methods for performing queries.<br>To create
+an instance, use <a href="#PoolPlus+defineTable"><code>poolPlus.defineTable()</code></a>.</p>
 </dd>
 </dl>
 
@@ -511,7 +512,8 @@ connection.pquery('SELECT * FROM `books` WHERE `author` = "David"')
 <a name="MySQLTable"></a>
 
 ## MySQLTable
-A class that provides convenient methods for performing queries.
+A class that provides convenient methods for performing queries.<br>To create
+an instance, use [`poolPlus.defineTable()`](#PoolPlus+defineTable).
 
 **See**: [https://github.com/mysqljs/mysql#performing-queries](https://github.com/mysqljs/mysql#performing-queries)  
 
