@@ -27,7 +27,6 @@ Have questions or feedback? [![Join the Gitter chat](https://badges.gitter.im/nw
     + [Migration Strategies](#migration-strategies)
     + [Defining Table Schemas](#defining-table-schemas)
     + [Column Types](#column-types)
-+ [Roadmap](#roadmap)
 
 ## Installation
 
