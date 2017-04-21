@@ -175,7 +175,7 @@ describe('ColumnDefinitions', () => {
       .$toSQL().should.equal('int');
 
     ColumnDefinitions.integer()
-      .$toSQL().should.equal('integer');
+      .$toSQL().should.equal('int'); // synonym
 
     ColumnDefinitions.bigint()
       .$toSQL().should.equal('bigint');
@@ -190,22 +190,22 @@ describe('ColumnDefinitions', () => {
       .$toSQL().should.equal('decimal');
 
     ColumnDefinitions.dec()
-      .$toSQL().should.equal('dec');
+      .$toSQL().should.equal('decimal'); // synonym
 
     ColumnDefinitions.numeric()
-      .$toSQL().should.equal('numeric');
+      .$toSQL().should.equal('decimal'); // synonym
 
     ColumnDefinitions.fixed()
-      .$toSQL().should.equal('fixed');
+      .$toSQL().should.equal('decimal'); // synonym
 
     ColumnDefinitions.bit()
       .$toSQL().should.equal('bit');
 
     ColumnDefinitions.bool()
-      .$toSQL().should.equal('bool');
+      .$toSQL().should.equal('tinyint(1)'); // synonym
 
     ColumnDefinitions.boolean()
-      .$toSQL().should.equal('boolean');
+      .$toSQL().should.equal('tinyint(1)'); // synonym
 
     ColumnDefinitions.date()
       .$toSQL().should.equal('date');
@@ -307,7 +307,7 @@ describe('ColumnDefinitions', () => {
       .$toSQL().should.equal('int(1)');
 
     ColumnDefinitions.integer(1)
-      .$toSQL().should.equal('integer(1)');
+      .$toSQL().should.equal('int(1)'); // synonym
 
     ColumnDefinitions.bigint(1)
       .$toSQL().should.equal('bigint(1)');
@@ -322,13 +322,13 @@ describe('ColumnDefinitions', () => {
       .$toSQL().should.equal('decimal(1)');
 
     ColumnDefinitions.dec(1)
-      .$toSQL().should.equal('dec(1)');
+      .$toSQL().should.equal('decimal(1)'); // synonym
 
     ColumnDefinitions.numeric(1)
-      .$toSQL().should.equal('numeric(1)');
+      .$toSQL().should.equal('decimal(1)'); // synonym
 
     ColumnDefinitions.fixed(1)
-      .$toSQL().should.equal('fixed(1)');
+      .$toSQL().should.equal('decimal(1)'); // synonym
 
     ColumnDefinitions.float(1, 2)
       .$toSQL().should.equal('float(1,2)');
@@ -340,13 +340,13 @@ describe('ColumnDefinitions', () => {
       .$toSQL().should.equal('decimal(1,2)');
 
     ColumnDefinitions.dec(1, 2)
-      .$toSQL().should.equal('dec(1,2)');
+      .$toSQL().should.equal('decimal(1,2)'); // synonym
 
     ColumnDefinitions.numeric(1, 2)
-      .$toSQL().should.equal('numeric(1,2)');
+      .$toSQL().should.equal('decimal(1,2)'); // synonym
 
     ColumnDefinitions.fixed(1, 2)
-      .$toSQL().should.equal('fixed(1,2)');
+      .$toSQL().should.equal('decimal(1,2)'); // synonym
 
     ColumnDefinitions.bit(1)
       .$toSQL().should.equal('bit(1)');
@@ -384,10 +384,10 @@ describe('ColumnDefinitions', () => {
 
     it('should be able to generate SQL with the DEFAULT or NOT NULL attributes', () => {
       ColumnDefinitions.bool().notNull().default(true)
-        .$toSQL().should.equal('bool NOT NULL DEFAULT \'1\'');
+        .$toSQL().should.equal('tinyint(1) NOT NULL DEFAULT \'1\'');
 
       ColumnDefinitions.bool().notNull().default(false)
-        .$toSQL().should.equal('bool NOT NULL DEFAULT \'0\'');
+        .$toSQL().should.equal('tinyint(1) NOT NULL DEFAULT \'0\'');
 
       ColumnDefinitions.int().notNull().default(1)
         .$toSQL().should.equal('int NOT NULL DEFAULT \'1\'');
@@ -471,17 +471,17 @@ describe('ColumnDefinitions', () => {
   describe('number data types', () => {
 
     it('should provide number-specific definition methods', () => {
-      ColumnDefinitions.integer().unsigned()
-        .$toSQL().should.equal('integer unsigned');
+      ColumnDefinitions.int().unsigned()
+        .$toSQL().should.equal('int unsigned');
 
-      ColumnDefinitions.integer().unsigned().zerofill()
-        .$toSQL().should.equal('integer unsigned zerofill');
+      ColumnDefinitions.int().unsigned().zerofill()
+        .$toSQL().should.equal('int unsigned zerofill');
 
-      ColumnDefinitions.integer().zerofill()
-        .$toSQL().should.equal('integer unsigned zerofill');
+      ColumnDefinitions.int().zerofill()
+        .$toSQL().should.equal('int unsigned zerofill');
 
-      ColumnDefinitions.integer().unsigned().autoIncrement()
-        .$toSQL().should.equal('integer unsigned AUTO_INCREMENT');
+      ColumnDefinitions.int().unsigned().autoIncrement()
+        .$toSQL().should.equal('int unsigned AUTO_INCREMENT');
     });
 
   });

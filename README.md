@@ -1133,17 +1133,17 @@ These schema properties configure table-level options. The options currently sup
 + `smallint([m])`
 + `mediumint([m])`
 + `int([m])`
-+ `integer([m])`
++ `integer([m])` - synonym for `int`
 + `bigint([m])`
 + `float([m [, d]])`
 + `double([m [, d]])`
 + `decimal([m [, d]])`
-+ `dec([m [, d]])`
-+ `numeric([m [, d]])`
-+ `fixed([m [, d]])`
++ `dec([m [, d]])` - synonym for `decimal`
++ `numeric([m [, d]])` - synonym for `decimal`
++ `fixed([m [, d]])` - synonym for `decimal`
 + `bit([m])`
-+ `bool()`
-+ `boolean()`
++ `bool()` - synonym for `tinyint(1)`
++ `boolean()` - synonym for `tinyint(1)`
 + `date()`
 + `datetime([m])`
 + `timestamp([m])`

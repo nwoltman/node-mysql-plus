@@ -545,6 +545,27 @@ describe('MySQLPlus', function() {
     "  `e` timestamp NULL DEFAULT '2017-03-25 12:46:05'\n" +
     ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
 
+  const synonymTableName = 'synonym_table';
+  const synonymTableSchema = {
+    columns: {
+      a: ColTypes.integer(),
+      b: ColTypes.dec(),
+      c: ColTypes.numeric(),
+      d: ColTypes.fixed(),
+      e: ColTypes.bool(),
+      f: ColTypes.boolean(),
+    },
+  };
+  const synonymTableExpectedSQL =
+    'CREATE TABLE `synonym_table` (\n' +
+    '  `a` int(11) DEFAULT NULL,\n' +
+    '  `b` decimal(10,0) DEFAULT NULL,\n' +
+    '  `c` decimal(10,0) DEFAULT NULL,\n' +
+    '  `d` decimal(10,0) DEFAULT NULL,\n' +
+    '  `e` tinyint(1) DEFAULT NULL,\n' +
+    '  `f` tinyint(1) DEFAULT NULL\n' +
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+
 
   describe('when creating new tables', () => {
 
@@ -563,6 +584,7 @@ describe('MySQLPlus', function() {
       pool.defineTable(optionsTableName, optionsTableSchema);
       pool.defineTable(textTableName, textTableSchema);
       pool.defineTable(timestampTableName, timestampTableSchema);
+      pool.defineTable(synonymTableName, synonymTableSchema);
       pool.sync(done);
     });
 
@@ -656,6 +678,13 @@ describe('MySQLPlus', function() {
         result[0]['Create Table'].should.equal(timestampTableExpectedSQL);
         cbTimestamp();
       });
+
+      const cbSynonym = cbManager.registerCallback();
+      pool.query(`SHOW CREATE TABLE \`${synonymTableName}\``, (err, result) => {
+        if (err) throw err;
+        result[0]['Create Table'].should.equal(synonymTableExpectedSQL);
+        cbSynonym();
+      });
     });
 
   });
@@ -679,6 +708,7 @@ describe('MySQLPlus', function() {
       pool.defineTable(optionsTableName, optionsTableSchema);
       pool.defineTable(textTableName, textTableSchema);
       pool.defineTable(timestampTableName, timestampTableSchema);
+      pool.defineTable(synonymTableName, synonymTableSchema);
       pool.sync(done);
     });
 
@@ -777,6 +807,13 @@ describe('MySQLPlus', function() {
         result[0]['Create Table'].should.equal(timestampTableExpectedSQL);
         cbTimestamp();
       });
+
+      const cbSynonym = cbManager.registerCallback();
+      pool.query(`SHOW CREATE TABLE \`${synonymTableName}\``, (err, result) => {
+        if (err) throw err;
+        result[0]['Create Table'].should.equal(synonymTableExpectedSQL);
+        cbSynonym();
+      });
     });
 
   });
@@ -800,6 +837,7 @@ describe('MySQLPlus', function() {
       pool.defineTable(optionsTableName, optionsTableSchema);
       pool.defineTable(textTableName, textTableSchema);
       pool.defineTable(timestampTableName, timestampTableSchema);
+      pool.defineTable(synonymTableName, synonymTableSchema);
       pool.sync(done);
     });
 
@@ -892,6 +930,13 @@ describe('MySQLPlus', function() {
         if (err) throw err;
         result[0]['Create Table'].should.equal(timestampTableExpectedSQL);
         cbTimestamp();
+      });
+
+      const cbSynonym = cbManager.registerCallback();
+      pool.query(`SHOW CREATE TABLE \`${synonymTableName}\``, (err, result) => {
+        if (err) throw err;
+        result[0]['Create Table'].should.equal(synonymTableExpectedSQL);
+        cbSynonym();
       });
     });
 
