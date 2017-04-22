@@ -694,11 +694,11 @@ userTable.insert(data, onDuplicateKeySQL, [data.points])
 
 **Example**: With only the `sqlString` argument
 ```js
-placeTable.insert('`location` = POINT(0, 0)');
+placeTable.insert('SET `location` = POINT(0, 0)');
 // INSERT INTO `place` SET `location` = POINT(0, 0);
 
-placeTable.insert('`location` = POINT(?, ?)', [8, 2]);
-// INSERT INTO `place` SET `location` = POINT(8, 2);
+placeTable.insert('(`location`) VALUES (POINT(?, ?))', [8, 2]);
+// INSERT INTO `place` (`location`) VALUES (POINT(8, 2));
 ```
 
 **Example**: Bulk insert
