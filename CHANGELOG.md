@@ -1,9 +1,24 @@
 # CHANGELOG
 
+## 0.11.0 (2017-04-25)
+
+### Breaking Changes (that fix bugs)
++ lib: Always drop keys not created by mysql-plus during migrations ([`6bfa2af`](https://github.com/nwoltman/node-mysql-plus/commit/6bfa2af04a5c8a3c5411a9c58c63b643535d2cea))
+  + This fixes a bug where syncing would throw an error when attempting to drop a key not created by `mysql-plus`.
++ ColumnDefinitions: Define certain numeric types as synonyms ([`79c5acb`](https://github.com/nwoltman/node-mysql-plus/commit/79c5acb67795eedd82cb8b7b3d1ef60a27a40dc3))
+  + This fixes a bug where using `integer`, `dec`, `numeric`, `fixed`, `bool`, or `boolean` would always cause the table to run unnecessary `ALTER` queries during migrations.
+  + Feature: The `bool` and `boolean` ColType methods now return a [`NumericColumnDefinition`](https://github.com/nwoltman/node-mysql-plus#numericcolumndefinition) instance.
+
+### New Features
++ MySQLTable: Implement an [`.exists()`](https://github.com/nwoltman/node-mysql-plus#MySQLTable+exists) method ([`a01e6fb`](https://github.com/nwoltman/node-mysql-plus/commit/a01e6fb23625afd1249c4fadb78738afc46aacab))
++ doc: Fix `MySQLTable#insert()` example with using only the `sqlString` argument ([`1da7a2a`](https://github.com/nwoltman/node-mysql-plus/commit/1da7a2ad99debafa9ecf9e3e5d50652361935af6))
+
+
 ## 0.10.1 (2017-04-14)
 
 ### Bug Fixes
 + lib: Fix bug when migrating a table with no foreign keys to having some ([`fa8960b`](https://github.com/nwoltman/node-mysql-plus/commit/fa8960b128340a205cd28fd15e49b190f092aca7))
+
 
 ## 0.10.0 (2017-04-05)
 
@@ -16,11 +31,13 @@
 ### New Features
 + PoolPlus: Add [`.basicTable()`](https://github.com/nwoltman/node-mysql-plus#PoolPlus+basicTable) method that just creates a `MySQLTable` instance ([`2ca6e43`](https://github.com/nwoltman/node-mysql-plus/commit/2ca6e4389b1c4a13aeec5fbc18b2a49aa3117b1a))
 
+
 ## 0.9.0 (2017-03-26)
 
 ### Breaking Changes
 + ColumnDefinition: Make timestamp columns NULL by default ([`dfcd030`](https://github.com/nwoltman/node-mysql-plus/commit/dfcd030d52ff033f9121062f7048b51d387e5fb0))
   + See the [TimestampColumnDefinition documentation](https://github.com/nwoltman/node-mysql-plus#timestampcolumndefinition) for details
+
 
 ## 0.8.0 (2017-03-21)
 
@@ -35,6 +52,7 @@
 
 ### Bug Fixes
 + MySQLTable: Fix bug in [`.insert()`](https://github.com/nwoltman/node-mysql-plus#MySQLTable+insert) where `sqlString` was ignored if data was an array ([`55cc324`](https://github.com/nwoltman/node-mysql-plus/commit/55cc324adccdc6f3b79f45ec8e4a19c09077e79e))
+
 
 ## 0.7.0 (2017-03-13)
 
@@ -51,6 +69,7 @@
   + Fixes issues with migrating tables with an AUTO_INCREMENT column
 + PoolPlus: Fix bug in debug mode where the sync callback would not get called ([`231e7ec`](https://github.com/nwoltman/node-mysql-plus/commit/231e7ec62a5f45612fa2056c0106d2d39b6fe214))
 
+
 ## 0.6.3 (2017-02-25)
 
 ### New Features
@@ -60,17 +79,20 @@
 ### Bug Fixes
 + lib: Fix bug when altering a multi-column index and the first column in that index has a foreign key ([`585b7dc`](https://github.com/nwoltman/node-mysql-plus/commit/585b7dc9ac1d43ba4cf6b8bca5cc3ec50004c8fc))
 
+
 ## 0.6.2 (2017-02-18)
 
 ### Bug Fixes
 + lib: Fix foreign key bug introduced in [`d43235a`](https://github.com/nwoltman/node-mysql-plus/commit/d43235a56772115ac1b945cc670f7ffd8f76c447) ([`03374e4`](https://github.com/nwoltman/node-mysql-plus/commit/03374e4746cc606e92d5d4676cce1c122cf559c9))
 + lib: Fix bug caused by columns with a default value ([`8f1e963`](https://github.com/nwoltman/node-mysql-plus/commit/8f1e963c5c9b3ca85959b75f5bbe9eb2994c72bb))
 
+
 ## 0.6.1 (2017-02-11)
 
 ### New Features
 + lib: Support spatial indexes ([`9a4a2be`](https://github.com/nwoltman/node-mysql-plus/commit/9a4a2be169294c49bb2be9318a3eead342626148))
 + ColumnDefinitions: Add support for spatial data (geometry) and JSON column types ([`46f3034`](https://github.com/nwoltman/node-mysql-plus/commit/46f3034b24fe25c718522b17e1aad42b0d1e63a6))
+
 
 ## 0.6.0 (2017-02-09)
 
@@ -88,6 +110,7 @@
 ### Bug Fixes
 + lib: Prevent error when changing columns or keys with foreign keys ([`d43235a`](https://github.com/nwoltman/node-mysql-plus/commit/d43235a56772115ac1b945cc670f7ffd8f76c447))
 
+
 ## 0.5.0 (2016-12-12)
 
 ### Deprecations
@@ -97,11 +120,13 @@
 ### New Features
 + UpdatableTimeColumnDefinition: Add [`.defaultCurrentTimestamp()`](https://github.com/nwoltman/node-mysql-plus#updatabletimecolumndefinition) method ([`949d72f`](https://github.com/nwoltman/node-mysql-plus/commit/949d72f5a7f04b4da57b484e27fa0eeca946aa0e))
 
+
 ## 0.4.1 (2016-12-10)
 
 ### Bug Fixes
 + TableDefinition: Use `defaultRaw()` over `default()` when appropriate ([`4d0ed0f`](https://github.com/nwoltman/node-mysql-plus/commit/4d0ed0f6f794c42d0963f4969cbf36f291af71ac))
 + changelog: Add missing deprecation ([`5420a08`](https://github.com/nwoltman/node-mysql-plus/commit/5420a08577e21316dc3dd420f322346ee782625f))
+
 
 ## 0.4.0 (2016-12-08)
 
@@ -127,6 +152,7 @@
 + ci: Test with MySQL 5.7 ([`5f42b10`](https://github.com/nwoltman/node-mysql-plus/commit/5f42b107133a277ed3e1db46230b05a2677eaf27))
 + lib: Prevent unnecessary ALTER TABLE operation when the collation is unchanged ([`b5ae554`](https://github.com/nwoltman/node-mysql-plus/commit/b5ae554244ea9831f04f5ab7b681c3f4afed3941))
 
+
 ## 0.3.0 (2016-05-28)
 
 ### Breaking Changes
@@ -141,6 +167,7 @@
 + doc: Remove unnecessary notes about escaping user input ([`9fe3a2c`](https://github.com/nwoltman/node-mysql-plus/commit/9fe3a2c4025d7275adfcc56d476d1be6367ab285))
 + doc: Fix typo in `MySQLTable.insertIgnore()` example ([`e5328ff`](https://github.com/nwoltman/node-mysql-plus/commit/e5328ffb75b2bdc7accb7e8842335f5f6c136643))
 + MySQLTable: Fix argument handling bug in `.update()` ([`362ed2b`](https://github.com/nwoltman/node-mysql-plus/commit/362ed2bc252345c50ff6b756d7536e5609c9dcdd))
+
 
 ## 0.2.0 (2016-05-25)
 + lib: Require the m argument for varchar and varbinary ([`0564137`](https://github.com/nwoltman/node-mysql-plus/commit/0564137180f44ced3faf9ccfe6e18859e39bf59c))
