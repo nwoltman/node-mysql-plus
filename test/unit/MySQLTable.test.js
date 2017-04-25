@@ -8,6 +8,9 @@ const config = require('../config');
 const should = require('should');
 const sinon = require('sinon');
 
+const expect = should;
+
+should.Assertion.addChain('to');
 should.config.checkProtoEql = false;
 
 describe('MySQLTable', () => {
@@ -70,7 +73,7 @@ describe('MySQLTable', () => {
 
 
     it('should be undefined if not passed to the constructor', () => {
-      should(testTable.trxn).be.undefined();
+      expect(testTable.trxn).to.be.undefined();
     });
 
 
@@ -756,6 +759,96 @@ describe('MySQLTable', () => {
           .then(result => {
             result.affectedRows.should.equal(2);
           });
+      });
+
+    });
+
+  });
+
+
+  describe('#exists()', () => {
+
+    before(done => {
+      const insertSQL = 'INSERT INTO `mysql_table_test_table` (`email`) VALUES ("one@email.com")';
+      testTable.query(insertSQL, done);
+    });
+
+    after(resetTable);
+
+    describe('with a callback', () => {
+
+      it('should resolve with `true` if rows exist (without using the `values` argument)', done => {
+        testTable.exists('WHERE `id` < 3', (err, exists) => {
+          if (err) throw err;
+          exists.should.be.true();
+          done();
+        });
+      });
+
+      it('should resolve with `true` if rows exist (with using the `values` argument)', done => {
+        testTable.exists('WHERE `email` = ?', ['one@email.com'], (err, exists) => {
+          if (err) throw err;
+          exists.should.be.true();
+          done();
+        });
+      });
+
+      it('should resolve with `false` if rows exist (without using the `values` argument)', done => {
+        testTable.exists('WHERE `id` > 3', (err, exists) => {
+          if (err) throw err;
+          exists.should.be.false();
+          done();
+        });
+      });
+
+      it('should resolve with `false` if rows exist (with using the `values` argument)', done => {
+        testTable.exists('WHERE `email` = ?', ['two@email.com'], (err, exists) => {
+          if (err) throw err;
+          exists.should.be.false();
+          done();
+        });
+      });
+
+      it('should resolve with an error if an error occurrs', done => {
+        const error = new Error('exists error');
+        sinon.stub(pool, 'query').yieldsAsync(error);
+
+        testTable.exists('WHERE `email` = 1', (err, exists) => {
+          err.should.equal(error);
+          expect(exists).to.be.undefined();
+
+          pool.query.restore();
+          done();
+        });
+      });
+
+    });
+
+
+    describe('with a promise', () => {
+
+      it('should resolve with `true` if rows exist (without using the `values` argument)', () => {
+        return testTable.exists('WHERE `id` < 3').then(exists => {
+          exists.should.be.true();
+        });
+      });
+
+      it('should resolve with `true` if rows exist (with using the `values` argument)', () => {
+        return testTable.exists('WHERE `email` = ?', ['one@email.com']).then(exists => {
+          exists.should.be.true();
+        });
+      });
+
+      it('should resolve with `false` if rows exist (without using the `values` argument)', () => {
+        return testTable.exists('WHERE `id` > 3').then(exists => {
+          exists.should.be.false();
+        });
+      });
+
+      it('should resolve with `false` if rows exist (with using the `values` argument)', () => {
+        return testTable.exists('WHERE `email` = ?', ['two@email.com']).then(exists => {
+          exists.should.be.false();
+        });
       });
 
     });

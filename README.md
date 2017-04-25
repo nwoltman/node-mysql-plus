@@ -540,6 +540,7 @@ an instance, use [`poolPlus.defineTable()`](#PoolPlus+defineTable) or
     * [.pool](#MySQLTable+pool) : <code>[PoolPlus](#PoolPlus)</code>
     * [.trxn](#MySQLTable+trxn) : <code>?[Connection](#Connection)</code>
     * [.select(columns, [sqlString], [values], [cb])](#MySQLTable+select) ⇒ <code>Promise</code>
+    * [.exists(sqlString, [values], [cb])](#MySQLTable+exists) ⇒ <code>Promise</code>
     * [.insert([data], [sqlString], [values], [cb])](#MySQLTable+insert) ⇒ <code>Promise</code>
     * [.insertIfNotExists(data, keyColumns, [cb])](#MySQLTable+insertIfNotExists) ⇒ <code>Promise</code>
     * [.update([data], [sqlString], [values], [cb])](#MySQLTable+update) ⇒ <code>Promise</code>
@@ -647,6 +648,44 @@ userTable.select('COUNT(*) AS `highScorers`', 'WHERE `points` > 10000')
   .then(rows => console.log(rows)); // -> [{highScorers: 27}]
 
 // SELECT COUNT(*) AS `highScorers` FROM `user` WHERE `points` > 10000;
+```
+
+
+---
+
+<a name="MySQLTable+exists"></a>
+
+### mySQLTable.exists(sqlString, [values], [cb]) ⇒ <code>Promise</code>
+Checks if rows in the table exist.
+
+
+| Param | Type | Description |
+|:--- |:--- |:--- |
+| sqlString | <code>string</code> | SQL that specifies rows to check for existence.<br>     The first example shows how this parameter is used in the query. |
+| [values] | <code>Array</code> | Values to replace the placeholders in `sqlString`. |
+| [cb] | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | A callback that gets called with     the results of the query where the `results` will be either `true` or `false`. |
+
+**Returns**: <code>?Promise</code> - If the `cb` parameter is omitted, a promise that will
+    resolve with either `true` or `false` is returned.
+
+**Example**: Using a promise
+```js
+userTable.exists('WHERE `id` > 10')
+  .then(exists => console.log(exists)); // true or false
+
+// SELECT EXISTS (
+//   SELECT 1 FROM `user`
+//   WHERE `id` > 10  # This is where `sqlString` gets inserted
+//   LIMIT 1
+// )
+```
+
+**Example**: Using a callback and the `values` argument
+```js
+userTable.exists('WHERE `id` = ?', [10], (err, exists) => {
+  if (err) throw err;
+  console.log(exists); // true or false
+});
 ```
 
 
