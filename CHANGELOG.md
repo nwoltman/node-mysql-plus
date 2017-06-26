@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 0.11.1 (2017-06-26)
+
+### Bug Fixes
++ lib: Fix bug when migrating a table with foreign keys to having none ([`f9867da`](https://github.com/nwoltman/node-mysql-plus/commit/f9867da3bc9699bbe38ab4e838136d31c0bfe94b))
+
+### Misc
++ Test on Node 8
+
+
 ## 0.11.0 (2017-04-25)
 
 ### Breaking Changes (that fix bugs)
