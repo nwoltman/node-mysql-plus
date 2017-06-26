@@ -309,8 +309,7 @@ describe('PoolPlus', () => {
               trxnDone(null, 'success!');
             });
           });
-        })
-        .then(result => {
+        }).then(result => {
           result.should.equal('success!');
           return pool.pquery('SELECT * from mysql_plus_transaction_test')
             .then(rows => {
@@ -318,8 +317,7 @@ describe('PoolPlus', () => {
               rows[0].id.should.equal(2);
               done();
             });
-        })
-        .catch(done);
+        }).catch(done);
       });
 
       it('should rollback changes if an errors occur', done => {
@@ -343,11 +341,9 @@ describe('PoolPlus', () => {
               trxnDone(null, 'success!');
             });
           });
-        })
-        .then(result => {
+        }).then(result => {
           done(new Error(result));
-        })
-        .catch(err => {
+        }).catch(err => {
           err.code.should.equal('ER_BAD_FIELD_ERROR');
           return pool.pquery('SELECT * from mysql_plus_transaction_test')
             .then(rows => {
@@ -355,8 +351,7 @@ describe('PoolPlus', () => {
               rows[0].id.should.equal(2);
               done();
             });
-        })
-        .catch(done);
+        }).catch(done);
       });
 
     });
@@ -379,8 +374,7 @@ describe('PoolPlus', () => {
               result.affectedRows.should.equal(1);
               return 'success!';
             });
-        })
-        .then(result => {
+        }).then(result => {
           result.should.equal('success!');
           return pool.pquery('SELECT * FROM mysql_plus_transaction_test')
             .then(rows => {
@@ -401,11 +395,9 @@ describe('PoolPlus', () => {
               result.affectedRows.should.equal(1);
               return 'success!';
             });
-        })
-        .then(result => {
+        }).then(result => {
           throw new Error(result);
-        })
-        .catch(err => {
+        }).catch(err => {
           err.code.should.equal('ER_BAD_FIELD_ERROR');
           return pool.pquery('SELECT * FROM mysql_plus_transaction_test')
             .then(rows => {
@@ -501,11 +493,9 @@ describe('PoolPlus', () => {
         it('should reject with an error', done => {
           pool.transaction(trxn => {
             return trxn.pquery('INSERT INTO mysql_plus_transaction_test VALUES (3)');
-          })
-          .then(result => {
+          }).then(result => {
             done(new Error(result));
-          })
-          .catch(err => {
+          }).catch(err => {
             err.should.equal(error);
             return pool.pquery('SELECT * FROM mysql_plus_transaction_test')
               .then(rows => {
@@ -513,8 +503,7 @@ describe('PoolPlus', () => {
                 rows[0].id.should.equal(2);
                 done();
               });
-          })
-          .catch(done);
+          }).catch(done);
         });
 
       });
