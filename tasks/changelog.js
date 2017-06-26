@@ -18,15 +18,18 @@ module.exports = function(grunt) {
     const commitLog = execSync(getCommitLog).toString();
     const changes = commitLog.replace(/^\+ Merge.*[\r\n]*/gm, ''); // Filter out merge commits
     const date = new Date().toISOString().slice(0, 10);
-    const versionHeader = '## ' + nextVersion + ' (' + date + ')\n';
+    const versionHeader = `## ${nextVersion} (${date})\n`;
 
     var changelog = fs.readFileSync('CHANGELOG.md', 'utf8');
+
     if (changelog.indexOf(versionHeader, 13) >= 0) {
       grunt.log.warn('Changelog already updated.');
       return;
     }
+
     changelog = '# CHANGELOG\n\n' +
-                versionHeader + changes + '\n' +
+                versionHeader + '\n' +
+                changes + '\n\n' +
                 changelog.replace(/^# CHANGELOG\s+/, '\n');
 
     fs.writeFileSync('CHANGELOG.md', changelog);
