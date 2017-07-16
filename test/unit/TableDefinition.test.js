@@ -138,7 +138,7 @@ describe('TableDefinition', () => {
             type: Operation.Types.ALTER_TABLE,
             sql: 'ALTER TABLE `' + existingTableName + '`\n' +
               '       DROP PRIMARY KEY,\n' +
-              '       MODIFY COLUMN `id` int unsigned NOT NULL,\n' +
+              '       MODIFY COLUMN `id` int unsigned NOT NULL FIRST,\n' +
               '       ADD COLUMN `newCol` tinyint AFTER `id`',
             columns: undefined,
           },
