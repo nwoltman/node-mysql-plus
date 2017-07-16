@@ -110,6 +110,12 @@ describe('PoolPlus', () => {
     it('should throw if no columns are provided', () => {
       should.throws(() => pool.defineTable('table', {}), /must have.*column/);
       should.throws(() => pool.defineTable('table', {columns: {}}), /must have.*column/);
+      should.throws(() => pool.defineTable('table', {columns: Object.create(null)}), /must have.*column/);
+
+      function Clazz() { /* constructor */ }
+      Clazz.prototype.foo = 1; // So the instance will have enumerable properties but no "own" properties
+
+      should.throws(() => pool.defineTable('table', {columns: new Clazz()}), /must have.*column/);
     });
 
     it('should throw if the specified migration strategy is invalid', () => {
