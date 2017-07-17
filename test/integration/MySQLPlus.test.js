@@ -132,7 +132,7 @@ describe('MySQLPlus', function() {
   const columnsTableName = 'columns_table';
   const columnsTableSchema = {
     columns: {
-      id: ColTypes.int().unsigned().notNull().primaryKey().default(1),
+      id: ColTypes.int().unsigned().notNull().default(1),
       uuid: ColTypes.char(44).unique(),
       email: ColTypes.char(255),
       fp: ColTypes.float(7, 4),
@@ -155,7 +155,6 @@ describe('MySQLPlus', function() {
     '  `changeme` tinyint(4) DEFAULT NULL,\n' +
     '  `neverchange` tinyint(4) DEFAULT NULL,\n' +
     '  `norename` tinyint(4) DEFAULT NULL,\n' +
-    '  PRIMARY KEY (`id`),\n' +
     '  UNIQUE KEY `unique_columns_table_uuid` (`uuid`),\n' +
     '  KEY `index_columns_table_email` (`email`),\n' +
     '  KEY `index_columns_table_id_email` (`id`,`email`)\n' +
