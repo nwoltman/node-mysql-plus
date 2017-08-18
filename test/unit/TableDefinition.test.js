@@ -79,10 +79,11 @@ describe('TableDefinition', () => {
       const expectedOperations = [
         {
           type: Operation.Types.CREATE_TABLE,
-          sql: 'CREATE TABLE `' + tableName + '` (\n' +
-          '       `id` int unsigned NOT NULL,\n' +
-          '       PRIMARY KEY (`id`)\n' +
-          '     )',
+          sql:
+            'CREATE TABLE `' + tableName + '` (\n' +
+            '  `id` int unsigned NOT NULL,\n' +
+            '  PRIMARY KEY (`id`)\n' +
+            ')',
         },
       ];
 
@@ -136,10 +137,11 @@ describe('TableDefinition', () => {
         const expectedOperations = [
           {
             type: Operation.Types.ALTER_TABLE,
-            sql: 'ALTER TABLE `' + existingTableName + '`\n' +
-              '       DROP PRIMARY KEY,\n' +
-              '       MODIFY COLUMN `id` int unsigned NOT NULL FIRST,\n' +
-              '       ADD COLUMN `newCol` tinyint AFTER `id`',
+            sql:
+              'ALTER TABLE `' + existingTableName + '`\n' +
+              '  DROP PRIMARY KEY,\n' +
+              '  MODIFY COLUMN `id` int unsigned NOT NULL FIRST,\n' +
+              '  ADD COLUMN `newCol` tinyint AFTER `id`',
             columns: undefined,
           },
         ];
@@ -162,12 +164,14 @@ describe('TableDefinition', () => {
           },
           {
             type: Operation.Types.CREATE_TABLE,
-            sql: 'CREATE TABLE `' + existingTableName + '` (\n' +
-            '       `id` int unsigned NOT NULL,\n' +
-            '       `newCol` tinyint\n' +
-            '     )',
+            sql:
+              'CREATE TABLE `' + existingTableName + '` (\n' +
+              '  `id` int unsigned NOT NULL,\n' +
+              '  `newCol` tinyint\n' +
+              ')',
           },
         ];
+
         new TableDefinition(existingTableName, newSchema, mockPool, 'drop')
           .genSyncOperations((err, operations) => {
             if (err) throw err;

@@ -855,4 +855,87 @@ describe('PoolPlus', () => {
 
   });
 
+
+  describe('with debugging enabled', () => {
+
+    const debugPool = new PoolPlus(Object.assign({plusOptions: {debug: true}}, config));
+
+    before(() => {
+      sinon.stub(console, 'log');
+    });
+
+    afterEach(() => {
+      console.log.reset();
+    });
+
+    after(done => {
+      console.log.restore();
+      debugPool.end(done);
+    });
+
+    it('should log operations to the console when syncing', done => {
+      debugPool.defineTable('pool_plus_test_table_debug', {
+        columns: {
+          id: debugPool.ColTypes.int().unsigned().notNull().primaryKey(),
+        },
+      });
+
+      debugPool.sync(err => {
+        if (err) throw err;
+
+        console.log.should.have.been.calledWithExactly([
+          '',
+          '============= mysql-plus operations: ==============',
+          '',
+          'type: CREATE_TABLE',
+          'SQL:',
+          'CREATE TABLE `pool_plus_test_table_debug` (',
+          '  `id` int unsigned NOT NULL,',
+          '  PRIMARY KEY (`id`)',
+          ')',
+          '',
+          '===================================================',
+          '',
+        ].join('\n'));
+
+        done();
+      });
+    });
+
+    it('should log the operation that failed to the console when syncing', done => {
+      debugPool.defineTable('pool_plus_test_table_debug_error', {
+        columns: {
+          id: debugPool.ColTypes.int().unsigned().notNull().primaryKey(),
+        },
+        foreignKeys: {
+          id: 'non_existent_table.id',
+        },
+      });
+
+      debugPool.sync(err => {
+        err.should.be.an.Error().and.match({
+          message: /ER_CANNOT_ADD_FOREIGN/,
+          code: 'ER_CANNOT_ADD_FOREIGN',
+          errno: 1215,
+        });
+
+        console.log.should.have.been.calledWithExactly([
+          '',
+          '====== mysql-plus sync errored on operation: ======',
+          '',
+          'type: ADD_FOREIGN_KEY',
+          'SQL:',
+          'ALTER TABLE `pool_plus_test_table_debug_error` ADD CONSTRAINT `fk_pool_plus_test_table_debug_error_id`' +
+          ' FOREIGN KEY (`id`) REFERENCES `non_existent_table` (`id`)',
+          '',
+          '===================================================',
+          '',
+        ].join('\n'));
+
+        done();
+      });
+    });
+
+  });
+
 });
