@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 0.12.0 (2017-08-18)
+
+### Notable Changes
++ TableDefinition: When a column changes, update its position ([`3836d3b`](https://github.com/nwoltman/node-mysql-plus/commit/3836d3bf99b95ae5fcfc3d5305e1ec2df03b077d))
++ lib: Replace lodash/isEmpty with a custom function ([`a2b68f9`](https://github.com/nwoltman/node-mysql-plus/commit/a2b68f991e8533d6a9fbe619c8d73ae1ba6f4167))
++ lib: Replace lodash/cloneDeep with a custom function for cloning keys ([`73651c9`](https://github.com/nwoltman/node-mysql-plus/commit/73651c926512a65d13bd20e7733c1a3b21946dde))
++ lib: Replace lodash/isEqual with a custom function for comparing key definitions ([`db32bec`](https://github.com/nwoltman/node-mysql-plus/commit/db32bec59cab6c9f9ae500c519443d71c5863e99))
+  + Lodash is no longer a dependency!
++ lib: Change how debugging logs to the console and test debugging code ([`c9aacb2`](https://github.com/nwoltman/node-mysql-plus/commit/c9aacb28de04ec796c23ddbf028b593b8e1a6a9c))
++ deps: [mysql@2.14.1](https://github.com/mysqljs/mysql/blob/master/Changes.md#v2141-2017-08-01) ([`adfb9b4`](https://github.com/nwoltman/node-mysql-plus/commit/adfb9b4289a2663a65e943c0d211e1cd92790424))
+
+
 ## 0.11.1 (2017-06-26)
 
 ### Bug Fixes
