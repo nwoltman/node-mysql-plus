@@ -20,22 +20,22 @@
     "mysql": "^2.13.0"
   },
   "devDependencies": {
-    "coveralls": "^2.11.6",
-    "es6-callback-manager": "^2.0.0",
-    "eslint": "^4.1.1",
+    "coveralls": "^2.13.1",
+    "es6-callback-manager": "^2.0.1",
+    "eslint": "^4.4.1",
     "grunt": "^1.0.1",
     "grunt-env": "^0.4.4",
     "grunt-eslint": "^20.0.0",
     "grunt-jsdoc-to-markdown": "^3.0.0",
-    "grunt-mocha-istanbul": "^5.0.1",
+    "grunt-mocha-istanbul": "^5.0.2",
     "grunt-mocha-test": "^0.13.2",
-    "istanbul": "^0.4.2",
+    "istanbul": "^0.4.5",
     "jit-grunt": "^0.10.0",
-    "mocha": "^3.0.0",
-    "semver": "^5.1.0",
-    "should": "^11.1.0",
+    "mocha": "^3.5.0",
+    "semver": "^5.4.1",
+    "should": "^11.2.1",
     "should-sinon": "0.0.5",
-    "sinon": "^2.0.0"
+    "sinon": "^3.2.1"
   },
   "scripts": {
     "test": "grunt"
