@@ -861,22 +861,26 @@ describe('PoolPlus', () => {
     const debugPool = new PoolPlus(Object.assign({plusOptions: {debug: true}}, config));
 
     before(() => {
-      sinon.stub(console, 'log');
-    });
-
-    afterEach(() => {
-      console.log.reset();
+      sinon.stub(debugPool, 'query').yieldsAsync(null, []);
     });
 
     after(done => {
-      console.log.restore();
+      debugPool.query.restore();
       debugPool.end(done);
     });
 
     it('should log operations to the console when syncing', done => {
-      debugPool.defineTable('pool_plus_test_table_debug', {
+      sinon.stub(console, 'log');
+      sinon.stub(Connection.prototype, 'query').yieldsAsync();
+
+      debugPool.defineTable('pool_plus_test_table_debug_a', {
         columns: {
           id: debugPool.ColTypes.int().unsigned().notNull().primaryKey(),
+        },
+      });
+      debugPool.defineTable('pool_plus_test_table_debug_b', {
+        columns: {
+          id: debugPool.ColTypes.char(1),
         },
       });
 
@@ -889,20 +893,35 @@ describe('PoolPlus', () => {
           '',
           'type: CREATE_TABLE',
           'SQL:',
-          'CREATE TABLE `pool_plus_test_table_debug` (',
+          'CREATE TABLE `pool_plus_test_table_debug_a` (',
           '  `id` int unsigned NOT NULL,',
           '  PRIMARY KEY (`id`)',
+          ')',
+          '',
+          'type: CREATE_TABLE',
+          'SQL:',
+          'CREATE TABLE `pool_plus_test_table_debug_b` (',
+          '  `id` char(1)',
           ')',
           '',
           '===================================================',
           '',
         ].join('\n'));
 
+        console.log.restore();
+        Connection.prototype.query.restore();
         done();
       });
     });
 
     it('should log the operation that failed to the console when syncing', done => {
+      const error = new Error('MOCK ALTER TABLE ERROR');
+
+      sinon.stub(console, 'log');
+      sinon.stub(Connection.prototype, 'query').callsFake((sql, cb) => {
+        process.nextTick(cb, sql.startsWith('ALTER') ? error : null);
+      });
+
       debugPool.defineTable('pool_plus_test_table_debug_error', {
         columns: {
           id: debugPool.ColTypes.int().unsigned().notNull().primaryKey(),
@@ -913,11 +932,7 @@ describe('PoolPlus', () => {
       });
 
       debugPool.sync(err => {
-        err.should.be.an.Error().and.match({
-          message: /ER_CANNOT_ADD_FOREIGN/,
-          code: 'ER_CANNOT_ADD_FOREIGN',
-          errno: 1215,
-        });
+        err.should.equal(error);
 
         console.log.should.have.been.calledWithExactly([
           '',
@@ -925,13 +940,15 @@ describe('PoolPlus', () => {
           '',
           'type: ADD_FOREIGN_KEY',
           'SQL:',
-          'ALTER TABLE `pool_plus_test_table_debug_error` ADD CONSTRAINT `fk_pool_plus_test_table_debug_error_id`' +
-          ' FOREIGN KEY (`id`) REFERENCES `non_existent_table` (`id`)',
+          'ALTER TABLE `pool_plus_test_table_debug_error` ADD CONSTRAINT `fk_pool_plus_test_table_debug_error_id`',
+          '  FOREIGN KEY (`id`) REFERENCES `non_existent_table` (`id`)',
           '',
           '===================================================',
           '',
         ].join('\n'));
 
+        console.log.restore();
+        Connection.prototype.query.restore();
         done();
       });
     });
