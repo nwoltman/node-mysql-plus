@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.12.1 (2017-08-18)
+
++ lib: Fix debug formatting + improve foreign key operation formatting ([`9f714a7`](https://github.com/nwoltman/node-mysql-plus/commit/9f714a78df557533d4ecf3ba82bddc201fba4e58))
+
+
 ## 0.12.0 (2017-08-18)
 
 ### Notable Changes
