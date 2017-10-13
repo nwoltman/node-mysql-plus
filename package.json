@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/nwoltman/node-mysql-plus#readme",
   "dependencies": {
-    "mysql": "^2.14.1"
+    "mysql": "^2.15.0"
   },
   "devDependencies": {
     "coveralls": "^3.0.0",
