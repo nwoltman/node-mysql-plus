@@ -8,6 +8,10 @@ describe('Connection', () => {
 
   const connection = mysql.createConnection(config);
 
+  after(() => {
+    connection.end();
+  });
+
   describe('#pquery()', () => {
 
     it('should behave like #query() when passed a callback', () => {
