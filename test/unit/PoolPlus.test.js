@@ -69,6 +69,18 @@ describe('PoolPlus', () => {
   });
 
 
+  describe('#raw()', () => {
+
+    it('should return a "raw" object', () => {
+      pool.raw('CURRENT_TIMESTAMP')
+        .should.have.type('object')
+        .and.have.ownProperty('toSqlString')
+        .which.has.type('function');
+    });
+
+  });
+
+
   describe('#basicTable()', () => {
 
     it('should return a MySQLTable instance', () => {
