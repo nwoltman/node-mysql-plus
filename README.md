@@ -819,7 +819,7 @@ fails because of a unique key constraint).
 
 | Param | Type | Description |
 |:--- |:--- |:--- |
-| data | <code>Object</code> | An object mapping column names to data values to insert.     The values are escaped by default. If you don't want a value to be escaped,     wrap it in a "raw" object (see the last example below). |
+| data | <code>Object</code> | An object mapping column names to data values to insert.     The values are escaped by default. If you don't want a value to be escaped,     create a "raw" value (see the last example below). |
 | keyColumns | <code>Array.&lt;string&gt;</code> | The names of columns in the `data` object.     If there is already a row in the table with the same values for these     columns as the values being inserted, the data will not be inserted. |
 | [cb] | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | A callback that gets called with the results of the query. |
 
@@ -846,8 +846,7 @@ userTable.insertIfNotExists({email: 'email@example.com', name: 'John Doe'}, ['em
 const data = {
   placeId: 'ChIJK2f-X1bxK4gRkB0jxyh7AwU',
   type: 'city',
-  // IMPORTANT: You must manually escape any user-input values used in the "raw" object.
-  location: {__raw: 'POINT(-80.5204096, 43.4642578)'},
+  location: mysql.raw('POINT(-80.5204096, 43.4642578)'),
 };
 placeTable.insertIfNotExists(data, ['placeId', 'type'])
   .then(result => result.affectedRows);
