@@ -240,6 +240,7 @@ and perform queries and transactions using promises.
 * [PoolPlus](#PoolPlus) ⇐ <code>Pool</code>
     * _instance_
         * [.ColTypes](#PoolPlus+ColTypes)
+        * [.raw(sql)](#PoolPlus+raw) ⇒ <code>Object</code>
         * [.basicTable(name)](#PoolPlus+basicTable) ⇒ <code>[MySQLTable](#MySQLTable)</code>
         * [.defineTable(name, schema, [migrationStrategy])](#PoolPlus+defineTable) ⇒ <code>[MySQLTable](#MySQLTable)</code>
         * [.sync(cb)](#PoolPlus+sync) ⇒ <code>void</code>
@@ -270,6 +271,40 @@ const userTable = pool.defineTable('user', {
     created: ColTypes.datetime(),
   }
 });
+```
+
+
+---
+
+<a name="PoolPlus+raw"></a>
+
+### poolPlus.raw(sql) ⇒ <code>Object</code>
+Wraps the provided SQL string in an object that will prevent the string from being escaped
+when it is used as a data-object value or `?` placeholder replacement.
+(The same as [`mysql.raw()`](https://github.com/mysqljs/mysql#escaping-query-values).)
+
+
+| Param | Type | Description |
+|:--- |:--- |:--- |
+| sql | <code>string</code> | SQL that you do not want to be escaped. |
+
+**Returns**: <code>Object</code> - An object that is turned into the provided `sql` string when `mysql` attempts to escape it.  
+**See**: [(mysql) Escaping query values](https://github.com/mysqljs/mysql#escaping-query-values)
+
+**Example**: Inserting a geometry Point
+```js
+placeTable.insert({
+  placeId: 'ChIJK2f',
+  coordinates: pool.raw('POINT(-80.5204, 43.4642)'),
+});
+// or
+placeTable.insert(
+  'SET `placeId` = ?, `coordinates` = ?',
+  ['ChIJK2f', pool.raw('POINT(-80.5204, 43.4642)')]
+);
+
+// INSERT INTO `place`
+// SET `placeId` = 'ChIJK2f', `coordinates` = POINT(-80.5204, 43.4642);
 ```
 
 
