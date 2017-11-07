@@ -372,10 +372,12 @@ describe('MySQLPlus', function() {
         onUpdate: 'NO ACTION',
       },
       d: 'columns_table.id',
+      eb: 'big_table.name NO ACTION',
       'eb, fb': {
         table: 'big_table',
         column: ['name', 'letter'],
       },
+      gc: 'columns_table.id  RESTRICT ',
       'gc, hc': {
         table: 'columns_table',
         column: ['id', 'email'],
@@ -404,7 +406,9 @@ describe('MySQLPlus', function() {
     '  CONSTRAINT `fk_fk_table_b` FOREIGN KEY (`b`) REFERENCES `big_table` (`id`),\n' +
     '  CONSTRAINT `fk_fk_table_c` FOREIGN KEY (`c`) REFERENCES `big_table` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,\n' +
     '  CONSTRAINT `fk_fk_table_d` FOREIGN KEY (`d`) REFERENCES `columns_table` (`id`),\n' +
+    '  CONSTRAINT `fk_fk_table_eb` FOREIGN KEY (`eb`) REFERENCES `big_table` (`name`) ON DELETE NO ACTION ON UPDATE NO ACTION,\n' +
     '  CONSTRAINT `fk_fk_table_eb_fb` FOREIGN KEY (`eb`, `fb`) REFERENCES `big_table` (`name`, `letter`),\n' +
+    '  CONSTRAINT `fk_fk_table_gc` FOREIGN KEY (`gc`) REFERENCES `columns_table` (`id`),\n' +
     '  CONSTRAINT `fk_fk_table_gc_hc` FOREIGN KEY (`gc`, `hc`) REFERENCES `columns_table` (`id`, `email`)\n' +
     ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
 
@@ -440,6 +444,7 @@ describe('MySQLPlus', function() {
         table: 'big_table',
         column: ['name', 'letter'],
       },
+      gc: 'columns_table.id CASCADE',
       'gc, hc': {
         table: 'columns_table',
         column: ['id', 'email'],
@@ -469,6 +474,7 @@ describe('MySQLPlus', function() {
     '  CONSTRAINT `fk_fk_table_c` FOREIGN KEY (`c`) REFERENCES `big_table` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,\n' +
     '  CONSTRAINT `fk_fk_table_d` FOREIGN KEY (`d`) REFERENCES `columns_table` (`id`),\n' +
     '  CONSTRAINT `fk_fk_table_eb_fb` FOREIGN KEY (`eb`, `fb`) REFERENCES `big_table` (`name`, `letter`),\n' +
+    '  CONSTRAINT `fk_fk_table_gc` FOREIGN KEY (`gc`) REFERENCES `columns_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,\n' +
     '  CONSTRAINT `fk_fk_table_gc_hc` FOREIGN KEY (`gc`, `hc`) REFERENCES `columns_table` (`id`, `email`)\n' +
     ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
 

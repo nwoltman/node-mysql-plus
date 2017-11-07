@@ -232,22 +232,41 @@ Note that spatial indexes may each only have 1 column and they may only be defin
 
 ### Foreign Keys
 
-Foreign keys are defined using the `foreignKeys` property, which is an object that maps column names to a reference table column. The reference table column can be specified with either an object or a string of the form `'<table name>.<column name>'`. If an object, the following properties may be set: `table` (required), `column` (required), `onDelete`, `onUpdate`.
+Foreign keys are defined using the `foreignKeys` property, which is an object that maps column names to a reference table column. The reference table column can be specified with either an object or a shorthand string.
+
+If an object, it should have the following properties:
+
++ `table` - The name of the reference table.
++ `column` - The name of the reference column in the reference table.
++ `onDelete` (optional) - One of: `RESTRICT`, `CASCADE`, `SET NULL`, `NO ACTION`, `SET DEFAULT`.
++ `onUpdate` (optional) - Same as `onDelete`.
+
+Alternatively, you can use a shorthand string that has the following form:
+
+```js
+'<table>.<column> [reference_option]' // `[reference_option]` is optional
+```
 
 **Example:**
+
 ```js
 {
   columns: {
     id: /* ... */,
+    uid: /* ... */,
     userID: /* ... */,
     thingOne: /* ... */,
     thingTwo: /* ... */,
   },
+
   foreignKeys: {
-    // String with shorthand reference
+    // String shorthand
     id: 'other_table.id', // shorthand for {table: 'other_table', column: 'id'}
 
-    // Object reference with ON DELETE and ON UPDATE attributes
+    uid: 'other_table.uid CASCADE',
+    // shorthand for {table: 'other_table', column: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE'}
+
+    // Object reference with ON DELETE and ON UPDATE options
     userID: {
       table: 'user',
       column: 'id',
@@ -271,6 +290,7 @@ Keys required for the example above:
 {
   primaryKey: 'id',
   uniqueKeys: [
+    'uid',
     'userID',
   ],
   indexes: [
