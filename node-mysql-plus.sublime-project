@@ -3,7 +3,8 @@
     {
       "path": ".",
       "file_exclude_patterns": [
-        "LICENSE",
+        "LICENSE.txt",
+        "package-lock.json",
         "*.sublime-project",
         ".DS_Store"
       ],
