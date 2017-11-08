@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## 0.13.0 (2017-11-08)
+
+### Deprecations
++ lib: Remove `{__raw: ...}` object documentation ([`1ad76d0`](https://github.com/nwoltman/node-mysql-plus/commit/1ad76d037811aa8c4ae8a1ecfda5c035a661b468))
+  + Use `mysql.raw()` or [`pool.raw()`](https://github.com/nwoltman/node-mysql-plus#PoolPlus+raw) instead to create raw values
+  + This is currently a soft deprecation. In `v0.14.0`, `mysql-plus` will log a warning if you use a `{__raw: ...}` object with the [`MySQLTable#insertIfNotExists()`](https://github.com/nwoltman/node-mysql-plus#MySQLTable+insertIfNotExists) method and support for `{__raw: ...}` objects will be removed completely in `v0.15.0`.
+
+### New Features
++ deps: mysql@2.15.0 ([`91ff662`](https://github.com/nwoltman/node-mysql-plus/commit/91ff662870ee58fee45c1cf71d4421dc8d7991af))
+  + [See `mysql` changes](https://github.com/mysqljs/mysql/blob/master/Changes.md#v2150-2017-10-05)
++ lib: Improve debug output formatting ([`a43815f`](https://github.com/nwoltman/node-mysql-plus/commit/a43815f14909ecf027c541149d0a1a689e0b4d57))
++ PoolPlus: Add `.raw()` method ([`f0779c9`](https://github.com/nwoltman/node-mysql-plus/commit/f0779c97d83f6fadb9938ec90918c8b83711407c))
+  + This is an alias of the `mysql.raw()` function added in `mysql@2.15.0`
++ TableDefinition: Expand foreign key shorthand syntax ([`ccb3c53`](https://github.com/nwoltman/node-mysql-plus/commit/ccb3c53d222848c95f1d8ae5d989c89d899e8764))
+  + You can now specify the `onDelete` and `onUpdate` options in the shorthand like so: `table.column CASCADE`
+
+### Misc
++ ci: Test on Node 9 ([`6c44566`](https://github.com/nwoltman/node-mysql-plus/commit/6c445665d4db74a4671e13bea66b224507cd3289))
++ Rename 'LICENSE' -> 'LICENSE.txt' ([`5b588f8`](https://github.com/nwoltman/node-mysql-plus/commit/5b588f8ebc86b8c119a7d693d106046203de34cd))
+
+
 ## 0.12.1 (2017-08-18)
 
 + lib: Fix debug formatting + improve foreign key operation formatting ([`9f714a7`](https://github.com/nwoltman/node-mysql-plus/commit/9f714a78df557533d4ecf3ba82bddc201fba4e58))
