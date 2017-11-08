@@ -14,7 +14,8 @@ module.exports = function(grunt) {
     }
 
     const repoUrl = pkg.repository.url.slice(0, -4); // Slice off '.git'
-    const getCommitLog = `git --no-pager log v${curVersion}... --pretty=format:"+ %s ([\`%h\`](${repoUrl}/commit/%H))"`;
+    const getCommitLog =
+      `git --no-pager log v${curVersion}... --reverse --pretty=format:"+ %s ([\`%h\`](${repoUrl}/commit/%H))"`;
     const commitLog = execSync(getCommitLog).toString();
     const changes = commitLog.replace(/^\+ Merge.*[\r\n]*/gm, ''); // Filter out merge commits
     const date = new Date().toISOString().slice(0, 10);
