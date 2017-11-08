@@ -1,4 +1,4 @@
-sudo: true
+sudo: enabled
 
 language: node_js
 
@@ -6,6 +6,7 @@ node_js:
   - '4'
   - '6'
   - '8'
+  - '9'
 
 before_script:
   - echo mysql-apt-config mysql-apt-config/select-server select mysql-5.7 | sudo debconf-set-selections
