@@ -1047,11 +1047,12 @@ See the [Column Types](#column-types) section for all possible column types and 
 
 ### Keys
 
-There are three properties that can be used to define different types of keys:
+The following properties can be used to define different types of keys:
 
 + [`primaryKey`](#primarykey--stringstring)
 + [`uniqueKeys`](#uniquekeys--arraystringstring)
 + [`indexes`](#indexes--arraystringstring)
++ [`spatialIndexes`](#spatialindexes--string)
 
 Note that [column definitions](#columndefinition) allow you to define these keys directly on the column. If you use that method of defining a key for a column, you should not define the key again using one of these properties.
 
@@ -1104,7 +1105,7 @@ Used to define the table's indexes. Its value is an array where the elements are
 
 Used to define the table's spatial indexes. Its value is an array where the elements are the column name for each index.
 
-Note that spatial indexes may each only have 1 column and they may only be defined for geometrical type columns.
+Note that spatial indexes may each only have 1 column and they may only be defined for [geometry-type](https://dev.mysql.com/doc/refman/5.7/en/spatial-type-overview.html) columns.
 
 **Example:**
 ```js
