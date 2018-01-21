@@ -22,7 +22,7 @@
   "devDependencies": {
     "coveralls": "^3.0.0",
     "es6-callback-manager": "^2.0.1",
-    "eslint": "~4.10.0",
+    "eslint": "~4.16.0",
     "grunt": "^1.0.1",
     "grunt-env": "^0.4.4",
     "grunt-eslint": "^20.1.0",
@@ -31,11 +31,11 @@
     "grunt-mocha-test": "^0.13.3",
     "istanbul": "^0.4.5",
     "jit-grunt": "^0.10.0",
-    "mocha": "^4.0.1",
-    "semver": "^5.4.1",
-    "should": "~13.1.3",
+    "mocha": "^5.0.0",
+    "semver": "^5.5.0",
+    "should": "~13.2.1",
     "should-sinon": "0.0.6",
-    "sinon": "~4.1.2"
+    "sinon": "~4.1.6"
   },
   "scripts": {
     "test": "grunt"

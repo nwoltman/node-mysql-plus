@@ -124,7 +124,7 @@
     "no-whitespace-before-property": 2,
     "no-with": 2,
     "object-curly-spacing": 2,
-    "object-property-newline": [2, {"allowMultiplePropertiesPerLine": true}],
+    "object-property-newline": [2, {"allowAllPropertiesOnSameLine": true}],
     "object-shorthand": 2,
     "one-var": [2, "never"],
     "one-var-declaration-per-line": 2,

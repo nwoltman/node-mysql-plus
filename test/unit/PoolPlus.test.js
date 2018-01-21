@@ -533,6 +533,10 @@ describe('PoolPlus', () => {
 
   describe('when defining tables', () => {
 
+    var PoolStub;
+    var PoolConfigStub;
+    var MySQLTableStub;
+
     var MockPool;
     var TableDefinitionStub;
 
@@ -541,9 +545,10 @@ describe('PoolPlus', () => {
       delete require.cache[require.resolve('../../lib/PoolPlus')];
 
       // Stub some classes
-      sinon.stub(require.cache[require.resolve('mysql/lib/Pool')], 'exports');
-      sinon.stub(require.cache[require.resolve('mysql/lib/PoolConfig')], 'exports');
-      sinon.stub(require.cache[require.resolve('../../lib/MySQLTable')], 'exports');
+      class MockClass {}
+      PoolStub = sinon.stub(require.cache[require.resolve('mysql/lib/Pool')], 'exports').value(MockClass);
+      PoolConfigStub = sinon.stub(require.cache[require.resolve('mysql/lib/PoolConfig')], 'exports').value(MockClass);
+      MySQLTableStub = sinon.stub(require.cache[require.resolve('../../lib/MySQLTable')], 'exports').value(MockClass);
       sinon.stub(require.cache[require.resolve('../../lib/TableDefinition')], 'exports');
 
       // Prevent checking for duplicate table definitions
@@ -559,9 +564,9 @@ describe('PoolPlus', () => {
 
     after(() => {
       // Restore stubs
-      require.cache[require.resolve('mysql/lib/Pool')].exports.restore();
-      require.cache[require.resolve('mysql/lib/PoolConfig')].exports.restore();
-      require.cache[require.resolve('../../lib/MySQLTable')].exports.restore();
+      PoolStub.restore();
+      PoolConfigStub.restore();
+      MySQLTableStub.restore();
       require.cache[require.resolve('../../lib/TableDefinition')].exports.restore();
       Map.prototype.has.restore();
 
