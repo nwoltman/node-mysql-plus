@@ -5,7 +5,7 @@
 ### Deprecations
 + lib: Remove `{__raw: ...}` object documentation ([`1ad76d0`](https://github.com/nwoltman/node-mysql-plus/commit/1ad76d037811aa8c4ae8a1ecfda5c035a661b468))
   + Use `mysql.raw()` or [`pool.raw()`](https://github.com/nwoltman/node-mysql-plus#PoolPlus+raw) instead to create raw values
-  + This is currently a soft deprecation. In `v0.14.0`, `mysql-plus` will log a warning if you use a `{__raw: ...}` object with the [`MySQLTable#insertIfNotExists()`](https://github.com/nwoltman/node-mysql-plus#MySQLTable+insertIfNotExists) method and support for `{__raw: ...}` objects will be removed completely in `v0.15.0`.
+  + This is currently a soft deprecation. In `v0.13.1`, `mysql-plus` will log a warning if you use a `{__raw: ...}` object with the [`MySQLTable#insertIfNotExists()`](https://github.com/nwoltman/node-mysql-plus#MySQLTable+insertIfNotExists) method and support for `{__raw: ...}` objects will be removed completely in `v0.14.0`.
 
 ### New Features
 + deps: mysql@2.15.0 ([`91ff662`](https://github.com/nwoltman/node-mysql-plus/commit/91ff662870ee58fee45c1cf71d4421dc8d7991af))
