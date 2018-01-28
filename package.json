@@ -26,7 +26,7 @@
     "grunt": "^1.0.1",
     "grunt-env": "^0.4.4",
     "grunt-eslint": "^20.1.0",
-    "grunt-jsdoc-to-markdown": "^3.0.0",
+    "grunt-jsdoc-to-markdown": "^4.0.0",
     "grunt-mocha-istanbul": "^5.0.2",
     "grunt-mocha-test": "^0.13.3",
     "istanbul": "^0.4.5",
@@ -35,7 +35,7 @@
     "semver": "^5.5.0",
     "should": "~13.2.1",
     "should-sinon": "0.0.6",
-    "sinon": "~4.1.6"
+    "sinon": "~4.2.2"
   },
   "scripts": {
     "test": "grunt"

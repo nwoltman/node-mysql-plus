@@ -8,6 +8,7 @@ module.exports = function(grunt) {
     const docs = fs.readFileSync('README.md', 'utf8')
       .replace(/\r\n|\r|\n/g, os.EOL)
       .replace(/\| --- /g, '|:--- ')
+      .replace(/<\/code><code>/g, '</code> &#124; <code>') // Add ' | ' between multiple types
       .replace(new RegExp('  ' + os.EOL + '(?=\\*\\*Example\\*\\*)', 'g'), os.EOL + os.EOL);
     fs.writeFileSync('README.md', docs);
     grunt.log.ok('Fixed docs');
