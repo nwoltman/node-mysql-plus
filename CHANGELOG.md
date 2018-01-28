@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 0.13.1 (2018-01-28)
+
+### Deprecations
++ lib: Log a deprecation message when a `{__raw: ...}` object is used ([`ec00429`](https://github.com/nwoltman/node-mysql-plus/commit/ec00429f59a26175f02eb3f1f91aea1ae7e6160d))
+
+### Documentation
++ docs: Add spatialIndexes to table of contents for Keys section ([`3a31e05`](https://github.com/nwoltman/node-mysql-plus/commit/3a31e05ac1c0b5bc34ad0787b3b99659b8597f4f))
++ docs: Amend the deprecation plan for `{__raw: ...}` objects ([`774b9d3`](https://github.com/nwoltman/node-mysql-plus/commit/774b9d3ac597f693230144e7e5d2a0b1214814e6))
+
+
 ## 0.13.0 (2017-11-08)
 
 ### Deprecations
