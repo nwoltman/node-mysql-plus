@@ -47,7 +47,6 @@ const pool = mysql.createPool({
   database: 'my_db',
 });
 // Both `mysql` and `pool` are 100% compatible with the mysql module
-
 module.exports = pool;
 ```
 
@@ -62,24 +61,14 @@ const userTable = db.defineTable('user', {
     email: db.ColTypes.varchar(255).notNull().unique(),
     name: db.ColTypes.varchar(63).notNull(),
   },
-  autoIncrement: 5000000000,
 });
 
 const User = {
-  insertAndSelectExample() {
-    userTable.insert({email: 'newuser@email.com', name: 'newuser'})
-      .then(result => userTable.select('*', 'WHERE `id` = ?', [result.insertId]))
-      .then(rows => {
-        console.log(rows);
-        /*
-          [{
-            id: 5000000001,
-            email: 'newuser@email.com',
-            name: 'newuser'
-          }]
-        */
-      })
-      .catch(err => console.error(err));
+  async insertAndSelectExample() {
+    const result = await userTable.insert({email: 'newuser@email.com', name: 'newuser'})
+    const rows = await userTable.select('*', 'WHERE `id` = ?', [result.insertId]))
+    console.log(rows); // [ { id: 1, email: 'newuser@email.com', name: 'newuser' } ]
+    return rows[0];
   }
 };
 
@@ -90,8 +79,18 @@ module.exports = User;
 
 ```js
 const db = require('./db');
+const User = require('./User');
 const express = require('express');
 const app = express();
+
+app.get('/user', async (req, res, next) => {
+  try {
+    const user = await User.insertAndSelectExample();
+    res.send(user);
+  } catch (err) {
+    next(err)
+  }
+})
 
 // Sync the table schemas to the database
 db.sync((err) => {
