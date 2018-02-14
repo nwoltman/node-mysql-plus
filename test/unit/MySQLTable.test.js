@@ -453,7 +453,7 @@ describe('MySQLTable', () => {
         const doneDataAndRaw = cbManager.registerCallback();
         const doneRowExists = cbManager.registerCallback();
 
-        testTable.insertIfNotExists({email: {__raw: '"three@email.com"'}}, ['email'], (err, result) => {
+        testTable.insertIfNotExists({email: MySQLPlus.raw('"three@email.com"')}, ['email'], (err, result) => {
           if (err) throw err;
           result.affectedRows.should.equal(1);
           result.insertId.should.equal(3);
@@ -464,7 +464,7 @@ describe('MySQLTable', () => {
             doneOnlyRaw();
           });
 
-          testTable.insertIfNotExists({id: 5, email: {__raw: '"five@email.com"'}}, ['id', 'email'], (err, result) => {
+          testTable.insertIfNotExists({id: 5, email: MySQLPlus.raw('"five@email.com"')}, ['id', 'email'], (err, result) => {
             if (err) throw err;
             result.affectedRows.should.equal(1);
             result.insertId.should.equal(5);
@@ -472,7 +472,7 @@ describe('MySQLTable', () => {
           });
         });
 
-        testTable.insertIfNotExists({email: {__raw: '"one@email.com"'}}, ['email'], (err, result) => {
+        testTable.insertIfNotExists({email: MySQLPlus.raw('"one@email.com"')}, ['email'], (err, result) => {
           if (err) throw err;
           result.affectedRows.should.equal(0);
           doneRowExists();
@@ -510,14 +510,14 @@ describe('MySQLTable', () => {
       });
 
       it('should accept raw data to insert and not escape it', () => {
-        const promiseNewRow = testTable.insertIfNotExists({email: {__raw: '"three@email.com"'}}, ['email'])
+        const promiseNewRow = testTable.insertIfNotExists({email: MySQLPlus.raw('"three@email.com"')}, ['email'])
           .then(result => {
             result.affectedRows.should.equal(1);
             result.insertId.should.equal(3);
 
             return Promise.all([
               testTable.select('email', 'WHERE id = 3'),
-              testTable.insertIfNotExists({id: 5, email: {__raw: '"five@email.com"'}}, ['id', 'email']),
+              testTable.insertIfNotExists({id: 5, email: MySQLPlus.raw('"five@email.com"')}, ['id', 'email']),
             ]);
           })
           .then(results => {
@@ -527,7 +527,7 @@ describe('MySQLTable', () => {
             results[1].insertId.should.equal(5);
           });
 
-        const promiseRowExists = testTable.insertIfNotExists({email: {__raw: '"one@email.com"'}}, ['email'])
+        const promiseRowExists = testTable.insertIfNotExists({email: MySQLPlus.raw('"one@email.com"')}, ['email'])
           .then(result => {
             result.affectedRows.should.equal(0);
           });
