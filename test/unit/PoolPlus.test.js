@@ -177,6 +177,12 @@ describe('PoolPlus', () => {
       });
     });
 
+    it('should return a promise if no callback is provided', () => {
+      const promise = pool.sync();
+      promise.should.be.an.instanceOf(Promise);
+      return promise;
+    });
+
 
     describe('if an error occured getting a connection', () => {
 
@@ -197,6 +203,12 @@ describe('PoolPlus', () => {
         pool.sync(err => {
           err.should.equal(error);
           done();
+        });
+      });
+
+      it('should reject the returned promise with an error', () => {
+        return pool.sync().catch(err => {
+          err.should.equal(error);
         });
       });
 
@@ -222,6 +234,12 @@ describe('PoolPlus', () => {
         });
       });
 
+      it('should reject the returned promise with an error', () => {
+        return pool.sync().catch(err => {
+          err.should.equal(error);
+        });
+      });
+
     });
 
 
@@ -244,6 +262,12 @@ describe('PoolPlus', () => {
         pool.sync(err => {
           err.should.equal(error);
           done();
+        });
+      });
+
+      it('should reject the returned promise with an error', () => {
+        return pool.sync().catch(err => {
+          err.should.equal(error);
         });
       });
 

@@ -242,7 +242,7 @@ and perform queries and transactions using promises.
         * [.raw(sql)](#PoolPlus+raw) ⇒ <code>Object</code>
         * [.basicTable(name)](#PoolPlus+basicTable) ⇒ <code>[MySQLTable](#MySQLTable)</code>
         * [.defineTable(name, schema, [migrationStrategy])](#PoolPlus+defineTable) ⇒ <code>[MySQLTable](#MySQLTable)</code>
-        * [.sync(cb)](#PoolPlus+sync) ⇒ <code>void</code>
+        * [.sync([cb])](#PoolPlus+sync) ⇒ <code>Promise</code>
         * [.pquery(sql, [values], [cb])](#PoolPlus+pquery) ⇒ <code>Promise</code>
         * [.transaction(trxnHandler)](#PoolPlus+transaction) ⇒ <code>Promise</code>
     * _inner_
@@ -355,7 +355,7 @@ const userTable = pool.defineTable('user', {
 
 <a name="PoolPlus+sync"></a>
 
-### poolPlus.sync(cb) ⇒ <code>void</code>
+### poolPlus.sync([cb]) ⇒ <code>Promise</code>
 Syncs the defined tables to the database by creating new tables and dropping
 or migrating existing tables (depending on the migration setting).
 
@@ -367,14 +367,26 @@ Always keep a backup of your database so you can restore it to the latest workin
 
 | Param | Type | Description |
 |:--- |:--- |:--- |
-| cb | <code>function</code> | A callback that is called once all defined table schemas have been synced to the     database. If an error occured, the first argument passed to the callback will be the error object. |
+| [cb] | <code>function</code> | A callback that is called once all defined table schemas have been synced to the     database. If an error occured, the first argument passed to the callback will be the error object. |
 
-**Example**:
+**Returns**: <code>?Promise</code> - If `cb` is not provided, a promise will be returned.
+
+**Example**: With a callback
 ```js
 pool.sync((err) => {
   if (err) throw err;
   // Now do something such as start an HTTP server
 });
+```
+
+**Example**: With a promise
+```js
+pool.sync()
+  .then(() => {
+    // Success
+  }, (err) => {
+    // Error
+  });
 ```
 
 
