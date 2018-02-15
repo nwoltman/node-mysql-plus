@@ -113,7 +113,7 @@ The possible migration strategies are as follows:
 + `alter` - default in a development environment
 + `drop`
 
-In addition to being the default in a production environment, the `safe` strategy is the only allowed strategy in production. This means that if `alter` or `drop` are used anywhere to configure your connections or tables, they will be ignored and `safe` will be used instead. However, if you really want to use `alter` in production, you may set the `allowAlterInProduction` option to `true` in your [Pool configuration](#mysql-pluscreatepoolconfig--poolplus).
+In addition to being the default in a production environment, the `safe` strategy is the only allowed strategy in production. This means that if `alter` or `drop` are used anywhere to configure connections or tables, they will be ignored and `safe` will be used instead. However, it is possible to override this behavior to allow the `alter` strategy in production by setting the `allowAlterInProduction` option to `true` in the [Pool configuration](#mysql-pluscreatepoolconfig--poolplus).
 
 ### safe
 
@@ -123,9 +123,9 @@ Only allows newly-defined tables to be created. Existing tables are never change
 
 Specifies that newly-defined tables will be created, existing tables that are no longer defined will be dropped, and existing tables that have a different definition from what is found in the database will be migrated with minimal data-loss.
 
-**To rename table columns**, you must specify the column's old name in the [column definition](#columndefinition) with the `.oldName('name')` method. If you don't, the column will be dropped and you will lose all of the data that was in that column.
+**To rename table columns**, the column's old name must be specified in the [column definition](#columndefinition) with the `.oldName('name')` method. If it is not, the column will be dropped and all of the data that was in that column will be lost.
 
-**Note:** It is up to you to understand how changes to an existing table might affect the data. For example, changing a DOUBLE column to a FLOAT will cause the precision of the value to be reduced so you may lose some significant digits (i.e. `1.123456789` would be reduced to `1.12346`). Furthermore, some changes to tables cannot be done and will cause an error. An example of this would be adding a column with the `NOT NULL` attribute to a non-empty table without specifying a default value.
+**Note:** It is up to you to understand how changes to an existing table might affect the data. For example, changing a DOUBLE column to a FLOAT will cause the precision of the value to be reduced so some significant digits may be lost (i.e. `1.123456789` would be reduced to `1.12346`). Furthermore, some changes to tables cannot be done and will cause an error. An example of this would be adding a column with the `NOT NULL` attribute to a non-empty table without specifying a default value.
 
 ### drop
 
@@ -156,7 +156,7 @@ Columns are defined using the `column` property which is an object where the key
 }
 ```
 
-See the [Column Types](#column-types) section for all possible column types and attributes that you can define.
+See the [Column Types](#column-types) section for all possible column types and attributes that can be defined.
 
 ### Keys
 
@@ -167,7 +167,7 @@ The following properties can be used to define different types of keys:
 + [`indexes`](#indexes--arraystringstring)
 + [`spatialIndexes`](#spatialindexes--string)
 
-Note that [column definitions](#columndefinition) allow you to define these keys directly on the column. If you use that method of defining a key for a column, you should not define the key again using one of these properties.
+Note that [column definitions](#columndefinition) allow these keys to be defined directly on the column. If that method of defining a key for a column is used, the key should not be defined again using one of these properties (otherwise it will be duplicated).
 
 #### `primaryKey` : `string|string[]`
 
@@ -241,7 +241,7 @@ If an object, it should have the following properties:
 + `onDelete` (optional) - One of: `RESTRICT`, `CASCADE`, `SET NULL`, `NO ACTION`, `SET DEFAULT`.
 + `onUpdate` (optional) - Same as `onDelete`.
 
-Alternatively, you can use a shorthand string that has the following form:
+Alternatively, a shorthand string that has the following form may be used:
 
 ```js
 '<table>.<column> [reference_option]' // `[reference_option]` is optional
@@ -323,7 +323,7 @@ These schema properties configure table-level options. The options currently sup
 }
 ```
 
-**Note:** After explicitly defining a table option in your schema, if you remove it from your schema and resync your table definitions, the table option will not change in the database. If you want to go back to the default value for the table option, you'll need to explicitly define it on your schema and resync the table (or manually change it on the command line), and then you may remove it from your schema.
+**Note:** After explicitly defining a table option in a schema, if you remove it from the schema and resync your table definitions, the table option will not change in the database. To go back to the default value for the table option, you'll need to explicitly define it on the schema and resync the table (or manually change it on the command line), and then you may remove it from the schema.
 
 ## Column Types
 
@@ -460,7 +460,7 @@ Compatible types:
 
 + `timestamp`
 
-There aren't any extra methods on this type, but there are some things you should be aware of with `timestamp` columns:
+There aren't any extra methods on this type, but there are some things to be aware of with `timestamp` columns:
 
 ##### NULL Timestamps
 
@@ -480,7 +480,7 @@ would define a column with this SQL:
 
 ##### Timestamps' DEFAULT value
 
-If you define a timestamp column and use the `notNull()` method, the column's `DEFAULT` value will be set to `CURRENT_TIMESTAMP`. So the following:
+If a timestamp column is defined with the `notNull()` method, the column's `DEFAULT` value will be set to `CURRENT_TIMESTAMP`. So the following:
 
 ```js
 {

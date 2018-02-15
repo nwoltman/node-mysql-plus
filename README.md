@@ -285,7 +285,7 @@ when it is used as a data-object value or `?` placeholder replacement.
 
 | Param | Type | Description |
 |:--- |:--- |:--- |
-| sql | <code>string</code> | SQL that you do not want to be escaped. |
+| sql | <code>string</code> | SQL that should not be escaped. |
 
 **Returns**: <code>Object</code> - An object that is turned into the provided `sql` string when `mysql` attempts to escape it.  
 **See**: [(mysql) Escaping query values](https://github.com/mysqljs/mysql#escaping-query-values)
@@ -336,7 +336,7 @@ Defines a table to be created or updated in the database.
 | schema | <code>Object</code> | An object that defines the table's schema.     See the [Defining Table Schemas](#defining-table-schemas) section. |
 | [migrationStrategy] | <code>string</code> | One of `safe`, `alter`, or `drop`. This will override     the `migrationStrategy` value from the [`config`](#module_mysql-plus..createPool)     (but is still subject to the same restrictions in production environments). |
 
-**Returns**: <code>[MySQLTable](#MySQLTable)</code> - A `MySQLTable` instance that lets you perform queries on the table.  
+**Returns**: <code>[MySQLTable](#MySQLTable)</code> - A `MySQLTable` instance that has methods for performing queries on the table.  
 **See**: [Defining Table Schemas](#defining-table-schemas)
 
 **Example**:
@@ -830,7 +830,7 @@ fails because of a unique key constraint).
 
 | Param | Type | Description |
 |:--- |:--- |:--- |
-| data | <code>Object</code> | An object mapping column names to data values to insert.     The values are escaped by default. If you don't want a value to be escaped,     create a "raw" value (see the last example below). |
+| data | <code>Object</code> | An object mapping column names to data values to insert. |
 | keyColumns | <code>Array.&lt;string&gt;</code> | The names of columns in the `data` object.     If there is already a row in the table with the same values for these     columns as the values being inserted, the data will not be inserted. |
 | [cb] | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | A callback that gets called with the results of the query. |
 
@@ -886,7 +886,7 @@ optional but at least one of them must be specified.
 
 | Param | Type | Description |
 |:--- |:--- |:--- |
-| [data] | <code>Object</code> | An object of (column name)-(data value) pairs that define the new column values.     This object will be escaped by `mysql.escape()` so if you want to use more sophisticated SQL (such as     a MySQL function) to update a column's value, you'll need to use the `sqlString` argument instead. |
+| [data] | <code>Object</code> | An object of (column name)-(data value) pairs that define the new column values. |
 | [sqlString] | <code>string</code> | SQL to be appended to the query after the `SET data` clause     or immediately after `SET ` if `data` is omitted. |
 | [values] | <code>Array</code> | Values to replace the placeholders in `sqlString` (and/or `data`). |
 | [cb] | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | A callback that gets called with the results of the query. |
@@ -917,6 +917,9 @@ userTable.update('`points` = `points` + ? WHERE `winner` = ?', [10, 1]);
 ```js
 userTable.update({points: 1000});
 // UPDATE `user` SET `points` = 1000;
+
+userTable.update({points: mysql.raw('`points` + 10')});
+// UPDATE `user` SET `points` = `points` + 10;
 ```
 
 
@@ -1011,7 +1014,7 @@ The possible migration strategies are as follows:
 + `alter` - default in a development environment
 + `drop`
 
-In addition to being the default in a production environment, the `safe` strategy is the only allowed strategy in production. This means that if `alter` or `drop` are used anywhere to configure your connections or tables, they will be ignored and `safe` will be used instead. However, if you really want to use `alter` in production, you may set the `allowAlterInProduction` option to `true` in your [Pool configuration](#mysql-pluscreatepoolconfig--poolplus).
+In addition to being the default in a production environment, the `safe` strategy is the only allowed strategy in production. This means that if `alter` or `drop` are used anywhere to configure connections or tables, they will be ignored and `safe` will be used instead. However, it is possible to override this behavior to allow the `alter` strategy in production by setting the `allowAlterInProduction` option to `true` in the [Pool configuration](#mysql-pluscreatepoolconfig--poolplus).
 
 ### safe
 
@@ -1021,9 +1024,9 @@ Only allows newly-defined tables to be created. Existing tables are never change
 
 Specifies that newly-defined tables will be created, existing tables that are no longer defined will be dropped, and existing tables that have a different definition from what is found in the database will be migrated with minimal data-loss.
 
-**To rename table columns**, you must specify the column's old name in the [column definition](#columndefinition) with the `.oldName('name')` method. If you don't, the column will be dropped and you will lose all of the data that was in that column.
+**To rename table columns**, the column's old name must be specified in the [column definition](#columndefinition) with the `.oldName('name')` method. If it is not, the column will be dropped and all of the data that was in that column will be lost.
 
-**Note:** It is up to you to understand how changes to an existing table might affect the data. For example, changing a DOUBLE column to a FLOAT will cause the precision of the value to be reduced so you may lose some significant digits (i.e. `1.123456789` would be reduced to `1.12346`). Furthermore, some changes to tables cannot be done and will cause an error. An example of this would be adding a column with the `NOT NULL` attribute to a non-empty table without specifying a default value.
+**Note:** It is up to you to understand how changes to an existing table might affect the data. For example, changing a DOUBLE column to a FLOAT will cause the precision of the value to be reduced so some significant digits may be lost (i.e. `1.123456789` would be reduced to `1.12346`). Furthermore, some changes to tables cannot be done and will cause an error. An example of this would be adding a column with the `NOT NULL` attribute to a non-empty table without specifying a default value.
 
 ### drop
 
@@ -1054,7 +1057,7 @@ Columns are defined using the `column` property which is an object where the key
 }
 ```
 
-See the [Column Types](#column-types) section for all possible column types and attributes that you can define.
+See the [Column Types](#column-types) section for all possible column types and attributes that can be defined.
 
 ### Keys
 
@@ -1065,7 +1068,7 @@ The following properties can be used to define different types of keys:
 + [`indexes`](#indexes--arraystringstring)
 + [`spatialIndexes`](#spatialindexes--string)
 
-Note that [column definitions](#columndefinition) allow you to define these keys directly on the column. If you use that method of defining a key for a column, you should not define the key again using one of these properties.
+Note that [column definitions](#columndefinition) allow these keys to be defined directly on the column. If that method of defining a key for a column is used, the key should not be defined again using one of these properties (otherwise it will be duplicated).
 
 #### `primaryKey` : `string|string[]`
 
@@ -1139,7 +1142,7 @@ If an object, it should have the following properties:
 + `onDelete` (optional) - One of: `RESTRICT`, `CASCADE`, `SET NULL`, `NO ACTION`, `SET DEFAULT`.
 + `onUpdate` (optional) - Same as `onDelete`.
 
-Alternatively, you can use a shorthand string that has the following form:
+Alternatively, a shorthand string that has the following form may be used:
 
 ```js
 '<table>.<column> [reference_option]' // `[reference_option]` is optional
@@ -1221,7 +1224,7 @@ These schema properties configure table-level options. The options currently sup
 }
 ```
 
-**Note:** After explicitly defining a table option in your schema, if you remove it from your schema and resync your table definitions, the table option will not change in the database. If you want to go back to the default value for the table option, you'll need to explicitly define it on your schema and resync the table (or manually change it on the command line), and then you may remove it from your schema.
+**Note:** After explicitly defining a table option in a schema, if you remove it from the schema and resync your table definitions, the table option will not change in the database. To go back to the default value for the table option, you'll need to explicitly define it on the schema and resync the table (or manually change it on the command line), and then you may remove it from the schema.
 
 ## Column Types
 
@@ -1358,7 +1361,7 @@ Compatible types:
 
 + `timestamp`
 
-There aren't any extra methods on this type, but there are some things you should be aware of with `timestamp` columns:
+There aren't any extra methods on this type, but there are some things to be aware of with `timestamp` columns:
 
 ##### NULL Timestamps
 
@@ -1378,7 +1381,7 @@ would define a column with this SQL:
 
 ##### Timestamps' DEFAULT value
 
-If you define a timestamp column and use the `notNull()` method, the column's `DEFAULT` value will be set to `CURRENT_TIMESTAMP`. So the following:
+If a timestamp column is defined with the `notNull()` method, the column's `DEFAULT` value will be set to `CURRENT_TIMESTAMP`. So the following:
 
 ```js
 {
