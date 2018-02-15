@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 0.14.0 (2018-02-15)
+
+### Breaking Changes
++ lib: Remove support for deprecated `{__raw: ...}` objects ([`739a293`](https://github.com/nwoltman/node-mysql-plus/commit/739a293b21d5ca5fe6e2080d1a81f6314d44a310))
+
+### New Features
++ PoolPlus: Add Promise support to [`pool.sync()`](https://github.com/nwoltman/node-mysql-plus#PoolPlus+sync) ([`0704b40`](https://github.com/nwoltman/node-mysql-plus/commit/0704b4023c020e672ad6d6e93e5af01074b828a6))
+
+#### Performance
++ lib: Use `===` where possible ([`9d31c23`](https://github.com/nwoltman/node-mysql-plus/commit/9d31c2348f68aabf41006b772ddf7b1c5fd9e526))
+
+### Documentation
++ docs: Simplify initial example and use `async-await` ([`9987b43`](https://github.com/nwoltman/node-mysql-plus/commit/9987b43882bf821b1e89aee46b39519c7553cde5))
++ docs: Avoid using pronouns where possible ([`913d92c`](https://github.com/nwoltman/node-mysql-plus/commit/913d92c020a3f0bb11ebcb05ef314d2dbe4dfa91))
+
+
 ## 0.13.1 (2018-01-28)
 
 ### Deprecations
