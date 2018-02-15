@@ -10,8 +10,6 @@ A MySQL client for Node.js with methods for defining tables with auto-migration 
 
 This module extends the popular [`mysql`](https://www.npmjs.com/package/mysql) module, so it can be safely dropped in as a replacement for that module before using any of its additional features. It is recommended that you read the [documentation](https://github.com/mysqljs/mysql#introduction) for the `mysql` module, especially the sections on [connection options](https://github.com/mysqljs/mysql#connection-options), [performing queries](https://github.com/mysqljs/mysql#performing-queries), [escaping query values](https://github.com/mysqljs/mysql#escaping-query-values), and [escaping query identifiers](https://github.com/mysqljs/mysql#escaping-query-identifiers).
 
-Have questions or feedback? [![Join the Gitter chat](https://badges.gitter.im/nwoltman/node-mysql-plus.svg)](https://gitter.im/nwoltman/node-mysql-plus?utm_source=badge&utm_medium=badge&utm_content=badge)
-
 ## Table of Contents
 
 + [Installation](#installation)
