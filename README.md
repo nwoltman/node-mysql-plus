@@ -1026,6 +1026,13 @@ Specifies that newly-defined tables will be created, existing tables that are no
 
 **Note:** It is up to you to understand how changes to an existing table might affect the data. For example, changing a DOUBLE column to a FLOAT will cause the precision of the value to be reduced so some significant digits may be lost (i.e. `1.123456789` would be reduced to `1.12346`). Furthermore, some changes to tables cannot be done and will cause an error. An example of this would be adding a column with the `NOT NULL` attribute to a non-empty table without specifying a default value.
 
+##### Known Migrations That Will Not Work
+
++ Altering a column in a certain way when a different table references that column as a foreign key.
+  + Normally this isn't a problem if the column type is being changed (since you'd also need to change the column type in the referencing table and `mysql-plus` can handle this case), but if only the column in the first table needs to change (such as modifying it's `AUTO_INCREMENT` value), the operation will fail because of the foreign key constraint.
+  + **Workaround 1:** Manually remove the foreign key constraint from the referencing table (using SQL) before syncing.
+  + **Workaround 2:** Remove the foreign key definition from the referencing table schema (i.e. by commenting it out) before syncing the column change, then restore the foreign key definition and re-sync.
+
 ### drop
 
 All defined tables will be dropped and recreated.
