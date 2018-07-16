@@ -1,13 +1,9 @@
 sudo: enabled
-
 language: node_js
-
 node_js:
   - '6'
   - '8'
-  - '9'
   - '10'
-
 before_script:
   - echo mysql-apt-config mysql-apt-config/select-server select mysql-5.7 | sudo debconf-set-selections
   - wget http://dev.mysql.com/get/mysql-apt-config_0.8.1-1_all.deb
@@ -15,11 +11,10 @@ before_script:
   - sudo apt-get update -q
   - sudo apt-get install -q -y --force-yes -o Dpkg::Options::=--force-confnew mysql-server
   - sudo mysql_upgrade
-
 deploy:
   provider: npm
   email: nwoltman@outlook.com
   on:
     tags: true
   api_key:
-    secure: oZ8+ZbYS3gNheR/ZPbxiVuXbJUX9IsvjjPO+RzSIKTpw1r75z+1W1NnsZwmDaBknnH+wdguQ7ZEfqeBIT+CbmnfPHlBAxu3oEkkIU1pzAb5UsVeZN9DFuGFHk4+UHqDHIgUtl4q04Hdwn5EhhDTyKFM0aR1WSsBYlNLJCvVnn+Wf/ayoiRlB6s28GcDCtc7r/jwcIAg8PfDnMdUYlUA1MvzmX4eP+2EVpsl4wY9jxBrt3Mdv5Iz3R+qFVj/cn/dVRU6vZvyjbL/E2XFtB/yHetgmGlhNmfE+VbpY6zW+apPtaNr2SkPkutIm+tLUUHR7g+M1jWXkVjTEvnxsYOJiPATHR/wy60S7iEmLcKTF3eI3YSRHEW+NR8krBf7egjxvO1T6B8QDjDCjWb4OeGGsbSYnPuoe5HefkAk/EiBu0bVSdN+2RDhc3OzHDcHTmDTMLCMSEM/mH7hJ5WU8DM7q4C5qkitcMxWp11L3aA1Pq2BXUbrj5Tytgn6bAIe1gEbINH4sIXqoVopZiBnXqtGzRSzroX4pAJrcTJVowBRulokvNfSMQdEt+DKONaUI+v3vG32gzDZL2/c0zUCppiNvGZ5f5WeliuKKrW3ngCBOK5xlQifEzi62dEj+tmlgqZdtHFzcUOfR0RzFOVxP/VBKENSoL8xnKQRLZFixotO35aY=
+    secure: LPZPi8D4H8Tyr4/k8NGRPnO4py8h+whOOEW+/BI/Bk1Dfaq2B/I4un/vjRjQXmcpgoJR4VrYE1btbyD6GBQ2I9uKP/+iVRrPgPe70hpQBZ0pjSLvubLmwty6Dxhzm360MR1UWCxy9BNOz618klEJxl451ooH8qb3M2Mkv1Y6YNnQtsKXXKIf7Zq9dxCMM8OnAW/Bl2XvT9stQwBz8mH+aeX1gVQD6/KThRztgz2/ZWcQ9eaiFruBYjaj/UuvwZ0BPxLaIstdIDK9CWq0n0MXG2EERDB03AZTfln301WhmOGVW8F9rgmXR+G3LrZIii7XyjxVFXXv+IhCQkyRc5l8j4G8BdPfLh27QGqk66a/DQMFl2rUdUGeh8qYpFyOKTsmRw88c1mo3TGk/S3yl3ckMrOcQOSO8jTY3CIu/VWEH76SDqP6seo+JOcsuIj1Dq8w3XqsLwQ9W4NXJC9IHH9sYqwY0qP2nbGOhKZNtd3WZZBciEMdfqGYj2owsfU8M38qz0HUfp0HvO9TqUHq6NeKBgZPdZTguFy2KJ131R+9S52iFAvM1sW4IC9bT7QO7IytOdi92VhAqyMTZgGhwja0WwFdKbCl9LjcN5sUJ2hvVb6ofJmu2pAAJeHTUHtjdUOeI2N4dAzT8W612/cHYG4QcXQB+q8n/gYqIlxsS1+1+NI=
