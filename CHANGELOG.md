@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 0.15.0 (2018-08-12)
+
+### Breaking Changes
++ Drop support for Node 4 ([`e1f25a9`](https://github.com/nwoltman/node-mysql-plus/commit/e1f25a91a915d2070d0d4acbdb89a54eb233d787))
++ ci: Stop testing on Node 9 ([`af9117f`](https://github.com/nwoltman/node-mysql-plus/commit/af9117f3ee5220a4e81340ce69ee86d5af7fe8b4))
+
+### New Features
++ deps: mysql@2.16.0 ([`e62a99a`](https://github.com/nwoltman/node-mysql-plus/commit/e62a99ad9cade81a6f6caecc4c481aab86592446))
+  + [See `mysql` changes](https://github.com/mysqljs/mysql/blob/master/Changes.md#v2160-2018-07-17)
++ ci: Test on Node 10 ([`c4dfb02`](https://github.com/nwoltman/node-mysql-plus/commit/c4dfb0264422f228c1bff81d92444dfc80773195))
+
+### Bug Fixes
++ fix: Run "ADD COLUMN" operations before "MODIFY/CHANGE COLUMN" operations ([`5e72c04`](https://github.com/nwoltman/node-mysql-plus/commit/5e72c047a3cd861256de5c6fb36dda4006ff1f3d))
+
+### Documentation
++ doc: Add section for known migrations that will not work ([`0650b44`](https://github.com/nwoltman/node-mysql-plus/commit/0650b44e61830ed0325911bea01c905a054de170))
+
+
 ## 0.14.0 (2018-02-15)
 
 ### Breaking Changes
