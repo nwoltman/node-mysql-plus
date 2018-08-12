@@ -140,8 +140,8 @@ describe('TableDefinition', () => {
             sql:
               'ALTER TABLE `' + existingTableName + '`\n' +
               '  DROP PRIMARY KEY,\n' +
-              '  MODIFY COLUMN `id` int unsigned NOT NULL FIRST,\n' +
-              '  ADD COLUMN `newCol` tinyint AFTER `id`',
+              '  ADD COLUMN `newCol` tinyint AFTER `id`,\n' +
+              '  MODIFY COLUMN `id` int unsigned NOT NULL FIRST',
             columns: undefined,
           },
         ];
