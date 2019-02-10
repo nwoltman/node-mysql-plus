@@ -6,9 +6,9 @@
 [![dependencies Status](https://david-dm.org/nwoltman/node-mysql-plus/status.svg)](https://david-dm.org/nwoltman/node-mysql-plus)
 [![devDependencies Status](https://david-dm.org/nwoltman/node-mysql-plus/dev-status.svg)](https://david-dm.org/nwoltman/node-mysql-plus?type=dev)
 
-A MySQL client for Node.js with methods for defining tables with auto-migration and making basic queries.
+A MySQL client for Node.js that makes defining tables easy and automatically migrates table schemas.
 
-This module extends the popular [`mysql`](https://www.npmjs.com/package/mysql) module, so it can be safely dropped in as a replacement for that module before using any of its additional features. It is recommended that you read the [documentation](https://github.com/mysqljs/mysql#introduction) for the `mysql` module, especially the sections on [connection options](https://github.com/mysqljs/mysql#connection-options), [performing queries](https://github.com/mysqljs/mysql#performing-queries), [escaping query values](https://github.com/mysqljs/mysql#escaping-query-values), and [escaping query identifiers](https://github.com/mysqljs/mysql#escaping-query-identifiers).
+This module extends the popular [`mysql`](https://www.npmjs.com/package/mysql) module, so it is recommended that you read the [`mysql` documentation](https://github.com/mysqljs/mysql#introduction), especially the sections on [connection options](https://github.com/mysqljs/mysql#connection-options), [performing queries](https://github.com/mysqljs/mysql#performing-queries), [escaping query values](https://github.com/mysqljs/mysql#escaping-query-values), and [escaping query identifiers](https://github.com/mysqljs/mysql#escaping-query-identifiers).
 
 ## Table of Contents
 
