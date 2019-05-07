@@ -6,133 +6,72 @@ const config = require('../config');
 
 const ColTypes = MySQLPlus.ColTypes;
 
-describe('when altering a multi-column index and the first column in that index has a foreign key', function() {
-
-  this.timeout(5000);
+describe('when modifying a column that is part of a foreign key', () => {
 
   const pool = MySQLPlus.createPool(config);
   const pool2 = MySQLPlus.createPool(config);
 
-  pool.defineTable('table_fk_index_first_column_a', {
+  pool.defineTable('table_fk_alter_column', {
+    columns: {
+      id: ColTypes.int().unsigned().notNull().primaryKey(),
+      uid: ColTypes.int().unsigned().notNull().unique(),
+    },
+  });
+  pool2.defineTable('table_fk_alter_column', {
+    columns: {
+      id: ColTypes.int().unsigned().notNull().primaryKey(),
+      uid: ColTypes.bigint().unsigned().notNull().unique(),
+    },
+  });
+
+  pool.defineTable('table_fk_modify_column_primary_key', {
     columns: {
       id: ColTypes.int().unsigned().notNull().primaryKey(),
     },
+    foreignKeys: {
+      id: 'table_fk_alter_column.id',
+    },
   });
-  pool.defineTable('table_fk_index_first_column_b', {
+  pool2.defineTable('table_fk_modify_column_primary_key', {
     columns: {
-      id: ColTypes.int().unsigned().notNull().primaryKey(),
+      id: ColTypes.int().unsigned().notNull().primaryKey().autoIncrement(),
+    },
+    foreignKeys: {
+      id: 'table_fk_alter_column.id',
     },
   });
 
-  pool.defineTable('table_fk_index_first_column_primary_rename', {
+  pool.defineTable('table_fk_modify_column_unique_key', {
     columns: {
-      aID: ColTypes.int().unsigned().notNull(),
-      bID: ColTypes.int().unsigned().notNull(),
+      uid: ColTypes.int().unsigned().notNull().unique(),
     },
-    primaryKey: ['aID', 'bID'],
-    indexes: ['bID'],
     foreignKeys: {
-      aID: 'table_fk_index_first_column_a.id',
-      bID: 'table_fk_index_first_column_b.id',
+      uid: 'table_fk_alter_column.uid',
     },
   });
-  pool2.defineTable('table_fk_index_first_column_primary_rename', {
+  pool2.defineTable('table_fk_modify_column_unique_key', {
     columns: {
-      aID: ColTypes.int().unsigned().notNull(),
-      bIDRenamed: ColTypes.int().unsigned().notNull().oldName('bID'),
+      uid: ColTypes.bigint().unsigned().notNull().unique(),
     },
-    primaryKey: ['aID', 'bIDRenamed'],
-    indexes: ['bIDRenamed'],
     foreignKeys: {
-      aID: 'table_fk_index_first_column_a.id',
-      bIDRenamed: 'table_fk_index_first_column_b.id',
+      uid: 'table_fk_alter_column.uid',
     },
   });
 
-  pool.defineTable('table_fk_index_first_column_unique_rename', {
+  pool.defineTable('table_fk_modify_column_index_key', {
     columns: {
-      aID: ColTypes.int().unsigned().notNull(),
-      bID: ColTypes.int().unsigned().notNull(),
+      uid: ColTypes.int().unsigned().notNull().index(),
     },
-    uniqueKeys: [
-      ['aID', 'bID'],
-    ],
-    indexes: ['bID'],
     foreignKeys: {
-      aID: 'table_fk_index_first_column_a.id',
-      bID: 'table_fk_index_first_column_b.id',
+      uid: 'table_fk_alter_column.uid',
     },
   });
-  pool2.defineTable('table_fk_index_first_column_unique_rename', {
+  pool2.defineTable('table_fk_modify_column_index_key', {
     columns: {
-      aID: ColTypes.int().unsigned().notNull(),
-      bIDRenamed: ColTypes.int().unsigned().notNull().oldName('bID'),
+      uid: ColTypes.bigint().unsigned().notNull().index(),
     },
-    uniqueKeys: [
-      ['aID', 'bIDRenamed'],
-    ],
-    indexes: ['bIDRenamed'],
     foreignKeys: {
-      aID: 'table_fk_index_first_column_a.id',
-      bIDRenamed: 'table_fk_index_first_column_b.id',
-    },
-  });
-
-  pool.defineTable('table_fk_index_first_column_index_rename', {
-    columns: {
-      aID: ColTypes.int().unsigned().notNull(),
-      bID: ColTypes.int().unsigned().notNull(),
-    },
-    indexes: [
-      ['aID', 'bID'],
-      'bID',
-    ],
-    foreignKeys: {
-      aID: 'table_fk_index_first_column_a.id',
-      bID: 'table_fk_index_first_column_b.id',
-    },
-  });
-  pool2.defineTable('table_fk_index_first_column_index_rename', {
-    columns: {
-      aID: ColTypes.int().unsigned().notNull(),
-      bIDRenamed: ColTypes.int().unsigned().notNull().oldName('bID'),
-    },
-    indexes: [
-      ['aID', 'bIDRenamed'],
-      'bIDRenamed',
-    ],
-    foreignKeys: {
-      aID: 'table_fk_index_first_column_a.id',
-      bIDRenamed: 'table_fk_index_first_column_b.id',
-    },
-  });
-
-  pool.defineTable('table_fk_index_first_column_key_change', {
-    columns: {
-      aID: ColTypes.int().unsigned().notNull(),
-      bID: ColTypes.int().unsigned().notNull(),
-    },
-    uniqueKeys: [
-      ['aID', 'bID'],
-    ],
-    indexes: ['bID'],
-    foreignKeys: {
-      aID: 'table_fk_index_first_column_a.id',
-      bID: 'table_fk_index_first_column_b.id',
-    },
-  });
-  pool2.defineTable('table_fk_index_first_column_key_change', {
-    columns: {
-      aID: ColTypes.int().unsigned().notNull(),
-      bID: ColTypes.int().unsigned().notNull(),
-    },
-    indexes: [
-      ['aID', 'bID'],
-      'bID',
-    ],
-    foreignKeys: {
-      aID: 'table_fk_index_first_column_a.id',
-      bID: 'table_fk_index_first_column_b.id',
+      uid: 'table_fk_alter_column.uid',
     },
   });
 
