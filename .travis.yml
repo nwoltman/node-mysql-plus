@@ -1,16 +1,24 @@
 dist: xenial
 language: node_js
 node_js:
-  - '6'
-  - '8'
+  - '12'
   - '10'
-  - '11'
+  - '8'
 services:
   - mysql
-deploy:
-  provider: npm
-  email: nwoltman@outlook.com
-  on:
-    tags: true
-  api_key:
-    secure: LPZPi8D4H8Tyr4/k8NGRPnO4py8h+whOOEW+/BI/Bk1Dfaq2B/I4un/vjRjQXmcpgoJR4VrYE1btbyD6GBQ2I9uKP/+iVRrPgPe70hpQBZ0pjSLvubLmwty6Dxhzm360MR1UWCxy9BNOz618klEJxl451ooH8qb3M2Mkv1Y6YNnQtsKXXKIf7Zq9dxCMM8OnAW/Bl2XvT9stQwBz8mH+aeX1gVQD6/KThRztgz2/ZWcQ9eaiFruBYjaj/UuvwZ0BPxLaIstdIDK9CWq0n0MXG2EERDB03AZTfln301WhmOGVW8F9rgmXR+G3LrZIii7XyjxVFXXv+IhCQkyRc5l8j4G8BdPfLh27QGqk66a/DQMFl2rUdUGeh8qYpFyOKTsmRw88c1mo3TGk/S3yl3ckMrOcQOSO8jTY3CIu/VWEH76SDqP6seo+JOcsuIj1Dq8w3XqsLwQ9W4NXJC9IHH9sYqwY0qP2nbGOhKZNtd3WZZBciEMdfqGYj2owsfU8M38qz0HUfp0HvO9TqUHq6NeKBgZPdZTguFy2KJ131R+9S52iFAvM1sW4IC9bT7QO7IytOdi92VhAqyMTZgGhwja0WwFdKbCl9LjcN5sUJ2hvVb6ofJmu2pAAJeHTUHtjdUOeI2N4dAzT8W612/cHYG4QcXQB+q8n/gYqIlxsS1+1+NI=
+stages:
+  - test
+  - name: npm release
+    if: tag IS present
+jobs:
+  include:
+    - stage: npm release
+      install: skip
+      script: true # skip step with success exit code
+      deploy:
+        provider: npm
+        email: nwoltman@outlook.com
+        on:
+          tags: true
+        api_key:
+          secure: LPZPi8D4H8Tyr4/k8NGRPnO4py8h+whOOEW+/BI/Bk1Dfaq2B/I4un/vjRjQXmcpgoJR4VrYE1btbyD6GBQ2I9uKP/+iVRrPgPe70hpQBZ0pjSLvubLmwty6Dxhzm360MR1UWCxy9BNOz618klEJxl451ooH8qb3M2Mkv1Y6YNnQtsKXXKIf7Zq9dxCMM8OnAW/Bl2XvT9stQwBz8mH+aeX1gVQD6/KThRztgz2/ZWcQ9eaiFruBYjaj/UuvwZ0BPxLaIstdIDK9CWq0n0MXG2EERDB03AZTfln301WhmOGVW8F9rgmXR+G3LrZIii7XyjxVFXXv+IhCQkyRc5l8j4G8BdPfLh27QGqk66a/DQMFl2rUdUGeh8qYpFyOKTsmRw88c1mo3TGk/S3yl3ckMrOcQOSO8jTY3CIu/VWEH76SDqP6seo+JOcsuIj1Dq8w3XqsLwQ9W4NXJC9IHH9sYqwY0qP2nbGOhKZNtd3WZZBciEMdfqGYj2owsfU8M38qz0HUfp0HvO9TqUHq6NeKBgZPdZTguFy2KJ131R+9S52iFAvM1sW4IC9bT7QO7IytOdi92VhAqyMTZgGhwja0WwFdKbCl9LjcN5sUJ2hvVb6ofJmu2pAAJeHTUHtjdUOeI2N4dAzT8W612/cHYG4QcXQB+q8n/gYqIlxsS1+1+NI=
