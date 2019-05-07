@@ -4,7 +4,7 @@ const MySQLPlus = require('../../lib/MySQLPlus');
 
 const config = require('../config');
 
-const ColTypes = MySQLPlus.ColTypes;
+const {ColTypes} = MySQLPlus;
 
 describe('when migrating a table with keys not created by mysql-plus', function() {
 
@@ -18,7 +18,7 @@ describe('when migrating a table with keys not created by mysql-plus', function(
     indexes: ['id'],
   });
 
-  before(done => {
+  before((done) => {
     pool.query(
       'CREATE TABLE `unknown_keys` (' +
       '`id` int, ' +
@@ -31,12 +31,12 @@ describe('when migrating a table with keys not created by mysql-plus', function(
     );
   });
 
-  after(done => {
+  after((done) => {
     pool.end(done);
   });
 
-  it('should remove the unknown keys', done => {
-    pool.sync(err => {
+  it('should remove the unknown keys', (done) => {
+    pool.sync((err) => {
       if (err) {
         throw err;
       }

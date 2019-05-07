@@ -3,9 +3,11 @@
     "mocha": true
   },
   "rules": {
-    "global-require": 0,
+    "curly": [2, "multi-line", "consistent"],
     "max-nested-callbacks": 0,
     "max-len": 0,
+    "no-sync": 0,
+    "padded-blocks": 0,
     "prefer-arrow-callback": 0
   }
 }

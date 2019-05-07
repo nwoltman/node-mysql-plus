@@ -1,7 +1,6 @@
 /**
  * Database configuration
  */
-
 'use strict';
 
 module.exports = {

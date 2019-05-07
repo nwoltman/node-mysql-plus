@@ -14,10 +14,15 @@ module.exports = function(grunt) {
     });
     const database = process.env.MYSQL_DATABASE;
 
-    db.query('DROP DATABASE IF EXISTS ??', [database], err => {
-      if (err) throw err;
-      db.query('CREATE DATABASE ?? CHARACTER SET utf8 COLLATE utf8_general_ci', [database], err => {
-        if (err) throw err;
+    db.query('DROP DATABASE IF EXISTS ??', [database], (err) => {
+      if (err) {
+        throw err;
+      }
+
+      db.query('CREATE DATABASE ?? CHARACTER SET utf8 COLLATE utf8_general_ci', [database], (err) => {
+        if (err) {
+          throw err;
+        }
         grunt.log.ok(`Created empty database "${database}"`);
         done();
       });

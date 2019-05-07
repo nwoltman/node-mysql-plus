@@ -6,7 +6,7 @@ const MySQLPlus = require('../../lib/MySQLPlus');
 const config = require('../config');
 const sinon = require('sinon');
 
-const ColTypes = MySQLPlus.ColTypes;
+const {ColTypes} = MySQLPlus;
 
 describe('MySQLPlus', function() {
 
@@ -576,7 +576,7 @@ describe('MySQLPlus', function() {
 
     const pool = MySQLPlus.createPool(config);
 
-    before(done => {
+    before((done) => {
       pool.defineTable(bigTableName, bigTableSchema);
       pool.defineTable(autoIncTableName, autoIncTableSchema);
       pool.defineTable(pivotTableName, pivotTableSchema);
@@ -593,11 +593,11 @@ describe('MySQLPlus', function() {
       pool.sync(done);
     });
 
-    after(done => {
+    after((done) => {
       pool.end(done);
     });
 
-    it('should create the tables with the correct structure', done => {
+    it('should create the tables with the correct structure', (done) => {
       const cbManager = new CallbackManager(done);
 
       const cb1 = cbManager.registerCallback();
@@ -699,7 +699,7 @@ describe('MySQLPlus', function() {
 
     const pool = MySQLPlus.createPool(config);
 
-    before(done => {
+    before((done) => {
       sinon.spy(pool, '_runOperations');
       pool.defineTable(bigTableName, bigTableSchema);
       pool.defineTable(autoIncTableName, autoIncTableSchema);
@@ -717,7 +717,7 @@ describe('MySQLPlus', function() {
       pool.sync(done);
     });
 
-    after(done => {
+    after((done) => {
       pool._runOperations.restore();
       pool.end(done);
     });
@@ -726,7 +726,7 @@ describe('MySQLPlus', function() {
       pool._runOperations.should.be.calledOnce().and.be.calledWith([]);
     });
 
-    it('should not alter any tables\' structure', done => {
+    it('should not alter any tables\' structure', (done) => {
       const cbManager = new CallbackManager(done);
 
       const cb1 = cbManager.registerCallback();
@@ -829,7 +829,7 @@ describe('MySQLPlus', function() {
     const dropConfig = Object.assign({plusOptions: {migrationStrategy: 'drop'}}, config);
     const pool = MySQLPlus.createPool(dropConfig);
 
-    before(done => {
+    before((done) => {
       pool.defineTable(bigTableName, bigTableSchema);
       pool.defineTable(autoIncTableName, autoIncTableSchema);
       pool.defineTable(pivotTableName, pivotTableSchema);
@@ -846,11 +846,11 @@ describe('MySQLPlus', function() {
       pool.sync(done);
     });
 
-    after(done => {
+    after((done) => {
       pool.end(done);
     });
 
-    it('should not alter any tables\' structure', done => {
+    it('should not alter any tables\' structure', (done) => {
       const cbManager = new CallbackManager(done);
 
       const cb1 = cbManager.registerCallback();
@@ -952,7 +952,7 @@ describe('MySQLPlus', function() {
 
     const pool = MySQLPlus.createPool(config);
 
-    before(done => {
+    before((done) => {
       pool.defineTable(bigTableName, bigTableSchema);
       pool.defineTable(autoIncTableName, autoIncTableMigratedSchema);
       pool.defineTable(pivotTableName, pivotTableSchema);
@@ -968,18 +968,18 @@ describe('MySQLPlus', function() {
       // we can check if the data is still there after some columns get renamed
       pool.query(
         `INSERT INTO ${columnsTableName} (id, email, renameme, changeme) VALUES (1, 'a', 1, 2), (2, 'b', 3, 4)`,
-        err => {
+        (err) => {
           if (err) throw err;
           pool.sync(done);
         }
       );
     });
 
-    after(done => {
+    after((done) => {
       pool.end(done);
     });
 
-    it('should migrate the tables to the correct new structure', done => {
+    it('should migrate the tables to the correct new structure', (done) => {
       const cbManager = new CallbackManager(done);
 
       const cb1 = cbManager.registerCallback();
@@ -1053,11 +1053,11 @@ describe('MySQLPlus', function() {
       });
     });
 
-    it('should not decrease the AUTO_INCREMENT table option', done => {
+    it('should not decrease the AUTO_INCREMENT table option', (done) => {
       const tempPool = MySQLPlus.createPool(config);
       // Try to go back to the original schema
       tempPool.defineTable(autoIncTableName, autoIncTableSchema);
-      tempPool.sync(err => {
+      tempPool.sync((err) => {
         if (err) throw err;
 
         tempPool.query(`SHOW CREATE TABLE \`${autoIncTableName}\``, (err, result) => {
@@ -1069,7 +1069,7 @@ describe('MySQLPlus', function() {
       });
     });
 
-    it('should not lose data when renaming columns', done => {
+    it('should not lose data when renaming columns', (done) => {
       pool.query(`SELECT renamed, changed FROM ${columnsTableName}`, (err, rows) => {
         if (err) throw err;
 

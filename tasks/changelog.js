@@ -1,12 +1,12 @@
 'use strict';
 
-const execSync = require('child_process').execSync;
+const {execSync} = require('child_process');
 const pkg = require('../package');
 const fs = require('fs');
 const semver = require('semver');
 
 module.exports = function(grunt) {
-  grunt.registerTask('changelog', 'Add the changes since the last release to the changelog', releaseType => {
+  grunt.registerTask('changelog', 'Add the changes since the last release to the changelog', (releaseType) => {
     const curVersion = pkg.version;
     const nextVersion = semver.inc(curVersion, releaseType);
     if (!nextVersion) {

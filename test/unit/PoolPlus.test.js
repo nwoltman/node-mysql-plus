@@ -1,5 +1,7 @@
 'use strict';
 
+/* eslint-disable no-console, padding-line-between-statements */
+
 const ColumnDefinitions = require('../../lib/ColumnDefinitions');
 const Connection = require('mysql/lib/Connection');
 const MySQLTable = require('../../lib/MySQLTable');
@@ -20,7 +22,7 @@ describe('PoolPlus', () => {
     columns: {id: pool.ColTypes.bigint().unsigned()},
   };
 
-  after(done => {
+  after((done) => {
     pool.end(done);
   });
 
@@ -54,13 +56,13 @@ describe('PoolPlus', () => {
 
   describe('#format()', () => {
 
-    it('should format an SQL string', done => {
+    it('should format an SQL string', (done) => {
       const tempPool = new PoolPlus(config);
       tempPool.format('?? ?', ['a', 'b']).should.equal("`a` 'b'");
       tempPool.end(done);
     });
 
-    it('should format an SQL string with a custom formatter', done => {
+    it('should format an SQL string with a custom formatter', (done) => {
       const tempPool = new PoolPlus(Object.assign({queryFormat: sql => sql + '!'}, config));
       tempPool.format('?? ?', ['a', 'b']).should.equal('?? ?!');
       tempPool.end(done);
@@ -147,8 +149,8 @@ describe('PoolPlus', () => {
 
   describe('#sync()', () => {
 
-    it('should sync the defined tables to the database', done => {
-      pool.sync(err => {
+    it('should sync the defined tables to the database', (done) => {
+      pool.sync((err) => {
         if (err) {
           done(err);
           return;
@@ -165,13 +167,13 @@ describe('PoolPlus', () => {
       });
     });
 
-    it('should work if no tables have been added, removed, or changed', done => {
+    it('should work if no tables have been added, removed, or changed', (done) => {
       pool.sync(done);
     });
 
-    it('should work even if no tables have been defined', done => {
+    it('should work even if no tables have been defined', (done) => {
       const p = new PoolPlus(config);
-      p.sync(err => {
+      p.sync((err) => {
         if (err) throw err;
         p.end(done);
       });
@@ -199,15 +201,15 @@ describe('PoolPlus', () => {
         TableDefinition.prototype.genSyncOperations.restore();
       });
 
-      it('should call the callback with an error', done => {
-        pool.sync(err => {
+      it('should call the callback with an error', (done) => {
+        pool.sync((err) => {
           err.should.equal(error);
           done();
         });
       });
 
       it('should reject the returned promise with an error', () => {
-        return pool.sync().catch(err => {
+        return pool.sync().catch((err) => {
           err.should.equal(error);
         });
       });
@@ -227,15 +229,15 @@ describe('PoolPlus', () => {
         TableDefinition.prototype.genSyncOperations.restore();
       });
 
-      it('should call the callback with an error', done => {
-        pool.sync(err => {
+      it('should call the callback with an error', (done) => {
+        pool.sync((err) => {
           err.should.equal(error);
           done();
         });
       });
 
       it('should reject the returned promise with an error', () => {
-        return pool.sync().catch(err => {
+        return pool.sync().catch((err) => {
           err.should.equal(error);
         });
       });
@@ -258,15 +260,15 @@ describe('PoolPlus', () => {
         TableDefinition.prototype.genSyncOperations.restore();
       });
 
-      it('should call the callback with an error', done => {
-        pool.sync(err => {
+      it('should call the callback with an error', (done) => {
+        pool.sync((err) => {
           err.should.equal(error);
           done();
         });
       });
 
       it('should reject the returned promise with an error', () => {
-        return pool.sync().catch(err => {
+        return pool.sync().catch((err) => {
           err.should.equal(error);
         });
       });
@@ -295,14 +297,14 @@ describe('PoolPlus', () => {
       pool.query.restore();
     });
 
-    it('should return a working Promise', done => {
+    it('should return a working Promise', (done) => {
       pool.pquery('SELECT "a" as solution')
-        .then(results => {
+        .then((results) => {
           results.should.have.length(1);
           results[0].solution.should.equal('a');
 
           pool.pquery('SELECT "a" as ??', ['solution'])
-            .then(results2 => {
+            .then((results2) => {
               results2.should.have.length(1);
               results2[0].solution.should.equal('a');
 
@@ -322,39 +324,39 @@ describe('PoolPlus', () => {
 
     describe('with a callback interface', () => {
 
-      before(done => {
+      before((done) => {
         pool.query('CREATE TABLE mysql_plus_transaction_test (id int)', done);
       });
 
-      after(done => {
+      after((done) => {
         pool.query('DROP TABLE mysql_plus_transaction_test', done);
       });
 
-      it('should commit changes if no errors occur', done => {
+      it('should commit changes if no errors occur', (done) => {
         pool.transaction((trxn, trxnDone) => {
-          trxn.query('INSERT INTO mysql_plus_transaction_test VALUES (1), (2)', (err, result) => {
+          trxn.query('INSERT INTO mysql_plus_transaction_test VALUES (1), (2)', (err, insertResult) => {
             if (err) {
               trxnDone(err);
               return;
             }
 
-            result.affectedRows.should.equal(2);
+            insertResult.affectedRows.should.equal(2);
 
-            trxn.query('DELETE FROM mysql_plus_transaction_test WHERE id = 1', (err, result) => {
+            trxn.query('DELETE FROM mysql_plus_transaction_test WHERE id = 1', (err, deleteResult) => {
               if (err) {
                 trxnDone(err);
                 return;
               }
 
-              result.affectedRows.should.equal(1);
+              deleteResult.affectedRows.should.equal(1);
 
               trxnDone(null, 'success!');
             });
           });
-        }).then(result => {
+        }).then((result) => {
           result.should.equal('success!');
           return pool.pquery('SELECT * from mysql_plus_transaction_test')
-            .then(rows => {
+            .then((rows) => {
               rows.should.have.length(1);
               rows[0].id.should.equal(2);
               done();
@@ -362,33 +364,33 @@ describe('PoolPlus', () => {
         }).catch(done);
       });
 
-      it('should rollback changes if an errors occur', done => {
+      it('should rollback changes if an errors occur', (done) => {
         pool.transaction((trxn, trxnDone) => {
-          trxn.query('INSERT INTO mysql_plus_transaction_test VALUES (3)', (err, result) => {
+          trxn.query('INSERT INTO mysql_plus_transaction_test VALUES (3)', (err, insertResult) => {
             if (err) {
               trxnDone(err);
               return;
             }
 
-            result.affectedRows.should.equal(1);
+            insertResult.affectedRows.should.equal(1);
 
-            trxn.query('DELETE FROM mysql_plus_transaction_test WHERE id = ERROR', (err, result) => {
+            trxn.query('DELETE FROM mysql_plus_transaction_test WHERE id = ERROR', (err, deleteResult) => {
               if (err) {
                 trxnDone(err);
                 return;
               }
 
-              result.affectedRows.should.equal(1);
+              deleteResult.affectedRows.should.equal(1);
 
               trxnDone(null, 'success!');
             });
           });
-        }).then(result => {
+        }).then((result) => {
           done(new Error(result));
-        }).catch(err => {
+        }).catch((err) => {
           err.code.should.equal('ER_BAD_FIELD_ERROR');
           return pool.pquery('SELECT * from mysql_plus_transaction_test')
-            .then(rows => {
+            .then((rows) => {
               rows.should.have.length(1);
               rows[0].id.should.equal(2);
               done();
@@ -406,20 +408,20 @@ describe('PoolPlus', () => {
       after(() => pool.pquery('DROP TABLE mysql_plus_transaction_test'));
 
       it('should commit changes if no errors occur', () => {
-        return pool.transaction(trxn => {
+        return pool.transaction((trxn) => {
           return trxn.pquery('INSERT INTO mysql_plus_transaction_test VALUES (1), (2)')
-            .then(result => {
+            .then((result) => {
               result.affectedRows.should.equal(2);
               return trxn.pquery('DELETE FROM mysql_plus_transaction_test WHERE id = 1');
             })
-            .then(result => {
+            .then((result) => {
               result.affectedRows.should.equal(1);
               return 'success!';
             });
-        }).then(result => {
+        }).then((result) => {
           result.should.equal('success!');
           return pool.pquery('SELECT * FROM mysql_plus_transaction_test')
-            .then(rows => {
+            .then((rows) => {
               rows.should.have.length(1);
               rows[0].id.should.equal(2);
             });
@@ -427,22 +429,22 @@ describe('PoolPlus', () => {
       });
 
       it('should rollback changes if an errors occur', () => {
-        return pool.transaction(trxn => {
+        return pool.transaction((trxn) => {
           return trxn.pquery('INSERT INTO mysql_plus_transaction_test VALUES (3)')
-            .then(result => {
+            .then((result) => {
               result.affectedRows.should.equal(1);
               return trxn.pquery('DELETE FROM mysql_plus_transaction_test WHERE id = ERROR');
             })
-            .then(result => {
+            .then((result) => {
               result.affectedRows.should.equal(1);
               return 'success!';
             });
-        }).then(result => {
+        }).then((result) => {
           throw new Error(result);
-        }).catch(err => {
+        }).catch((err) => {
           err.code.should.equal('ER_BAD_FIELD_ERROR');
           return pool.pquery('SELECT * FROM mysql_plus_transaction_test')
-            .then(rows => {
+            .then((rows) => {
               rows.should.have.length(1);
               rows[0].id.should.equal(2);
             });
@@ -454,14 +456,14 @@ describe('PoolPlus', () => {
 
     describe('with either interface', () => {
 
-      before(done => {
-        pool.query('CREATE TABLE mysql_plus_transaction_test (id int)', err => {
+      before((done) => {
+        pool.query('CREATE TABLE mysql_plus_transaction_test (id int)', (err) => {
           if (err) throw err;
           pool.query('INSERT INTO mysql_plus_transaction_test VALUES (2)', done);
         });
       });
 
-      after(done => {
+      after((done) => {
         pool.query('DROP TABLE mysql_plus_transaction_test', done);
       });
 
@@ -478,12 +480,12 @@ describe('PoolPlus', () => {
           pool.getConnection.restore();
         });
 
-        it('should reject with an error', done => {
+        it('should reject with an error', (done) => {
           pool.transaction(() => 'success!')
-            .then(result => {
+            .then((result) => {
               done(new Error(result));
             })
-            .catch(err => {
+            .catch((err) => {
               err.should.equal(error);
               done();
             })
@@ -505,12 +507,12 @@ describe('PoolPlus', () => {
           Connection.prototype.beginTransaction.restore();
         });
 
-        it('should reject with an error', done => {
+        it('should reject with an error', (done) => {
           pool.transaction(() => 'success!')
-            .then(result => {
+            .then((result) => {
               done(new Error(result));
             })
-            .catch(err => {
+            .catch((err) => {
               err.should.equal(error);
               done();
             })
@@ -532,15 +534,15 @@ describe('PoolPlus', () => {
           Connection.prototype.commit.restore();
         });
 
-        it('should reject with an error', done => {
-          pool.transaction(trxn => {
+        it('should reject with an error', (done) => {
+          pool.transaction((trxn) => {
             return trxn.pquery('INSERT INTO mysql_plus_transaction_test VALUES (3)');
-          }).then(result => {
+          }).then((result) => {
             done(new Error(result));
-          }).catch(err => {
+          }).catch((err) => {
             err.should.equal(error);
             return pool.pquery('SELECT * FROM mysql_plus_transaction_test')
-              .then(rows => {
+              .then((rows) => {
                 rows.should.have.length(1);
                 rows[0].id.should.equal(2);
                 done();
@@ -905,12 +907,12 @@ describe('PoolPlus', () => {
       sinon.stub(debugPool, 'query').yieldsAsync(null, []);
     });
 
-    after(done => {
+    after((done) => {
       debugPool.query.restore();
       debugPool.end(done);
     });
 
-    it('should log operations to the console when syncing', done => {
+    it('should log operations to the console when syncing', (done) => {
       sinon.stub(console, 'log');
       sinon.stub(Connection.prototype, 'query').yieldsAsync();
 
@@ -925,7 +927,7 @@ describe('PoolPlus', () => {
         },
       });
 
-      debugPool.sync(err => {
+      debugPool.sync((err) => {
         if (err) throw err;
 
         console.log.should.have.been.calledWithExactly([
@@ -953,7 +955,7 @@ describe('PoolPlus', () => {
       });
     });
 
-    it('should log the operation that failed to the console when syncing', done => {
+    it('should log the operation that failed to the console when syncing', (done) => {
       const error = new Error('MOCK ALTER TABLE ERROR');
 
       sinon.stub(console, 'log');
@@ -970,7 +972,7 @@ describe('PoolPlus', () => {
         },
       });
 
-      debugPool.sync(err => {
+      debugPool.sync((err) => {
         err.should.equal(error);
 
         console.log.should.have.been.calledWithExactly([

@@ -1,6 +1,8 @@
-/* eslint-disable camelcase, global-require */
-
 'use strict';
+
+/* eslint-disable camelcase, no-sync */
+
+const fs = require('fs');
 
 module.exports = function(grunt) {
   require('jit-grunt')(grunt, {
@@ -78,7 +80,7 @@ module.exports = function(grunt) {
           ],
           separators: true,
           'sort-by': ['order'],
-          template: require('fs').readFileSync('jsdoc2md/README.hbs', 'utf8'),
+          template: fs.readFileSync('jsdoc2md/README.hbs', 'utf8'),
         },
         src: ['lib/MySQLPlus.js', 'lib/PoolPlus.js', 'lib/Connection.js', 'lib/MySQLTable.js'],
         dest: 'README.md',

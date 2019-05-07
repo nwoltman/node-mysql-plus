@@ -4,7 +4,7 @@ const MySQLPlus = require('../../lib/MySQLPlus');
 
 const config = require('../config');
 
-const ColTypes = MySQLPlus.ColTypes;
+const {ColTypes} = MySQLPlus;
 
 describe('when modifying a column that is part of a foreign key', () => {
 
@@ -75,8 +75,8 @@ describe('when modifying a column that is part of a foreign key', () => {
     },
   });
 
-  before(done => {
-    pool.sync(err => {
+  before((done) => {
+    pool.sync((err) => {
       if (err) {
         done(err);
         return;
@@ -88,7 +88,7 @@ describe('when modifying a column that is part of a foreign key', () => {
 
   after(done => pool2.end(done));
 
-  it('should not error when migrating the table', done => {
+  it('should not error when migrating the table', (done) => {
     pool2.sync(done);
   });
 

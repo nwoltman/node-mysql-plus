@@ -4,7 +4,7 @@ const MySQLPlus = require('../../lib/MySQLPlus');
 
 const config = require('../config');
 
-const ColTypes = MySQLPlus.ColTypes;
+const {ColTypes} = MySQLPlus;
 
 describe('adding a column before a modified column should work', function() {
 
@@ -26,8 +26,8 @@ describe('adding a column before a modified column should work', function() {
     },
   });
 
-  before(done => {
-    pool.sync(err => {
+  before((done) => {
+    pool.sync((err) => {
       if (err) {
         throw err;
       }
@@ -36,11 +36,11 @@ describe('adding a column before a modified column should work', function() {
     });
   });
 
-  after(done => {
+  after((done) => {
     pool2.end(done);
   });
 
-  it('should not error', done => {
+  it('should not error', (done) => {
     pool2.sync(done);
   });
 
@@ -66,8 +66,8 @@ describe('adding a column before a changed column should work', function() {
     },
   });
 
-  before(done => {
-    pool.sync(err => {
+  before((done) => {
+    pool.sync((err) => {
       if (err) {
         throw err;
       }
@@ -76,11 +76,11 @@ describe('adding a column before a changed column should work', function() {
     });
   });
 
-  after(done => {
+  after((done) => {
     pool2.end(done);
   });
 
-  it('should not error', done => {
+  it('should not error', (done) => {
     pool2.sync(done);
   });
 

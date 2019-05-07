@@ -20,6 +20,7 @@
     "mysql": "^2.17.1"
   },
   "devDependencies": {
+    "@nwoltman/eslint-config": "~0.2.0",
     "coveralls": "^3.0.3",
     "es6-callback-manager": "^2.0.1",
     "eslint": "^5.16.0",

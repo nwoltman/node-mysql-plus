@@ -21,13 +21,13 @@ describe('MySQLTable', () => {
   const testTable = new MySQLTable('mysql_table_test_table', mockTableSchema, pool);
 
   function resetTable(cb) {
-    testTable.delete(err => {
+    testTable.delete((err) => {
       if (err) throw err;
       pool.query('ALTER TABLE `mysql_table_test_table` AUTO_INCREMENT=1', cb);
     });
   }
 
-  before(done => {
+  before((done) => {
     pool.query(`
       CREATE TABLE \`mysql_table_test_table\` (
         \`id\` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -37,7 +37,7 @@ describe('MySQLTable', () => {
     `, done);
   });
 
-  after(done => {
+  after((done) => {
     pool.end(done);
   });
 
@@ -90,7 +90,7 @@ describe('MySQLTable', () => {
 
   describe('#select()', () => {
 
-    before(done => {
+    before((done) => {
       const insertSQL = 'INSERT INTO `mysql_table_test_table` (`email`) VALUES ' +
         "('one@email.com'), ('two@email.com'), ('three@email.com')";
       testTable.query(insertSQL, done);
@@ -100,7 +100,7 @@ describe('MySQLTable', () => {
 
     describe('with a callback', () => {
 
-      it('should be able to select all data from the table', done => {
+      it('should be able to select all data from the table', (done) => {
         testTable.select('*', (err, rows) => {
           if (err) throw err;
           rows.should.have.length(3);
@@ -108,11 +108,11 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should be able to select certain columns of data from the table', done => {
+      it('should be able to select certain columns of data from the table', (done) => {
         testTable.select('email', (err, rows) => {
           if (err) throw err;
           rows.should.have.length(3);
-          rows.forEach(row => {
+          rows.forEach((row) => {
             row.should.not.have.property('id');
             row.should.have.property('email');
           });
@@ -120,7 +120,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should be able to select specific columns and rows from the table', done => {
+      it('should be able to select specific columns and rows from the table', (done) => {
         testTable.select(['id', 'email'], 'WHERE `id` > 1 ORDER BY `id`', (err, rows) => {
           if (err) throw err;
           rows.should.have.length(2);
@@ -132,7 +132,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should be able to use SQL formatted with placeholders', done => {
+      it('should be able to use SQL formatted with placeholders', (done) => {
         testTable.select('??', 'WHERE ?? > ? ORDER BY ??', [['id', 'email'], 'id', 1, 'id'], (err, rows) => {
           if (err) throw err;
           rows.should.have.length(2);
@@ -144,7 +144,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should be able to select columns using aliases', done => {
+      it('should be able to select columns using aliases', (done) => {
         testTable.select('`id`, `email` AS `eml`', 'WHERE `id` = 1', (err, rows) => {
           if (err) throw err;
           rows.should.deepEqual([{id: 1, eml: 'one@email.com'}]);
@@ -152,7 +152,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should be able to select using a function', done => {
+      it('should be able to select using a function', (done) => {
         testTable.select('COUNT(*) AS `everyoneElse`', 'WHERE `id` <> 1', (err, rows) => {
           if (err) throw err;
           rows.should.deepEqual([{everyoneElse: 2}]);
@@ -167,16 +167,16 @@ describe('MySQLTable', () => {
 
       it('should be able to select all data from the table', () => {
         return testTable.select('*')
-          .then(rows => {
+          .then((rows) => {
             rows.should.have.length(3);
           });
       });
 
       it('should be able to select certain columns of data from the table', () => {
         return testTable.select('email')
-          .then(rows => {
+          .then((rows) => {
             rows.should.have.length(3);
-            rows.forEach(row => {
+            rows.forEach((row) => {
               row.should.not.have.property('id');
               row.should.have.property('email');
             });
@@ -185,7 +185,7 @@ describe('MySQLTable', () => {
 
       it('should be able to select specific columns and rows from the table', () => {
         return testTable.select(['id', 'email'], 'WHERE `id` > 1 ORDER BY `id`')
-          .then(rows => {
+          .then((rows) => {
             rows.should.have.length(2);
             rows[0].id.should.equal(2);
             rows[0].email.should.equal('two@email.com');
@@ -196,7 +196,7 @@ describe('MySQLTable', () => {
 
       it('should be able to use SQL formatted with placeholders', () => {
         return testTable.select('??', 'WHERE ?? > ? ORDER BY ??', [['id', 'email'], 'id', 1, 'id'])
-          .then(rows => {
+          .then((rows) => {
             rows.should.have.length(2);
             rows[0].id.should.equal(2);
             rows[0].email.should.equal('two@email.com');
@@ -207,14 +207,14 @@ describe('MySQLTable', () => {
 
       it('should be able to select columns using aliases', () => {
         return testTable.select('`id`, `email` AS `eml`', 'WHERE `id` = 1')
-          .then(rows => {
+          .then((rows) => {
             rows.should.deepEqual([{id: 1, eml: 'one@email.com'}]);
           });
       });
 
       it('should be able to select using a function', () => {
         return testTable.select('COUNT(*) AS `everyoneElse`', 'WHERE `id` <> 1')
-          .then(rows => {
+          .then((rows) => {
             rows.should.deepEqual([{everyoneElse: 2}]);
           });
       });
@@ -230,7 +230,7 @@ describe('MySQLTable', () => {
 
       after(resetTable);
 
-      it('should insert the specified data into the table', done => {
+      it('should insert the specified data into the table', (done) => {
         testTable.insert({email: 'one@email.com'}, (err, result) => {
           if (err) throw err;
           result.affectedRows.should.equal(1);
@@ -239,7 +239,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should insert the specified data into the table with an ON DUPLICATE KEY UPDATE clause', done => {
+      it('should insert the specified data into the table with an ON DUPLICATE KEY UPDATE clause', (done) => {
         const data = {id: 1, email: 'one@email.com'};
         const onDuplicateKey1 = "ON DUPLICATE KEY UPDATE `email` = 'one2@email.com'";
 
@@ -263,7 +263,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should insert data with question marks into the table when using the `sqlString` and `values` parameters', done => {
+      it('should insert data with question marks into the table when using the `sqlString` and `values` parameters', (done) => {
         const data = {id: 1, email: '??one?@email.com'};
         const onDuplicateKey = 'ON DUPLICATE KEY UPDATE ?? = ?';
 
@@ -285,7 +285,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should be able to perform bulk inserts', done => {
+      it('should be able to perform bulk inserts', (done) => {
         const data = [
           [2, 'two@email.com', null],
           [3, 'three@email.com', null],
@@ -297,7 +297,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should be able to perform bulk inserts with specified columns', done => {
+      it('should be able to perform bulk inserts with specified columns', (done) => {
         const data = [
           [null, 'four@email.com'],
           [null, 'five@email.com'],
@@ -309,7 +309,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should allow the first parameter to be a string', done => {
+      it('should allow the first parameter to be a string', (done) => {
         testTable.insert("(`email`) VALUES ('six@email.com'), ('seven@email.com')", (err, result1) => {
           if (err) throw err;
           result1.affectedRows.should.equal(2);
@@ -331,7 +331,7 @@ describe('MySQLTable', () => {
 
       it('should insert the specified data into the table', () => {
         return testTable.insert({email: 'one@email.com'})
-          .then(result => {
+          .then((result) => {
             result.affectedRows.should.equal(1);
             result.insertId.should.equal(1);
           });
@@ -349,7 +349,7 @@ describe('MySQLTable', () => {
         return Promise.all([
           testTable.insert(data, onDuplicateKey1),
           testTable.insert([columns, rows], onDuplicateKey2),
-        ]).then(results => {
+        ]).then((results) => {
           results[0].affectedRows.should.equal(2); // Updated rows are affected twice
           results[0].insertId.should.equal(1);
           results[1].affectedRows.should.equal(2);
@@ -368,7 +368,7 @@ describe('MySQLTable', () => {
         return Promise.all([
           testTable.insert(data, onDuplicateKey, ['email', 'one3@email.com']),
           testTable.insert([columns, rows], onDuplicateKey, ['email', 'one3b@email.com']),
-        ]).then(results => {
+        ]).then((results) => {
           results[0].affectedRows.should.equal(2); // Updated rows are affected twice
           results[0].insertId.should.equal(1);
           results[1].affectedRows.should.equal(2);
@@ -383,7 +383,7 @@ describe('MySQLTable', () => {
         ];
 
         return testTable.insert([data])
-          .then(result => {
+          .then((result) => {
             result.affectedRows.should.equal(2);
           });
       });
@@ -395,7 +395,7 @@ describe('MySQLTable', () => {
         ];
 
         return testTable.insert([['letter', 'email'], data])
-          .then(result => {
+          .then((result) => {
             result.affectedRows.should.equal(2);
           });
       });
@@ -404,7 +404,7 @@ describe('MySQLTable', () => {
         return Promise.all([
           testTable.insert("(`email`) VALUES ('six@email.com'), ('seven@email.com')"),
           testTable.insert('SET ?? = ?', ['email', 'eight@email.com']),
-        ]).then(results => {
+        ]).then((results) => {
           results[0].affectedRows.should.equal(2);
           results[1].affectedRows.should.equal(1);
         });
@@ -419,26 +419,26 @@ describe('MySQLTable', () => {
 
     describe('with a callback', () => {
 
-      before(done => {
+      before((done) => {
         testTable.insertIfNotExists({email: 'one@email.com'}, ['email'], done);
       });
 
       after(resetTable);
 
-      it('should not insert anything and not change the table if a row with the same key already exists', done => {
+      it('should not insert anything and not change the table if a row with the same key already exists', (done) => {
         testTable.insertIfNotExists({email: 'one@email.com'}, ['email'], (err, result) => {
           if (err) throw err;
           result.affectedRows.should.equal(0);
 
-          testTable.query('SHOW CREATE TABLE ' + testTable.name, (err, result) => {
+          testTable.query('SHOW CREATE TABLE ' + testTable.name, (err, rows) => {
             if (err) throw err;
-            result[0]['Create Table'].should.match(/ AUTO_INCREMENT=2 /);
+            rows[0]['Create Table'].should.match(/ AUTO_INCREMENT=2 /);
             done();
           });
         });
       });
 
-      it('should insert the specified data into the table', done => {
+      it('should insert the specified data into the table', (done) => {
         testTable.insertIfNotExists({email: 'two@email.com'}, ['email'], (err, result) => {
           if (err) throw err;
           result.affectedRows.should.equal(1);
@@ -447,7 +447,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should accept raw data to insert and not escape it', done => {
+      it('should accept raw data to insert and not escape it', (done) => {
         const cbManager = new CallbackManager(done);
         const doneOnlyRaw = cbManager.registerCallback();
         const doneDataAndRaw = cbManager.registerCallback();
@@ -464,10 +464,10 @@ describe('MySQLTable', () => {
             doneOnlyRaw();
           });
 
-          testTable.insertIfNotExists({id: 5, email: MySQLPlus.raw('"five@email.com"')}, ['id', 'email'], (err, result) => {
+          testTable.insertIfNotExists({id: 5, email: MySQLPlus.raw('"five@email.com"')}, ['id', 'email'], (err, result2) => {
             if (err) throw err;
-            result.affectedRows.should.equal(1);
-            result.insertId.should.equal(5);
+            result2.affectedRows.should.equal(1);
+            result2.insertId.should.equal(5);
             doneDataAndRaw();
           });
         });
@@ -492,18 +492,18 @@ describe('MySQLTable', () => {
 
       it('should not insert anything and not change the table if a row with the same key already exists', () => {
         return testTable.insertIfNotExists({email: 'one@email.com'}, ['email'])
-          .then(result => {
+          .then((result) => {
             result.affectedRows.should.equal(0);
             return testTable.query('SHOW CREATE TABLE ' + testTable.name);
           })
-          .then(result => {
+          .then((result) => {
             result[0]['Create Table'].should.match(/ AUTO_INCREMENT=2 /);
           });
       });
 
       it('should insert the specified data into the table', () => {
         return testTable.insertIfNotExists({email: 'two@email.com'}, ['email'])
-          .then(result => {
+          .then((result) => {
             result.affectedRows.should.equal(1);
             result.insertId.should.equal(2);
           });
@@ -511,7 +511,7 @@ describe('MySQLTable', () => {
 
       it('should accept raw data to insert and not escape it', () => {
         const promiseNewRow = testTable.insertIfNotExists({email: MySQLPlus.raw('"three@email.com"')}, ['email'])
-          .then(result => {
+          .then((result) => {
             result.affectedRows.should.equal(1);
             result.insertId.should.equal(3);
 
@@ -520,7 +520,7 @@ describe('MySQLTable', () => {
               testTable.insertIfNotExists({id: 5, email: MySQLPlus.raw('"five@email.com"')}, ['id', 'email']),
             ]);
           })
-          .then(results => {
+          .then((results) => {
             results[0][0].email.should.equal('three@email.com');
 
             results[1].affectedRows.should.equal(1);
@@ -528,7 +528,7 @@ describe('MySQLTable', () => {
           });
 
         const promiseRowExists = testTable.insertIfNotExists({email: MySQLPlus.raw('"one@email.com"')}, ['email'])
-          .then(result => {
+          .then((result) => {
             result.affectedRows.should.equal(0);
           });
 
@@ -544,7 +544,7 @@ describe('MySQLTable', () => {
 
     describe('with a callback', () => {
 
-      before(done => {
+      before((done) => {
         const insertSQL = 'INSERT INTO `mysql_table_test_table` (`email`) VALUES ' +
           "('one@email.com'), ('two@email.com'), ('three@email.com')";
         testTable.query(insertSQL, done);
@@ -552,7 +552,7 @@ describe('MySQLTable', () => {
 
       after(resetTable);
 
-      it('should be able to update all rows in the table with only the `data` argument', done => {
+      it('should be able to update all rows in the table with only the `data` argument', (done) => {
         testTable.update({letter: '?'}, (err, result) => {
           if (err) throw err;
           result.affectedRows.should.equal(3);
@@ -561,7 +561,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should be able to update all rows in the table with only the `sqlString` argument', done => {
+      it('should be able to update all rows in the table with only the `sqlString` argument', (done) => {
         testTable.update("`email` = CONCAT('updated_', `email`)", (err, result) => {
           if (err) throw err;
           result.affectedRows.should.equal(3);
@@ -570,7 +570,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should be able to update specific rows in the table', done => {
+      it('should be able to update specific rows in the table', (done) => {
         testTable.update({email: 'updated@email.com'}, 'WHERE `id` = 3', (err, result) => {
           if (err) throw err;
           result.affectedRows.should.equal(1);
@@ -579,7 +579,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should be able to update rows using SQL formatted with placeholders', done => {
+      it('should be able to update rows using SQL formatted with placeholders', (done) => {
         testTable.update({email: 'updated2@email.com'}, 'WHERE `id` = ?', [3], (err, result) => {
           if (err) throw err;
           result.affectedRows.should.equal(1);
@@ -588,7 +588,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should accept the `sqlString` argument without using the `data` argument', done => {
+      it('should accept the `sqlString` argument without using the `data` argument', (done) => {
         testTable.update("`email` = 'updated3@email.com' WHERE `id` = ?", [3], (err, result) => {
           if (err) throw err;
           result.affectedRows.should.equal(1);
@@ -597,7 +597,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should accept the `sqlString` argument without the `data` or `values` arguments', done => {
+      it('should accept the `sqlString` argument without the `data` or `values` arguments', (done) => {
         testTable.update("`email` = 'updated4@email.com' WHERE `id` = 3", (err, result) => {
           if (err) throw err;
           result.affectedRows.should.equal(1);
@@ -606,7 +606,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should work with `data` objects that contain question marks', done => {
+      it('should work with `data` objects that contain question marks', (done) => {
         testTable.update({email: 'updated?@email.com'}, 'WHERE `id` = ?', [3], (err, result) => {
           if (err) throw err;
           result.affectedRows.should.equal(1);
@@ -620,7 +620,7 @@ describe('MySQLTable', () => {
 
     describe('with a promise', () => {
 
-      before(done => {
+      before((done) => {
         const insertSQL = 'INSERT INTO `mysql_table_test_table` (`email`) VALUES ' +
           "('one@email.com'), ('two@email.com'), ('three@email.com')";
         testTable.query(insertSQL, done);
@@ -630,7 +630,7 @@ describe('MySQLTable', () => {
 
       it('should be able to update all rows in the table with only the `data` argument', () => {
         return testTable.update({letter: '?'})
-          .then(result => {
+          .then((result) => {
             result.affectedRows.should.equal(3);
             result.changedRows.should.equal(3);
           });
@@ -638,7 +638,7 @@ describe('MySQLTable', () => {
 
       it('should be able to update all rows in the table with only the `sqlString` argument', () => {
         return testTable.update("`email` = CONCAT('updated_', `email`)")
-          .then(result => {
+          .then((result) => {
             result.affectedRows.should.equal(3);
             result.changedRows.should.equal(3);
           });
@@ -646,7 +646,7 @@ describe('MySQLTable', () => {
 
       it('should be able to update specific rows in the table', () => {
         return testTable.update({email: 'updated@email.com'}, 'WHERE `id` = 3')
-          .then(result => {
+          .then((result) => {
             result.affectedRows.should.equal(1);
             result.changedRows.should.equal(1);
           });
@@ -654,7 +654,7 @@ describe('MySQLTable', () => {
 
       it('should be able to update rows using SQL formatted with placeholders', () => {
         return testTable.update({email: 'updated2@email.com'}, 'WHERE `id` = ?', [3])
-          .then(result => {
+          .then((result) => {
             result.affectedRows.should.equal(1);
             result.changedRows.should.equal(1);
           });
@@ -662,7 +662,7 @@ describe('MySQLTable', () => {
 
       it('should accept the `sqlString` argument without using the `data` argument', () => {
         return testTable.update("`email` = 'updated3@email.com' WHERE `id` = ?", [3])
-          .then(result => {
+          .then((result) => {
             result.affectedRows.should.equal(1);
             result.changedRows.should.equal(1);
           });
@@ -670,7 +670,7 @@ describe('MySQLTable', () => {
 
       it('should accept the `sqlString` argument without the `data` or `values` arguments', () => {
         return testTable.update("`email` = 'updated4@email.com' WHERE `id` = 3")
-          .then(result => {
+          .then((result) => {
             result.affectedRows.should.equal(1);
             result.changedRows.should.equal(1);
           });
@@ -678,7 +678,7 @@ describe('MySQLTable', () => {
 
       it('should work with `data` objects that contain question marks', () => {
         return testTable.update({email: 'updated?@email.com'}, 'WHERE `id` = ?', [3])
-          .then(result => {
+          .then((result) => {
             result.affectedRows.should.equal(1);
             result.changedRows.should.equal(1);
           });
@@ -693,7 +693,7 @@ describe('MySQLTable', () => {
 
     describe('with a callback', () => {
 
-      before(done => {
+      before((done) => {
         const insertSQL = 'INSERT INTO `mysql_table_test_table` (`email`) VALUES ' +
           "('one@email.com'), ('two@email.com'), ('three@email.com'), ('four@email.com'), ('five@email.com')," +
           "('six@email.com'), ('seven@email.com'), ('eight@email.com'), ('nine@email.com')";
@@ -702,7 +702,7 @@ describe('MySQLTable', () => {
 
       after(resetTable);
 
-      it('should delete specific rows from the table', done => {
+      it('should delete specific rows from the table', (done) => {
         testTable.delete('WHERE `id` > 3', (err, result) => {
           if (err) throw err;
           result.affectedRows.should.equal(6);
@@ -710,7 +710,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should delete rows using SQL formatted with placeholders', done => {
+      it('should delete rows using SQL formatted with placeholders', (done) => {
         testTable.delete('WHERE ?? > ?', ['id', 2], (err, result) => {
           if (err) throw err;
           result.affectedRows.should.equal(1);
@@ -718,7 +718,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should delete all rows from the table', done => {
+      it('should delete all rows from the table', (done) => {
         testTable.delete((err, result) => {
           if (err) throw err;
           result.affectedRows.should.equal(2);
@@ -731,7 +731,7 @@ describe('MySQLTable', () => {
 
     describe('with a promise', () => {
 
-      before(done => {
+      before((done) => {
         const insertSQL = 'INSERT INTO `mysql_table_test_table` (`email`) VALUES ' +
           "('one@email.com'), ('two@email.com'), ('three@email.com'), ('four@email.com'), ('five@email.com')," +
           "('six@email.com'), ('seven@email.com'), ('eight@email.com'), ('nine@email.com')";
@@ -742,21 +742,21 @@ describe('MySQLTable', () => {
 
       it('should delete specific rows from the table', () => {
         return testTable.delete('WHERE `id` > 3')
-          .then(result => {
+          .then((result) => {
             result.affectedRows.should.equal(6);
           });
       });
 
       it('should delete rows using SQL formatted with placeholders', () => {
         return testTable.delete('WHERE ?? > ?', ['id', 2])
-          .then(result => {
+          .then((result) => {
             result.affectedRows.should.equal(1);
           });
       });
 
       it('should delete all rows from the table', () => {
         return testTable.delete()
-          .then(result => {
+          .then((result) => {
             result.affectedRows.should.equal(2);
           });
       });
@@ -768,7 +768,7 @@ describe('MySQLTable', () => {
 
   describe('#exists()', () => {
 
-    before(done => {
+    before((done) => {
       const insertSQL = 'INSERT INTO `mysql_table_test_table` (`email`) VALUES ("one@email.com")';
       testTable.query(insertSQL, done);
     });
@@ -777,7 +777,7 @@ describe('MySQLTable', () => {
 
     describe('with a callback', () => {
 
-      it('should resolve with `true` if rows exist (without using the `values` argument)', done => {
+      it('should resolve with `true` if rows exist (without using the `values` argument)', (done) => {
         testTable.exists('WHERE `id` < 3', (err, exists) => {
           if (err) throw err;
           exists.should.be.true();
@@ -785,7 +785,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should resolve with `true` if rows exist (with using the `values` argument)', done => {
+      it('should resolve with `true` if rows exist (with using the `values` argument)', (done) => {
         testTable.exists('WHERE `email` = ?', ['one@email.com'], (err, exists) => {
           if (err) throw err;
           exists.should.be.true();
@@ -793,7 +793,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should resolve with `false` if rows exist (without using the `values` argument)', done => {
+      it('should resolve with `false` if rows exist (without using the `values` argument)', (done) => {
         testTable.exists('WHERE `id` > 3', (err, exists) => {
           if (err) throw err;
           exists.should.be.false();
@@ -801,7 +801,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should resolve with `false` if rows exist (with using the `values` argument)', done => {
+      it('should resolve with `false` if rows exist (with using the `values` argument)', (done) => {
         testTable.exists('WHERE `email` = ?', ['two@email.com'], (err, exists) => {
           if (err) throw err;
           exists.should.be.false();
@@ -809,7 +809,7 @@ describe('MySQLTable', () => {
         });
       });
 
-      it('should resolve with an error if an error occurrs', done => {
+      it('should resolve with an error if an error occurrs', (done) => {
         const error = new Error('exists error');
         sinon.stub(pool, 'query').yieldsAsync(error);
 
@@ -828,25 +828,25 @@ describe('MySQLTable', () => {
     describe('with a promise', () => {
 
       it('should resolve with `true` if rows exist (without using the `values` argument)', () => {
-        return testTable.exists('WHERE `id` < 3').then(exists => {
+        return testTable.exists('WHERE `id` < 3').then((exists) => {
           exists.should.be.true();
         });
       });
 
       it('should resolve with `true` if rows exist (with using the `values` argument)', () => {
-        return testTable.exists('WHERE `email` = ?', ['one@email.com']).then(exists => {
+        return testTable.exists('WHERE `email` = ?', ['one@email.com']).then((exists) => {
           exists.should.be.true();
         });
       });
 
       it('should resolve with `false` if rows exist (without using the `values` argument)', () => {
-        return testTable.exists('WHERE `id` > 3').then(exists => {
+        return testTable.exists('WHERE `id` > 3').then((exists) => {
           exists.should.be.false();
         });
       });
 
       it('should resolve with `false` if rows exist (with using the `values` argument)', () => {
-        return testTable.exists('WHERE `email` = ?', ['two@email.com']).then(exists => {
+        return testTable.exists('WHERE `email` = ?', ['two@email.com']).then((exists) => {
           exists.should.be.false();
         });
       });
@@ -866,7 +866,7 @@ describe('MySQLTable', () => {
       pool.pquery.restore();
     });
 
-    it('should just directly call the pool\'s pquery() function', done => {
+    it('should just directly call the pool\'s pquery() function', (done) => {
       testTable.query('SELECT 1 + 1 AS solution', function callback(err, rows) {
         if (err) throw err;
         rows.should.have.length(1);
@@ -878,7 +878,7 @@ describe('MySQLTable', () => {
 
     it('should return a promise if the callback is omitted', () => {
       return testTable.query('SELECT 1 + 1 AS solution')
-        .then(rows => {
+        .then((rows) => {
           rows.should.have.length(1);
           rows[0].solution.should.equal(2);
           pool.pquery.should.be.calledOnce().and.be.calledWith('SELECT 1 + 1 AS solution');
@@ -906,13 +906,13 @@ describe('MySQLTable', () => {
     it('should create a new MySQLTable instance that makes queries using the provided transaction connection', () => {
       const goodError = new Error('Good error');
 
-      return pool.transaction(trxn => {
+      return pool.transaction((trxn) => {
         const trxnTestTable = testTable.transacting(trxn);
 
         return trxnTestTable.insert({email: 'transacting@email.com'})
           .then(result => trxnTestTable.insert({email: 'meh', letter: result.insertId}))
           .then(() => trxnTestTable.select('*'))
-          .then(rows => {
+          .then((rows) => {
             rows.should.have.length(2);
             rows[0].id.should.equal(1);
             rows[0].email.should.equal('transacting@email.com');
@@ -924,10 +924,10 @@ describe('MySQLTable', () => {
           });
       }).then(() => {
         throw new Error('Bad error');
-      }).catch(err => {
+      }).catch((err) => {
         err.should.equal(goodError);
         return testTable.select('*')
-          .then(rows => {
+          .then((rows) => {
             rows.should.be.empty();
           });
       });

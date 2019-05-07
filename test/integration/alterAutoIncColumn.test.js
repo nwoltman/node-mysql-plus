@@ -4,7 +4,7 @@ const MySQLPlus = require('../../lib/MySQLPlus');
 
 const config = require('../config');
 
-const ColTypes = MySQLPlus.ColTypes;
+const {ColTypes} = MySQLPlus;
 
 describe('when removing or adding the AUTO_INCREMENT attribute from a column', function() {
 
@@ -24,8 +24,8 @@ describe('when removing or adding the AUTO_INCREMENT attribute from a column', f
     },
   });
 
-  before(done => {
-    pool.sync(err => {
+  before((done) => {
+    pool.sync((err) => {
       if (err) {
         throw err;
       }
@@ -36,8 +36,8 @@ describe('when removing or adding the AUTO_INCREMENT attribute from a column', f
 
   after(done => pool2.end(done));
 
-  it('should not error when migrating the table', done => {
-    pool2.sync(err => {
+  it('should not error when migrating the table', (done) => {
+    pool2.sync((err) => {
       if (err) {
         throw err;
       }

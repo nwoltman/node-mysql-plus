@@ -36,7 +36,7 @@ describe('MySQLPlus', () => {
       pool = MySQLPlus.createPool({});
     });
 
-    after(done => {
+    after((done) => {
       pool.end(done);
     });
 

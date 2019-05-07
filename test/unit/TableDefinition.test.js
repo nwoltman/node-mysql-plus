@@ -54,12 +54,12 @@ describe('TableDefinition', () => {
 
     it('should pass the error to the callback if querying the database results in an error', () => {
       new TableDefinition(throwTable1Name, throwTableSchema, mockPool)
-        .genSyncOperations(err => {
+        .genSyncOperations((err) => {
           err.should.equal(error1);
         });
 
       new TableDefinition(throwTable2Name, throwTableSchema, mockPool, 'alter')
-        .genSyncOperations(err => {
+        .genSyncOperations((err) => {
           err.should.equal(error2);
         });
     });

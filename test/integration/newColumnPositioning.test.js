@@ -4,7 +4,7 @@ const MySQLPlus = require('../../lib/MySQLPlus');
 
 const config = require('../config');
 
-const ColTypes = MySQLPlus.ColTypes;
+const {ColTypes} = MySQLPlus;
 
 describe('when adding new columns', function() {
 
@@ -27,8 +27,8 @@ describe('when adding new columns', function() {
     },
   });
 
-  before(done => {
-    pool.sync(err => {
+  before((done) => {
+    pool.sync((err) => {
       if (err) {
         throw err;
       }
@@ -39,8 +39,8 @@ describe('when adding new columns', function() {
 
   after(done => pool2.end(done));
 
-  it('should add the columns in the same position that they are defined in the JS columns object', done => {
-    pool2.sync(err => {
+  it('should add the columns in the same position that they are defined in the JS columns object', (done) => {
+    pool2.sync((err) => {
       if (err) {
         throw err;
       }

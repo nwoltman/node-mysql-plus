@@ -4,7 +4,7 @@ const MySQLPlus = require('../../lib/MySQLPlus');
 
 const config = require('../config');
 
-const ColTypes = MySQLPlus.ColTypes;
+const {ColTypes} = MySQLPlus;
 
 describe('when migrating a table with no foreign keys to having some foreign keys', function() {
 
@@ -30,8 +30,8 @@ describe('when migrating a table with no foreign keys to having some foreign key
     },
   });
 
-  before(done => {
-    pool.sync(err => {
+  before((done) => {
+    pool.sync((err) => {
       if (err) {
         throw err;
       }
@@ -40,11 +40,11 @@ describe('when migrating a table with no foreign keys to having some foreign key
     });
   });
 
-  after(done => {
+  after((done) => {
     pool2.end(done);
   });
 
-  it('should not error', done => {
+  it('should not error', (done) => {
     pool2.sync(done);
   });
 
