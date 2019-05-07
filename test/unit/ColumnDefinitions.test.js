@@ -547,8 +547,8 @@ describe('ColumnDefinitions', () => {
   describe('varchar and varbinary', () => {
 
     it('should throw if no `m` value is provided when creating the column definition', () => {
-      should.throws(() => ColumnDefinitions.varchar(), /You must specify the `m` argument for varchar/);
-      should.throws(() => ColumnDefinitions.varbinary(), /You must specify the `m` argument for varbinary/);
+      should.throws(() => ColumnDefinitions.varchar(), 'The varchar `m` argument must be specified');
+      should.throws(() => ColumnDefinitions.varbinary(), 'The varbinary `m` argument must be specified');
     });
 
     it('should accept 0 as a valid `m` value', () => {
@@ -576,8 +576,8 @@ describe('ColumnDefinitions', () => {
     });
 
     it('should throw if no values are provided when creating the column definition', () => {
-      should.throws(() => ColumnDefinitions.enum(), /provide at least one possible enum value/);
-      should.throws(() => ColumnDefinitions.set(), /provide at least one possible set value/);
+      should.throws(() => ColumnDefinitions.enum(), 'At least one enum value must be provided');
+      should.throws(() => ColumnDefinitions.set(), 'At least one set value must be provided');
     });
 
   });
