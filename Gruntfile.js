@@ -42,6 +42,7 @@ module.exports = function(grunt) {
         bail: grunt.option('bail'),
         colors: true,
         require: ['should', 'should-sinon'],
+        reporter: grunt.option('grep') ? 'spec' : 'dot',
       },
     },
 
@@ -60,7 +61,7 @@ module.exports = function(grunt) {
         },
       },
       options: {
-        mochaOptions: ['--colors'],
+        mochaOptions: ['--colors', '--reporter', 'dot'],
         require: ['should', 'should-sinon'],
       },
     },
