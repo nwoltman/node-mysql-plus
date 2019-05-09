@@ -609,7 +609,7 @@ describe('ColumnDefinitions', () => {
   });
 
 
-  describe('geometrical data types', () => {
+  describe('geometry data types', () => {
 
     it('should be able to create spatial indexes', () => {
       ColumnDefinitions.geometry().spatialIndex()

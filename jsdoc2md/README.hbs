@@ -261,7 +261,7 @@ These schema properties configure table-level options. The options currently sup
   + [TextColumnDefinition](#textcolumndefinition)
   + [UpdatableTimeColumnDefinition](#updatabletimecolumndefinition)
     + [TimestampColumnDefinition](#timestampcolumndefinition)
-  + [GeometricalColumnDefinition](#geometricalcolumndefinition)
+  + [GeometryColumnDefinition](#geometrycolumndefinition)
 
 [`mysql.ColTypes`](#module_mysql-plus..ColTypes) and [`pool.ColTypes`](#PoolPlus+ColTypes) both expose the following methods:
 
@@ -320,7 +320,7 @@ This class is what is used to define the column's attributes. These attributes c
   + Examples:
     + `.default('Hello')` produces `DEFAULT 'Hello'`
     + `.default(null)` produces `DEFAULT NULL`
-  + __Note:__ `*blob`, `*text`, `json`, and geometrical columns cannot be assigned a default value other than `null`.
+  + __Note:__ `*blob`, `*text`, `json`, and geometry columns cannot be assigned a default value other than `null`.
 + `primaryKey()` - Declares the column to be the table's primary key
 + `unique()` - Creates a unique index for the column
 + `index()` - Creates an index for the column
@@ -426,7 +426,7 @@ would define a column with this SQL:
 
 Normally if the `DEFAULT` is unspecified, MySQL uses `CURRENT_TIMESTAMP` as the `DEFAULT` value of only the first timestamp column and `'0000-00-00 00:00:00'` for subsequent columns, but `mysql-plus` uses `CURRENT_TIMESTAMP` for all timestamp columns for consistency.
 
-#### GeometricalColumnDefinition
+#### GeometryColumnDefinition
 
 Methods:
 
