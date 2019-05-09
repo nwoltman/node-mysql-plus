@@ -557,6 +557,29 @@ describe('MySQLPlus', function() {
     '  `e` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL\n' +
     ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci';
 
+  const keyPartsTableName = 'key_parts_table';
+  const keyPartsTableSchema = {
+    columns: {
+      a: ColTypes.char(7).notNull(),
+      b: ColTypes.varchar(30),
+      c: ColTypes.text(),
+    },
+    primaryKey: 'a(5)',
+    keys: [
+      KeyTypes.index('b(20)'),
+      KeyTypes.uniqueIndex('c(42)'),
+    ],
+  };
+  const keyPartsTableExpectedSQL =
+    'CREATE TABLE `key_parts_table` (\n' +
+    '  `a` char(7) NOT NULL,\n' +
+    '  `b` varchar(30) DEFAULT NULL,\n' +
+    '  `c` text,\n' +
+    '  PRIMARY KEY (`a`(5)),\n' +
+    '  UNIQUE KEY `uniq_c` (`c`(42)),\n' +
+    '  KEY `idx_b` (`b`(20))\n' +
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+
   const timestampTableName = 'timestamp_table';
   const timestampTableSchema = {
     columns: {
@@ -615,6 +638,7 @@ describe('MySQLPlus', function() {
       pool.defineTable(foreignKeysTableName, foreignKeysTableSchema);
       pool.defineTable(optionsTableName, optionsTableSchema);
       pool.defineTable(textTableName, textTableSchema);
+      pool.defineTable(keyPartsTableName, keyPartsTableSchema);
       pool.defineTable(timestampTableName, timestampTableSchema);
       pool.defineTable(synonymTableName, synonymTableSchema);
       pool.sync(done);
@@ -711,6 +735,13 @@ describe('MySQLPlus', function() {
         cb10();
       });
 
+      const cbKeyParts = cbManager.registerCallback();
+      pool.query(`SHOW CREATE TABLE \`${keyPartsTableName}\``, (err, result) => {
+        if (err) throw err;
+        result[0]['Create Table'].should.equal(keyPartsTableExpectedSQL);
+        cbKeyParts();
+      });
+
       const cbTimestamp = cbManager.registerCallback();
       pool.query(`SHOW CREATE TABLE \`${timestampTableName}\``, (err, result) => {
         if (err) throw err;
@@ -747,6 +778,7 @@ describe('MySQLPlus', function() {
       pool.defineTable(foreignKeysTableName, foreignKeysTableSchema);
       pool.defineTable(optionsTableName, optionsTableSchema);
       pool.defineTable(textTableName, textTableSchema);
+      pool.defineTable(keyPartsTableName, keyPartsTableSchema);
       pool.defineTable(timestampTableName, timestampTableSchema);
       pool.defineTable(synonymTableName, synonymTableSchema);
       pool.sync(done);
@@ -848,6 +880,13 @@ describe('MySQLPlus', function() {
         cb10();
       });
 
+      const cbKeyParts = cbManager.registerCallback();
+      pool.query(`SHOW CREATE TABLE \`${keyPartsTableName}\``, (err, result) => {
+        if (err) throw err;
+        result[0]['Create Table'].should.equal(keyPartsTableExpectedSQL);
+        cbKeyParts();
+      });
+
       const cbTimestamp = cbManager.registerCallback();
       pool.query(`SHOW CREATE TABLE \`${timestampTableName}\``, (err, result) => {
         if (err) throw err;
@@ -884,6 +923,7 @@ describe('MySQLPlus', function() {
       pool.defineTable(foreignKeysTableName, foreignKeysTableSchema);
       pool.defineTable(optionsTableName, optionsTableSchema);
       pool.defineTable(textTableName, textTableSchema);
+      pool.defineTable(keyPartsTableName, keyPartsTableSchema);
       pool.defineTable(timestampTableName, timestampTableSchema);
       pool.defineTable(synonymTableName, synonymTableSchema);
       pool.sync(done);
@@ -978,6 +1018,13 @@ describe('MySQLPlus', function() {
         if (err) throw err;
         result[0]['Create Table'].should.equal(textTableExpectedSQL);
         cb10();
+      });
+
+      const cbKeyParts = cbManager.registerCallback();
+      pool.query(`SHOW CREATE TABLE \`${keyPartsTableName}\``, (err, result) => {
+        if (err) throw err;
+        result[0]['Create Table'].should.equal(keyPartsTableExpectedSQL);
+        cbKeyParts();
       });
 
       const cbTimestamp = cbManager.registerCallback();

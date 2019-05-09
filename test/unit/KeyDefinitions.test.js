@@ -284,9 +284,47 @@ describe('KeyDefinitions', () => {
     a = KeyDefinitions.foreignKey('a').references('t', 'id').cascade();
     b = KeyDefinitions.foreignKey('a').references('t', 'id').onDelete('SET NULL').onUpdate('CASCADE');
     a.$equals(b).should.be.false();
+
+    // More for keys with a prefix length
+
+    a = KeyDefinitions.index('a(20)');
+    b = KeyDefinitions.index('a(20)');
+    a.$equals(b).should.be.true();
+
+    a = KeyDefinitions.uniqueIndex('a(20)');
+    b = KeyDefinitions.uniqueIndex('a(20)');
+    a.$equals(b).should.be.true();
+
+    a = KeyDefinitions.index('a(20)');
+    b = KeyDefinitions.index('a(10)');
+    a.$equals(b).should.be.false();
+
+    a = KeyDefinitions.uniqueIndex('a(20)');
+    b = KeyDefinitions.uniqueIndex('a(10)');
+    a.$equals(b).should.be.false();
+
+    a = KeyDefinitions.index('a(20)');
+    b = KeyDefinitions.index('b(20)');
+    a.$equals(b).should.be.false();
+
+    a = KeyDefinitions.uniqueIndex('a(20)');
+    b = KeyDefinitions.uniqueIndex('b(20)');
+    a.$equals(b).should.be.false();
   });
 
-  it('should support key prefixes');
+  it('should support keys with a prefix length', () => {
+    KeyDefinitions.index('id(20)').$toSQL()
+      .should.equal('INDEX `idx_id` (`id`(20))');
+
+    KeyDefinitions.uniqueIndex('id(20)').$toSQL()
+      .should.equal('UNIQUE INDEX `uniq_id` (`id`(20))');
+
+    KeyDefinitions.index('id(20)', 'name(5)').$toSQL()
+      .should.equal('INDEX `idx_id_name` (`id`(20), `name`(5))');
+
+    KeyDefinitions.uniqueIndex('id(20)', 'name(5)').$toSQL()
+      .should.equal('UNIQUE INDEX `uniq_id_name` (`id`(20), `name`(5))');
+  });
 
 
   describe('foreign key definitions', () => {

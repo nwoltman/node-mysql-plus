@@ -166,9 +166,9 @@ See the [Column Types](#column-types) section for all possible column types and 
 
 ### Primary Key
 
-`string|string[]`
+`string | string[]`
 
-The table’s primary key can be defined with the `primaryKey` property:
+The table’s primary key can be defined with the `primaryKey` property.
 
 ```js
 {
@@ -189,6 +189,17 @@ An array can be used to define a multi-column primary key.
     name: pool.ColTypes.varchar(255).notNull(),
   },
   primaryKey: ['id', 'name']
+}
+```
+
+Primary keys for string columns may include a key [prefix length](#prefix-lengths).
+
+```js
+{
+  columns: {
+    id: pool.ColTypes.varchar(100).unsigned().notNull(),
+  },
+  primaryKey: 'id(20)'
 }
 ```
 
@@ -436,10 +447,10 @@ Compatible types:
 
 [`mysql.KeyTypes`](#module_mysql-plus..KeyTypes) and [`pool.KeyTypes`](#PoolPlus+KeyTypes) both expose the following methods for defining table keys:
 
-+ `index(columnName [, ...otherColumns])` - Creates a regular [index](https://dev.mysql.com/doc/en/create-index.html)
-+ `uniqueIndex(columnName [, ...otherColumns])` - Creates a [unique index](https://dev.mysql.com/doc/en/create-index.html#create-index-unique)
++ `index(keyPart [, ...otherKeyParts])` - Creates a regular [index](https://dev.mysql.com/doc/en/create-index.html)
++ `uniqueIndex(keyPart [, ...otherKeyParts])` - Creates a [unique index](https://dev.mysql.com/doc/en/create-index.html#create-index-unique)
 + `spatialIndex(columnName)` - Creates a [spatial index](https://dev.mysql.com/doc/en/create-index.html#create-index-spatial)
-+ `fulltextIndex(columnName)` - Creates a [fulltext index](https://dev.mysql.com/doc/en/innodb-fulltext-index.html)
++ `fulltextIndex(columnName, [...otherColumns])` - Creates a [fulltext index](https://dev.mysql.com/doc/en/innodb-fulltext-index.html)
 + `foreignKey(columnName [, ...otherColumns])` - Creates a [foreign key constraint](https://dev.mysql.com/doc/en/create-table-foreign-keys.html)
 
 **Example:**
@@ -514,4 +525,22 @@ Indexes required for the example above:
     KeyTypes.index('thingOne', 'thingTwo'),
   ]
 }
+```
+
+### Prefix Lengths
+
+`PRIMARY`, `INDEX`, and `UNIQUE` keys on `char`, `varchar`, `binary`, `varbinary`, `blob`, and `text` columns may include a [key prefix length](https://dev.mysql.com/doc/en/create-index.html#create-index-column-prefixes).
+
+```js
+{
+  columns: {
+    id: ColTypes.char(50).notNull(),
+    uid: ColTypes.varchar(100).notNull(),
+    description: ColTypes.text(),
+  },
+  primaryKey: 'id(10)',
+  keys: [
+    KeyTypes.uniqueIndex('uid(30)'),
+    KeyTypes.index('description(50)'),
+  ]
 ```
