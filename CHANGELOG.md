@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## 0.16.0 (2019-05-09)
+
+### Breaking Changes
++ feat!: Change the interface for how keys are defined in the table schema ([`8cab7ce`](https://github.com/nwoltman/node-mysql-plus/commit/8cab7ce8c7113634a72e103fff7c84194feab2bf))
+  + Check out the [new documentation](https://github.com/nwoltman/node-mysql-plus#keys) on how to define table keys
++ chore(ci)!: Update config and stop testing on Node 6 and 11 ([`56564e8`](https://github.com/nwoltman/node-mysql-plus/commit/56564e87dfe689a437d32fa17a44582c529b1e7b))
+
+### New Features
++ feat: Add support for FULLTEXT indexes ([`673fad7`](https://github.com/nwoltman/node-mysql-plus/commit/673fad75beef5caca6d57592b4e24d4c2015064b))
++ feat: Add support for key prefix lengths ([`13e185d`](https://github.com/nwoltman/node-mysql-plus/commit/13e185d059dc826d903ef6bb33428b0c452a1b91))
+
+### Improvements
++ improvement: Don't run unnecessary DROP/ADD_FOREIGN_KEY operations ([`687df26`](https://github.com/nwoltman/node-mysql-plus/commit/687df26988be4611089d8ffee0564d9880891b06))
++ improvement: Improve error messages when creating ColumnDefinitions with improper arguments ([`fff463e`](https://github.com/nwoltman/node-mysql-plus/commit/fff463e0d695c7f6ab44d6e150a655fd49e8897f))
++ chore(deps): mysql@2.17.4 ([`6281eab`](https://github.com/nwoltman/node-mysql-plus/commit/6281eab4c81c5a4d02eac92ba72c5b48a75fe71c))
++ chore: Fix spelling - 'geometrical' -> 'geometry' ([`b88c815`](https://github.com/nwoltman/node-mysql-plus/commit/b88c81548939bcacb6bb69bd787ea2be3a842c2c))
+
+### Documentation
++ docs: Use clearer language in the readme intro ([`ceb11ca`](https://github.com/nwoltman/node-mysql-plus/commit/ceb11ca9b6f2110fa1b926587a771f2e8d1d12c9))
+
+
 ## 0.15.0 (2018-08-12)
 
 ### Breaking Changes
@@ -226,7 +247,7 @@
 + MySQLTable: Deprecate `tableName` property in favour of new `name` property ([`1916ddc`](https://github.com/nwoltman/node-mysql-plus/commit/1916ddccca9a9fc9c3ea4a5bfd1f71faf455e09b))
 + MySQLTable: Deprecate the `.insertIgnore()` and `.replace()` methods ([`9613737`](https://github.com/nwoltman/node-mysql-plus/commit/9613737475d74cdf5bace1bdb626f994a3265223))
 + ColumnDefinition: Deprecate usage of `.default('CURRENT_TIMESTAMP')` ([`4dec938`](https://github.com/nwoltman/node-mysql-plus/commit/4dec9381ca03220dbb0152c7b65d5df2abb91521))
-  + Use the [`.defaultRaw()`](https://github.com/nwoltman/node-mysql-plus#columndefinition) method instead 
+  + Use the [`.defaultRaw()`](https://github.com/nwoltman/node-mysql-plus#columndefinition) method instead
 
 ### New features and other changes
 + deps: Bump minimum mysql and lodash versions to most recent ([`c29c9d6`](https://github.com/nwoltman/node-mysql-plus/commit/c29c9d663a56b032130194e50f34382739e4f6d9))
@@ -251,7 +272,7 @@
 + MySQLTable: Fix escaping bug in `.insert()` and `.update()` ([`a271b9d`](https://github.com/nwoltman/node-mysql-plus/commit/a271b9d2fb5589ec121d6b60a2091bf9bd12c60e))
   + This fix required the signature to `.update()` to be changed. Now the `data` argument is optional(ish) and can only be an object.
 + doc: Require all instances of the `values` argument in `MySQLTable` to be an Array ([`7cc7699`](https://github.com/nwoltman/node-mysql-plus/commit/7cc769942e184c5dd44b914724b61972266a7954))
-  + Technically only a documentation change, but officially non-array values for the `values` argument are no longer supported and their use may cause undefined behaviour 
+  + Technically only a documentation change, but officially non-array values for the `values` argument are no longer supported and their use may cause undefined behaviour
 
 ### Other Changes
 + MySQLTable: Modify `.insert()` to allow for bulk inserts ([`72c5e59`](https://github.com/nwoltman/node-mysql-plus/commit/72c5e59a92be9dee1a20f42217d5eb360507cf29))
