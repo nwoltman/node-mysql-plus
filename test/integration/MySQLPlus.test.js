@@ -29,6 +29,7 @@ describe('MySQLPlus', function() {
       jdoc: ColTypes.json(),
       location: ColTypes.point().notNull().spatialIndex(),
       line: ColTypes.linestring(),
+      description: ColTypes.text().fulltextIndex(),
     },
     keys: [
       KeyTypes.uniqueIndex('name', 'letter'),
@@ -52,12 +53,14 @@ describe('MySQLPlus', function() {
     '  `jdoc` json DEFAULT NULL,\n' +
     '  `location` point NOT NULL,\n' +
     '  `line` linestring DEFAULT NULL,\n' +
+    '  `description` text,\n' +
     '  PRIMARY KEY (`id`),\n' +
     '  UNIQUE KEY `uniq_email` (`email`),\n' +
     '  UNIQUE KEY `uniq_name_letter` (`name`,`letter`),\n' +
     '  UNIQUE KEY `uniq_created` (`created`),\n' +
     '  KEY `idx_letter` (`letter`),\n' +
-    '  SPATIAL KEY `sptl_location` (`location`)\n' +
+    '  SPATIAL KEY `sptl_location` (`location`),\n' +
+    '  FULLTEXT KEY `fltxt_description` (`description`)\n' +
     ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
 
   const autoIncTableName = 'auto_inc_table';
@@ -345,6 +348,47 @@ describe('MySQLPlus', function() {
     '  SPATIAL KEY `sptl_c` (`c`)\n' +
     ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
 
+  const fulltextIndexesTableName = 'fulltext_table';
+  const fulltextIndexesTableSchema = {
+    columns: {
+      a: ColTypes.char(32).notNull(),
+      b: ColTypes.varchar(255).notNull(),
+      c: ColTypes.text().notNull(),
+    },
+    keys: [
+      KeyTypes.fulltextIndex('a'),
+      KeyTypes.fulltextIndex('b'),
+    ],
+  };
+  const fulltextIndexesTableExpectedSQL =
+    'CREATE TABLE `fulltext_table` (\n' +
+    '  `a` char(32) NOT NULL,\n' +
+    '  `b` varchar(255) NOT NULL,\n' +
+    '  `c` text NOT NULL,\n' +
+    '  FULLTEXT KEY `fltxt_a` (`a`),\n' +
+    '  FULLTEXT KEY `fltxt_b` (`b`)\n' +
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+
+  const fulltextIndexesTableMigragedSchema = {
+    columns: {
+      a: ColTypes.char(32).notNull(),
+      b: ColTypes.varchar(255).notNull(),
+      c: ColTypes.text().notNull(),
+    },
+    keys: [
+      KeyTypes.fulltextIndex('a'),
+      KeyTypes.fulltextIndex('c'),
+    ],
+  };
+  const fulltextIndexesTableMigratedExpectedSQL =
+    'CREATE TABLE `fulltext_table` (\n' +
+    '  `a` char(32) NOT NULL,\n' +
+    '  `b` varchar(255) NOT NULL,\n' +
+    '  `c` text NOT NULL,\n' +
+    '  FULLTEXT KEY `fltxt_a` (`a`),\n' +
+    '  FULLTEXT KEY `fltxt_c` (`c`)\n' +
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+
   const foreignKeysTableName = 'fk_table';
   const foreignKeysTableSchema = {
     columns: {
@@ -567,6 +611,7 @@ describe('MySQLPlus', function() {
       pool.defineTable(uniqueKeysTableName, uniqueKeysTableSchema);
       pool.defineTable(indexesTableName, indexesTableSchema);
       pool.defineTable(spatialIndexesTableName, spatialIndexesTableSchema);
+      pool.defineTable(fulltextIndexesTableName, fulltextIndexesTableSchema);
       pool.defineTable(foreignKeysTableName, foreignKeysTableSchema);
       pool.defineTable(optionsTableName, optionsTableSchema);
       pool.defineTable(textTableName, textTableSchema);
@@ -638,6 +683,13 @@ describe('MySQLPlus', function() {
         cbSpatial();
       });
 
+      const cbFulltext = cbManager.registerCallback();
+      pool.query(`SHOW CREATE TABLE \`${fulltextIndexesTableName}\``, (err, result) => {
+        if (err) throw err;
+        result[0]['Create Table'].should.equal(fulltextIndexesTableExpectedSQL);
+        cbFulltext();
+      });
+
       const cb8 = cbManager.registerCallback();
       pool.query(`SHOW CREATE TABLE \`${foreignKeysTableName}\``, (err, result) => {
         if (err) throw err;
@@ -691,6 +743,7 @@ describe('MySQLPlus', function() {
       pool.defineTable(uniqueKeysTableName, uniqueKeysTableSchema);
       pool.defineTable(indexesTableName, indexesTableSchema);
       pool.defineTable(spatialIndexesTableName, spatialIndexesTableSchema);
+      pool.defineTable(fulltextIndexesTableName, fulltextIndexesTableSchema);
       pool.defineTable(foreignKeysTableName, foreignKeysTableSchema);
       pool.defineTable(optionsTableName, optionsTableSchema);
       pool.defineTable(textTableName, textTableSchema);
@@ -767,6 +820,13 @@ describe('MySQLPlus', function() {
         cbSpatial();
       });
 
+      const cbFulltext = cbManager.registerCallback();
+      pool.query(`SHOW CREATE TABLE \`${fulltextIndexesTableName}\``, (err, result) => {
+        if (err) throw err;
+        result[0]['Create Table'].should.equal(fulltextIndexesTableExpectedSQL);
+        cbFulltext();
+      });
+
       const cb8 = cbManager.registerCallback();
       pool.query(`SHOW CREATE TABLE \`${foreignKeysTableName}\``, (err, result) => {
         if (err) throw err;
@@ -820,6 +880,7 @@ describe('MySQLPlus', function() {
       pool.defineTable(uniqueKeysTableName, uniqueKeysTableSchema);
       pool.defineTable(indexesTableName, indexesTableSchema);
       pool.defineTable(spatialIndexesTableName, spatialIndexesTableSchema);
+      pool.defineTable(fulltextIndexesTableName, fulltextIndexesTableSchema);
       pool.defineTable(foreignKeysTableName, foreignKeysTableSchema);
       pool.defineTable(optionsTableName, optionsTableSchema);
       pool.defineTable(textTableName, textTableSchema);
@@ -891,6 +952,13 @@ describe('MySQLPlus', function() {
         cbSpatial();
       });
 
+      const cbFulltext = cbManager.registerCallback();
+      pool.query(`SHOW CREATE TABLE \`${fulltextIndexesTableName}\``, (err, result) => {
+        if (err) throw err;
+        result[0]['Create Table'].should.equal(fulltextIndexesTableExpectedSQL);
+        cbFulltext();
+      });
+
       const cb8 = cbManager.registerCallback();
       pool.query(`SHOW CREATE TABLE \`${foreignKeysTableName}\``, (err, result) => {
         if (err) throw err;
@@ -943,6 +1011,7 @@ describe('MySQLPlus', function() {
       pool.defineTable(uniqueKeysTableName, uniqueKeysTableMigragedSchema);
       pool.defineTable(indexesTableName, indexesTableMigragedSchema);
       pool.defineTable(spatialIndexesTableName, spatialIndexesTableMigragedSchema);
+      pool.defineTable(fulltextIndexesTableName, fulltextIndexesTableMigragedSchema);
       pool.defineTable(foreignKeysTableName, foreignKeysTableMigratedSchema);
       pool.defineTable(optionsTableName, optionsTableMigratedSchema);
 
@@ -1018,6 +1087,13 @@ describe('MySQLPlus', function() {
         if (err) throw err;
         result[0]['Create Table'].should.equal(spatialIndexesTableMigratedExpectedSQL);
         cbSpatial();
+      });
+
+      const cbFulltext = cbManager.registerCallback();
+      pool.query(`SHOW CREATE TABLE \`${fulltextIndexesTableName}\``, (err, result) => {
+        if (err) throw err;
+        result[0]['Create Table'].should.equal(fulltextIndexesTableMigratedExpectedSQL);
+        cbFulltext();
       });
 
       const cb8 = cbManager.registerCallback();

@@ -429,6 +429,12 @@ describe('ColumnDefinitions', () => {
 
       ColumnDefinitions.point().notNull().index().spatialIndex()
         .$toSQL().should.equal('point NOT NULL');
+
+      ColumnDefinitions.text().fulltextIndex()
+        .$toSQL().should.equal('text');
+
+      ColumnDefinitions.longtext().notNull().index().fulltextIndex()
+        .$toSQL().should.equal('longtext NOT NULL');
     });
 
     it('should allow the columns to be defined as primary keys, but not change the SQL, except for forcing the column to be NOT NULL', () => {
@@ -498,6 +504,26 @@ describe('ColumnDefinitions', () => {
 
       ColumnDefinitions.char().charset('utf8').collate('utf8_general_ci')
         .$toSQL().should.equal('char CHARACTER SET utf8 COLLATE utf8_general_ci');
+    });
+
+    it('should be able to create fulltext indexes', () => {
+      ColumnDefinitions.char(32).fulltextIndex()
+        .$toSQL().should.equal('char(32)');
+
+      ColumnDefinitions.varchar(255).fulltextIndex()
+        .$toSQL().should.equal('varchar(255)');
+
+      ColumnDefinitions.text().fulltextIndex()
+        .$toSQL().should.equal('text');
+
+      ColumnDefinitions.tinytext().fulltextIndex()
+        .$toSQL().should.equal('tinytext');
+
+      ColumnDefinitions.mediumtext().fulltextIndex()
+        .$toSQL().should.equal('mediumtext');
+
+      ColumnDefinitions.longtext().fulltextIndex()
+        .$toSQL().should.equal('longtext');
     });
 
   });

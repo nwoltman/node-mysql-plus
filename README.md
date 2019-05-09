@@ -1162,11 +1162,13 @@ Keys can be defined with the `keys` property, which is an array of [`KeyTypes`](
     accountID: pool.ColTypes.int().unsigned().notNull(),
     email: pool.ColTypes.varchar(255).notNull(),
     location: pool.ColTypes.point().notNull(),
+    description: pool.ColTypes.text(),
   },
   keys: [
     pool.KeyTypes.index('accountID'),
     pool.KeyTypes.uniqueIndex('email'),
     pool.KeyTypes.spatialIndex('location'),
+    pool.KeyTypes.fulltextIndex('description'),
     pool.KeyTypes.foreignKey('accountID').references('account', 'id'),
   ]
 }
@@ -1305,6 +1307,7 @@ Methods:
 
 + `charset(value)` - Sets the column's character set
 + `collate(value)` - Sets the column's collation
++ `fulltextIndex()` - Creates a [fulltext index](https://dev.mysql.com/doc/en/innodb-fulltext-index.html) for the column (excluding `enum` and `set` columns)
 
 Compatible types:
 
@@ -1375,7 +1378,7 @@ Normally if the `DEFAULT` is unspecified, MySQL uses `CURRENT_TIMESTAMP` as the 
 
 Methods:
 
-+ `spatialIndex()` - Creates a spatial index for the column
++ `spatialIndex()` - Creates a [spatial index](https://dev.mysql.com/doc/en/create-index.html#create-index-spatial) for the column
 
 Compatible types:
 
@@ -1395,6 +1398,7 @@ Compatible types:
 + `index(columnName [, ...otherColumns])` - Creates a regular [index](https://dev.mysql.com/doc/en/create-index.html)
 + `uniqueIndex(columnName [, ...otherColumns])` - Creates a [unique index](https://dev.mysql.com/doc/en/create-index.html#create-index-unique)
 + `spatialIndex(columnName)` - Creates a [spatial index](https://dev.mysql.com/doc/en/create-index.html#create-index-spatial)
++ `fulltextIndex(columnName)` - Creates a [fulltext index](https://dev.mysql.com/doc/en/innodb-fulltext-index.html)
 + `foreignKey(columnName [, ...otherColumns])` - Creates a [foreign key constraint](https://dev.mysql.com/doc/en/create-table-foreign-keys.html)
 
 **Example:**
@@ -1404,6 +1408,7 @@ Compatible types:
     pool.KeyTypes.index('accountID'),
     pool.KeyTypes.uniqueIndex('email'),
     pool.KeyTypes.spatialIndex('location'),
+    pool.KeyTypes.fulltextIndex('description'),
     pool.KeyTypes.foreignKey('accountID').references('account', 'id'),
 
     // Multi-column keys
@@ -1421,6 +1426,7 @@ All key types have a `name` method that can be used to customize the key’s nam
     pool.KeyTypes.index('accountID').name('account_key'),
     pool.KeyTypes.uniqueIndex('email').name('email_key'),
     pool.KeyTypes.spatialIndex('location').name('location_key'),
+    pool.KeyTypes.fulltextIndex('description').name('description_key'),
     pool.KeyTypes.foreignKey('accountID').references('account', 'id').name('account_foreign_key'),
   ]
 }

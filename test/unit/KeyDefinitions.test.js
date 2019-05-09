@@ -10,6 +10,7 @@ describe('KeyDefinitions', () => {
     should.throws(() => KeyDefinitions.index(), 'Cannot create a key with 0 columns');
     should.throws(() => KeyDefinitions.uniqueIndex(), 'Cannot create a key with 0 columns');
     should.throws(() => KeyDefinitions.spatialIndex(), 'Cannot create a key with 0 columns');
+    should.throws(() => KeyDefinitions.fulltextIndex(), 'Cannot create a key with 0 columns');
     should.throws(() => KeyDefinitions.foreignKey(), 'Cannot create a key with 0 columns');
   });
 
@@ -22,6 +23,9 @@ describe('KeyDefinitions', () => {
 
     KeyDefinitions.spatialIndex('id').name('my_index').$toSQL()
       .should.equal('SPATIAL INDEX `my_index` (`id`)');
+
+    KeyDefinitions.fulltextIndex('id').name('my_index').$toSQL()
+      .should.equal('FULLTEXT INDEX `my_index` (`id`)');
 
     KeyDefinitions.foreignKey('id').name('my_key').references('t', 'id').$toSQL()
       .should.equal('CONSTRAINT `my_key`\n  FOREIGN KEY (`id`) REFERENCES `t` (`id`)');
@@ -43,6 +47,10 @@ describe('KeyDefinitions', () => {
     b = KeyDefinitions.spatialIndex('a');
     a.$equals(b).should.be.true();
 
+    a = KeyDefinitions.fulltextIndex('a');
+    b = KeyDefinitions.fulltextIndex('a');
+    a.$equals(b).should.be.true();
+
     a = KeyDefinitions.foreignKey('a').references('t', 'id');
     b = KeyDefinitions.foreignKey('a').references('t', 'id');
     a.$equals(b).should.be.true();
@@ -57,6 +65,10 @@ describe('KeyDefinitions', () => {
 
     a = KeyDefinitions.spatialIndex('a').name('my_key');
     b = KeyDefinitions.spatialIndex('a').name('my_key');
+    a.$equals(b).should.be.true();
+
+    a = KeyDefinitions.fulltextIndex('a').name('my_key');
+    b = KeyDefinitions.fulltextIndex('a').name('my_key');
     a.$equals(b).should.be.true();
 
     a = KeyDefinitions.foreignKey('a').references('t', 'id').name('my_key');
@@ -75,6 +87,10 @@ describe('KeyDefinitions', () => {
     b = KeyDefinitions.spatialIndex('a', 'b');
     a.$equals(b).should.be.true();
 
+    a = KeyDefinitions.fulltextIndex('a', 'b');
+    b = KeyDefinitions.fulltextIndex('a', 'b');
+    a.$equals(b).should.be.true();
+
     a = KeyDefinitions.foreignKey('a', 'b').references('t', 'id');
     b = KeyDefinitions.foreignKey('a', 'b').references('t', 'id');
     a.$equals(b).should.be.true();
@@ -89,6 +105,10 @@ describe('KeyDefinitions', () => {
 
     a = KeyDefinitions.spatialIndex('a');
     b = KeyDefinitions.spatialIndex('b');
+    a.$equals(b).should.be.false();
+
+    a = KeyDefinitions.fulltextIndex('a');
+    b = KeyDefinitions.fulltextIndex('b');
     a.$equals(b).should.be.false();
 
     a = KeyDefinitions.foreignKey('a').references('t', 'id');
@@ -107,6 +127,10 @@ describe('KeyDefinitions', () => {
     b = KeyDefinitions.spatialIndex('b').name('my_key');
     a.$equals(b).should.be.false();
 
+    a = KeyDefinitions.fulltextIndex('a').name('my_key');
+    b = KeyDefinitions.fulltextIndex('b').name('my_key');
+    a.$equals(b).should.be.false();
+
     a = KeyDefinitions.foreignKey('a').references('t', 'id').name('my_key');
     b = KeyDefinitions.foreignKey('b').references('t', 'id').name('my_key');
     a.$equals(b).should.be.false();
@@ -121,6 +145,10 @@ describe('KeyDefinitions', () => {
 
     a = KeyDefinitions.spatialIndex('a').name('my_key');
     b = KeyDefinitions.spatialIndex('a').name('my_index');
+    a.$equals(b).should.be.false();
+
+    a = KeyDefinitions.fulltextIndex('a').name('my_key');
+    b = KeyDefinitions.fulltextIndex('a').name('my_index');
     a.$equals(b).should.be.false();
 
     a = KeyDefinitions.foreignKey('a').references('t', 'id').name('my_key');
@@ -139,6 +167,10 @@ describe('KeyDefinitions', () => {
     b = KeyDefinitions.spatialIndex('a', 'c');
     a.$equals(b).should.be.false();
 
+    a = KeyDefinitions.fulltextIndex('a', 'b');
+    b = KeyDefinitions.fulltextIndex('a', 'c');
+    a.$equals(b).should.be.false();
+
     a = KeyDefinitions.foreignKey('a', 'b').references('t', 'id');
     b = KeyDefinitions.foreignKey('a', 'c').references('t', 'id');
     a.$equals(b).should.be.false();
@@ -155,6 +187,10 @@ describe('KeyDefinitions', () => {
     b = KeyDefinitions.spatialIndex('a', 'b');
     a.$equals(b).should.be.false();
 
+    a = KeyDefinitions.fulltextIndex('a');
+    b = KeyDefinitions.fulltextIndex('a', 'b');
+    a.$equals(b).should.be.false();
+
     a = KeyDefinitions.foreignKey('a').references('t', 'id');
     b = KeyDefinitions.foreignKey('a', 'b').references('t', 'id');
     a.$equals(b).should.be.false();
@@ -169,6 +205,10 @@ describe('KeyDefinitions', () => {
 
     a = KeyDefinitions.spatialIndex('a', 'c');
     b = KeyDefinitions.spatialIndex('a');
+    a.$equals(b).should.be.false();
+
+    a = KeyDefinitions.fulltextIndex('a', 'c');
+    b = KeyDefinitions.fulltextIndex('a');
     a.$equals(b).should.be.false();
 
     a = KeyDefinitions.foreignKey('a', 'c').references('t', 'id');
