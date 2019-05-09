@@ -14,7 +14,7 @@
 ### Improvements
 + improvement: Don't run unnecessary DROP/ADD_FOREIGN_KEY operations ([`687df26`](https://github.com/nwoltman/node-mysql-plus/commit/687df26988be4611089d8ffee0564d9880891b06))
 + improvement: Improve error messages when creating ColumnDefinitions with improper arguments ([`fff463e`](https://github.com/nwoltman/node-mysql-plus/commit/fff463e0d695c7f6ab44d6e150a655fd49e8897f))
-+ chore(deps): mysql@2.17.4 ([`6281eab`](https://github.com/nwoltman/node-mysql-plus/commit/6281eab4c81c5a4d02eac92ba72c5b48a75fe71c))
++ chore(deps): mysql@2.17.1 ([`6281eab`](https://github.com/nwoltman/node-mysql-plus/commit/6281eab4c81c5a4d02eac92ba72c5b48a75fe71c))
 + chore: Fix spelling - 'geometrical' -> 'geometry' ([`b88c815`](https://github.com/nwoltman/node-mysql-plus/commit/b88c81548939bcacb6bb69bd787ea2be3a842c2c))
 
 ### Documentation
