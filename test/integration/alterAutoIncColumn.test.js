@@ -51,7 +51,7 @@ describe('when removing or adding the AUTO_INCREMENT attribute from a column', f
           'CREATE TABLE `alter_auto_inc_column` (\n' +
           '  `a` int(10) unsigned DEFAULT NULL,\n' +
           '  `b` int(10) unsigned NOT NULL AUTO_INCREMENT,\n' +
-          '  KEY `index_alter_auto_inc_column_b` (`b`)\n' +
+          '  KEY `idx_b` (`b`)\n' +
           ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
         );
         done();

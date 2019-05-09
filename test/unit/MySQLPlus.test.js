@@ -1,6 +1,7 @@
 'use strict';
 
 const ColumnDefinitions = require('../../lib/ColumnDefinitions');
+const KeyDefinitions = require('../../lib/KeyDefinitions');
 const MySQLPlus = require('../../lib/MySQLPlus');
 const PoolPlus = require('../../lib/PoolPlus');
 
@@ -23,6 +24,15 @@ describe('MySQLPlus', () => {
 
     it('should provide the ColumnDefinitions functions', () => {
       MySQLPlus.ColTypes.should.equal(ColumnDefinitions);
+    });
+
+  });
+
+
+  describe('.KeyTypes', () => {
+
+    it('should provide the KeyDefinitions functions', () => {
+      MySQLPlus.KeyTypes.should.equal(KeyDefinitions);
     });
 
   });

@@ -25,6 +25,7 @@ This module extends the popular [`mysql`](https://www.npmjs.com/package/mysql) m
     + [Migration Strategies](#migration-strategies)
     + [Defining Table Schemas](#defining-table-schemas)
     + [Column Types](#column-types)
+    + [Key Types](#key-types)
 
 ## Installation
 
@@ -146,6 +147,7 @@ This module.
 
 * [mysql-plus](#module_mysql-plus) ⇐ <code>mysql</code>
     * [~ColTypes](#module_mysql-plus..ColTypes)
+    * [~KeyTypes](#module_mysql-plus..KeyTypes)
     * [~createPool(config)](#module_mysql-plus..createPool) ⇒ <code>[PoolPlus](#PoolPlus)</code>
     * [~queryCallback](#module_mysql-plus..queryCallback) : <code>function</code>
 
@@ -168,6 +170,33 @@ const userTable = pool.defineTable('user', {
     id: mysql.ColTypes.bigint().unsigned().notNull().primaryKey(),
     created: mysql.ColTypes.datetime(),
   }
+});
+```
+
+
+---
+
+<a name="module_mysql-plus..KeyTypes"></a>
+
+### mysql-plus~KeyTypes
+A namespace that provides the key type methods used to define keys.
+
+**See**: [Key Types](#key-types)
+
+**Example**:
+```js
+const mysql = require('mysql-plus');
+const pool = mysql.createPool(config);
+const userTable = pool.defineTable('user', {
+  columns: {
+    id: mysql.ColTypes.bigint().unsigned().notNull().primaryKey(),
+    uid: mysql.ColTypes.varchar(32).notNull(),
+    created: mysql.ColTypes.datetime(),
+  },
+  keys: [
+    mysql.KeyTypes.uniqueIndex('uid'),
+    mysql.KeyTypes.index('created'),
+  ],
 });
 ```
 
@@ -237,6 +266,7 @@ and perform queries and transactions using promises.
 * [PoolPlus](#PoolPlus) ⇐ <code>Pool</code>
     * _instance_
         * [.ColTypes](#PoolPlus+ColTypes)
+        * [.KeyTypes](#PoolPlus+KeyTypes)
         * [.raw(sql)](#PoolPlus+raw) ⇒ <code>Object</code>
         * [.basicTable(name)](#PoolPlus+basicTable) ⇒ <code>[MySQLTable](#MySQLTable)</code>
         * [.defineTable(name, schema, [migrationStrategy])](#PoolPlus+defineTable) ⇒ <code>[MySQLTable](#MySQLTable)</code>
@@ -267,6 +297,35 @@ const userTable = pool.defineTable('user', {
     id: ColTypes.bigint().unsigned().notNull().primaryKey(),
     created: ColTypes.datetime(),
   }
+});
+```
+
+
+---
+
+<a name="PoolPlus+KeyTypes"></a>
+
+### poolPlus.KeyTypes
+A namespace that provides the column type methods used to define keys.
+The exact same thing as [`mysqlPlus.KeyTypes`](#module_mysql-plus..KeyTypes).
+Just here for convenience.
+
+**See**: [Key Types](#key-types)
+
+**Example**:
+```js
+const pool = mysql.createPool(config);
+const {ColTypes, KeyTypes} = pool;
+const userTable = pool.defineTable('user', {
+  columns: {
+    id: ColTypes.bigint().unsigned().notNull().primaryKey(),
+    uid: ColTypes.varchar(32).notNull(),
+    created: ColTypes.datetime(),
+  },
+  keys: [
+    KeyTypes.uniqueIndex('uid'),
+    KeyTypes.index('created'),
+  ],
 });
 ```
 
@@ -1043,8 +1102,8 @@ All defined tables will be dropped and recreated.
 A schema is defined by a JavaScript object with certain properties. For `mysql-plus`, the schema properties can be broken down into four main types:
 
 + [Columns](#columns)
++ [Primary Key](#primary-key)
 + [Keys](#keys)
-+ [Foreign Keys](#foreign-keys)
 + [Table Options](#table-options)
 
 ### Columns
@@ -1064,146 +1123,56 @@ Columns are defined using the `column` property which is an object where the key
 
 See the [Column Types](#column-types) section for all possible column types and attributes that can be defined.
 
-### Keys
+### Primary Key
 
-The following properties can be used to define different types of keys:
+`string|string[]`
 
-+ [`primaryKey`](#primarykey--stringstring)
-+ [`uniqueKeys`](#uniquekeys--arraystringstring)
-+ [`indexes`](#indexes--arraystringstring)
-+ [`spatialIndexes`](#spatialindexes--string)
-
-Note that [column definitions](#columndefinition) allow these keys to be defined directly on the column. If that method of defining a key for a column is used, the key should not be defined again using one of these properties (otherwise it will be duplicated).
-
-#### `primaryKey` : `string|string[]`
-
-Used to define the table's primary key. Its value is the name of one or more columns that make up the primary key.
-
-**Example:**
-```js
-// Single column primary key
-{
-  primaryKey: 'id',
-}
-
-// Multi-column primary key
-{
-  primaryKey: ['userID', 'videoID'],
-}
-```
-
-#### `uniqueKeys` : `Array.<string|string[]>`
-
-Used to define the table's unique keys. Its value is an array where the elements are the names of one or more columns that make up a unique key.
-
-**Example:**
-```js
-{
-  uniqueKeys: [
-    'email',    // Single column unique key
-    ['a', 'b'], // Multi-column unique key
-  ],
-}
-```
-
-#### `indexes` : `Array.<string|string[]>`
-
-Used to define the table's indexes. Its value is an array where the elements are the names of one or more columns that make up an index.
-
-**Example:**
-```js
-{
-  indexes: [
-    'points',   // Single column index
-    ['a', 'b'], // Multi-column index
-  ],
-}
-```
-
-#### `spatialIndexes` : `string[]`
-
-Used to define the table's spatial indexes. Its value is an array where the elements are the column name for each index.
-
-Note that spatial indexes may each only have 1 column and they may only be defined for [geometry-type](https://dev.mysql.com/doc/refman/5.7/en/spatial-type-overview.html) columns.
-
-**Example:**
-```js
-{
-  spatialIndexes: [
-    'coordinates',
-    'line',
-  ],
-}
-```
-
-### Foreign Keys
-
-Foreign keys are defined using the `foreignKeys` property, which is an object that maps column names to a reference table column. The reference table column can be specified with either an object or a shorthand string.
-
-If an object, it should have the following properties:
-
-+ `table` - The name of the reference table.
-+ `column` - The name of the reference column in the reference table.
-+ `onDelete` (optional) - One of: `RESTRICT`, `CASCADE`, `SET NULL`, `NO ACTION`, `SET DEFAULT`.
-+ `onUpdate` (optional) - Same as `onDelete`.
-
-Alternatively, a shorthand string that has the following form may be used:
-
-```js
-'<table>.<column> [reference_option]' // `[reference_option]` is optional
-```
-
-**Example:**
+The table’s primary key can be defined with the `primaryKey` property:
 
 ```js
 {
   columns: {
-    id: /* ... */,
-    uid: /* ... */,
-    userID: /* ... */,
-    thingOne: /* ... */,
-    thingTwo: /* ... */,
+    id: pool.ColTypes.int().unsigned().notNull(),
+    name: pool.ColTypes.varchar(255).notNull(),
   },
-
-  foreignKeys: {
-    // String shorthand
-    id: 'other_table.id', // shorthand for {table: 'other_table', column: 'id'}
-
-    uid: 'other_table.uid CASCADE',
-    // shorthand for {table: 'other_table', column: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE'}
-
-    // Object reference with ON DELETE and ON UPDATE options
-    userID: {
-      table: 'user',
-      column: 'id',
-      onDelete: 'CASCADE',
-      onUpdate: 'NO ACTION',
-    },
-
-    // Multi-column foreign key (uses comma-separated column names)
-    'thingOne, thingTwo': {
-      table: 'thing_table',
-      column: ['one', 'two'],
-    },
-  },
+  primaryKey: 'id'
 }
 ```
 
-**Note:** Foreign key definitions don't define keys, but [_constraints_](https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_foreign_key_constraint). When defining foreign key constraints, the columns that make up the constraints should also be keys.
+An array can be used to define a multi-column primary key.
 
-Keys required for the example above:
 ```js
 {
-  primaryKey: 'id',
-  uniqueKeys: [
-    'uid',
-    'userID',
-  ],
-  indexes: [
-    ['thingOne', 'thingTwo'],
-  ],
+  columns: {
+    id: pool.ColTypes.int().unsigned().notNull(),
+    name: pool.ColTypes.varchar(255).notNull(),
+  },
+  primaryKey: ['id', 'name']
 }
 ```
+
+### Keys
+
+Keys can be defined with the `keys` property, which is an array of [`KeyTypes`](#key-types):
+
+```js
+{
+  columns: {
+    id: pool.ColTypes.int().unsigned().notNull(),
+    accountID: pool.ColTypes.int().unsigned().notNull(),
+    email: pool.ColTypes.varchar(255).notNull(),
+    location: pool.ColTypes.point().notNull(),
+  },
+  keys: [
+    pool.KeyTypes.index('accountID'),
+    pool.KeyTypes.uniqueIndex('email'),
+    pool.KeyTypes.spatialIndex('location'),
+    pool.KeyTypes.foreignKey('accountID').references('account', 'id'),
+  ]
+}
+```
+
+See the [Key Types](#key-types) section for information on the different types of keys that can be defined.
 
 ### Table Options
 
@@ -1418,3 +1387,84 @@ Compatible types:
 + `multilinestring`
 + `multipolygon`
 + `geometrycollection`
+
+## Key Types
+
+[`mysql.KeyTypes`](#module_mysql-plus..KeyTypes) and [`pool.KeyTypes`](#PoolPlus+KeyTypes) both expose the following methods for defining table keys:
+
++ `index(columnName [, ...otherColumns])` - Creates a regular [index](https://dev.mysql.com/doc/en/create-index.html)
++ `uniqueIndex(columnName [, ...otherColumns])` - Creates a [unique index](https://dev.mysql.com/doc/en/create-index.html#create-index-unique)
++ `spatialIndex(columnName)` - Creates a [spatial index](https://dev.mysql.com/doc/en/create-index.html#create-index-spatial)
++ `foreignKey(columnName [, ...otherColumns])` - Creates a [foreign key constraint](https://dev.mysql.com/doc/en/create-table-foreign-keys.html)
+
+**Example:**
+```js
+{
+  keys: [
+    pool.KeyTypes.index('accountID'),
+    pool.KeyTypes.uniqueIndex('email'),
+    pool.KeyTypes.spatialIndex('location'),
+    pool.KeyTypes.foreignKey('accountID').references('account', 'id'),
+
+    // Multi-column keys
+    pool.KeyTypes.uniqueIndex('accountID', 'email'),
+    pool.KeyTypes.foreignKey('userID', 'accountID').references('user', ['id', 'accountID']),
+  ]
+}
+```
+
+All key types have a `name` method that can be used to customize the key’s name (helpful if you need to use an [index hint](https://dev.mysql.com/doc/en/index-hints.html) in a query):
+
+```js
+{
+  keys: [
+    pool.KeyTypes.index('accountID').name('account_key'),
+    pool.KeyTypes.uniqueIndex('email').name('email_key'),
+    pool.KeyTypes.spatialIndex('location').name('location_key'),
+    pool.KeyTypes.foreignKey('accountID').references('account', 'id').name('account_foreign_key'),
+  ]
+}
+```
+
+### Foreign Keys
+
+Foreign keys have the following additional methods:
+
++ `references(tableName, columns)` - Sets the name of the reference table (`string`) and the referenced columns (`string|Array<string>`)
++ `onDelete(action)` - Sets the foreign key’s `ON DELETE` action, where `action` is one of: `RESTRICT`, `CASCADE`, `SET NULL`, `NO ACTION`
++ `onUpdate(action)` - Sets the foreign key’s `ON UPDATE` action (with the same options as `onDelete`)
++ `cascade()` - Short for: `.onDelete('CASCADE').onUpdate('CASCADE')`
+
+**Example:**
+```js
+{
+  columns: {
+    id: /* ... */,
+    uid: /* ... */,
+    userID: /* ... */,
+    thingOne: /* ... */,
+    thingTwo: /* ... */,
+  },
+  keys: [
+    KeyTypes.foreignKey('id').references('other_table', 'id'),
+    KeyTypes.foreignKey('uid').references('other_table', 'uid').cascade(),
+    KeyTypes.foreignKey('userID').references('user', 'id').onDelete('CASCADE').onUpdate('SET NULL'),
+    KeyTypes.foreignKey('thingOne', 'thingTwo').references('thing_table', ['one', 'two']),
+  ]
+}
+```
+
+**Note:** Foreign keys don't define indexes, but [_constraints_](https://dev.mysql.com/doc/en/glossary.html#glos_foreign_key_constraint). When defining foreign keys, the columns used in the key should also have an index.
+
+Indexes required for the example above:
+
+```js
+{
+  primaryKey: 'id',
+  keys: [
+    KeyTypes.uniqueIndex('uid'),
+    KeyTypes.uniqueIndex('userID'),
+    KeyTypes.index('thingOne', 'thingTwo'),
+  ]
+}
+```

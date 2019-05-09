@@ -4,7 +4,7 @@ const MySQLPlus = require('../../lib/MySQLPlus');
 
 const config = require('../config');
 
-const {ColTypes} = MySQLPlus;
+const {ColTypes, KeyTypes} = MySQLPlus;
 
 describe('when modifying a column that is part of a foreign key', () => {
 
@@ -28,51 +28,51 @@ describe('when modifying a column that is part of a foreign key', () => {
     columns: {
       id: ColTypes.int().unsigned().notNull().primaryKey(),
     },
-    foreignKeys: {
-      id: 'table_fk_alter_column.id',
-    },
+    keys: [
+      KeyTypes.foreignKey('id').references('table_fk_alter_column', 'id'),
+    ],
   });
   pool2.defineTable('table_fk_modify_column_primary_key', {
     columns: {
       id: ColTypes.int().unsigned().notNull().primaryKey().autoIncrement(),
     },
-    foreignKeys: {
-      id: 'table_fk_alter_column.id',
-    },
+    keys: [
+      KeyTypes.foreignKey('id').references('table_fk_alter_column', 'id'),
+    ],
   });
 
   pool.defineTable('table_fk_modify_column_unique_key', {
     columns: {
       uid: ColTypes.int().unsigned().notNull().unique(),
     },
-    foreignKeys: {
-      uid: 'table_fk_alter_column.uid',
-    },
+    keys: [
+      KeyTypes.foreignKey('uid').references('table_fk_alter_column', 'uid'),
+    ],
   });
   pool2.defineTable('table_fk_modify_column_unique_key', {
     columns: {
       uid: ColTypes.bigint().unsigned().notNull().unique(),
     },
-    foreignKeys: {
-      uid: 'table_fk_alter_column.uid',
-    },
+    keys: [
+      KeyTypes.foreignKey('uid').references('table_fk_alter_column', 'uid'),
+    ],
   });
 
   pool.defineTable('table_fk_modify_column_index_key', {
     columns: {
       uid: ColTypes.int().unsigned().notNull().index(),
     },
-    foreignKeys: {
-      uid: 'table_fk_alter_column.uid',
-    },
+    keys: [
+      KeyTypes.foreignKey('uid').references('table_fk_alter_column', 'uid'),
+    ],
   });
   pool2.defineTable('table_fk_modify_column_index_key', {
     columns: {
       uid: ColTypes.bigint().unsigned().notNull().index(),
     },
-    foreignKeys: {
-      uid: 'table_fk_alter_column.uid',
-    },
+    keys: [
+      KeyTypes.foreignKey('uid').references('table_fk_alter_column', 'uid'),
+    ],
   });
 
   before((done) => {

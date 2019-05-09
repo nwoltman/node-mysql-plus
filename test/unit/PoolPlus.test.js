@@ -4,6 +4,7 @@
 
 const ColumnDefinitions = require('../../lib/ColumnDefinitions');
 const Connection = require('mysql/lib/Connection');
+const KeyDefinitions = require('../../lib/KeyDefinitions');
 const MySQLTable = require('../../lib/MySQLTable');
 const Pool = require('mysql/lib/Pool');
 const PoolPlus = require('../../lib/PoolPlus');
@@ -31,6 +32,15 @@ describe('PoolPlus', () => {
 
     it('should provide the ColumnDefinitions functions', () => {
       pool.ColTypes.should.equal(ColumnDefinitions);
+    });
+
+  });
+
+
+  describe('.KeyTypes', () => {
+
+    it('should provide the KeyDefinitions functions', () => {
+      pool.KeyTypes.should.equal(KeyDefinitions);
     });
 
   });
@@ -967,9 +977,9 @@ describe('PoolPlus', () => {
         columns: {
           id: debugPool.ColTypes.int().unsigned().notNull().primaryKey(),
         },
-        foreignKeys: {
-          id: 'non_existent_table.id',
-        },
+        keys: [
+          KeyDefinitions.foreignKey('id').references('non_existent_table', 'id'),
+        ],
       });
 
       debugPool.sync((err) => {
@@ -980,7 +990,7 @@ describe('PoolPlus', () => {
           '====== mysql-plus sync errored on operation: ======',
           '',
           'type: ADD_FOREIGN_KEY',
-          'ALTER TABLE `pool_plus_test_table_debug_error` ADD CONSTRAINT `fk_pool_plus_test_table_debug_error_id`',
+          'ALTER TABLE `pool_plus_test_table_debug_error` ADD CONSTRAINT `fk_id_pool_plus_test_table_debug_error`',
           '  FOREIGN KEY (`id`) REFERENCES `non_existent_table` (`id`);',
           '',
           '===================================================',

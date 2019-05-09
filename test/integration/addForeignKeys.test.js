@@ -4,7 +4,7 @@ const MySQLPlus = require('../../lib/MySQLPlus');
 
 const config = require('../config');
 
-const {ColTypes} = MySQLPlus;
+const {ColTypes, KeyTypes} = MySQLPlus;
 
 describe('when migrating a table with no foreign keys to having some foreign keys', function() {
 
@@ -25,9 +25,9 @@ describe('when migrating a table with no foreign keys to having some foreign key
     columns: {
       id: ColTypes.int().notNull().index(),
     },
-    foreignKeys: {
-      id: 'add_foreign_keys_foreign.id',
-    },
+    keys: [
+      KeyTypes.foreignKey('id').references('add_foreign_keys_foreign', 'id'),
+    ],
   });
 
   before((done) => {
