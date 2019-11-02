@@ -5,45 +5,15 @@
   "author": "Nathan Woltman <nwoltman@outlook.com>",
   "license": "MIT",
   "main": "lib/MySQLPlus.js",
-  "engines": {
-    "node": ">=6"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/nwoltman/node-mysql-plus.git"
-  },
-  "bugs": {
-    "url": "https://github.com/nwoltman/node-mysql-plus/issues"
-  },
-  "homepage": "https://github.com/nwoltman/node-mysql-plus#readme",
-  "dependencies": {
-    "mysql": "^2.17.1"
-  },
-  "devDependencies": {
-    "@nwoltman/eslint-config": "~0.2.0",
-    "coveralls": "^3.0.3",
-    "es6-callback-manager": "^2.0.1",
-    "eslint": "^5.16.0",
-    "grunt": "^1.0.4",
-    "grunt-env": "^0.4.4",
-    "grunt-eslint": "^21.0.0",
-    "grunt-jsdoc-to-markdown": "^4.0.0",
-    "grunt-mocha-istanbul": "^5.0.2",
-    "grunt-mocha-test": "^0.13.3",
-    "istanbul": "^0.4.5",
-    "jit-grunt": "^0.10.0",
-    "mocha": "^6.1.4",
-    "semver": "^6.0.0",
-    "should": "~13.2.3",
-    "should-sinon": "0.0.6",
-    "sinon": "~7.3.2"
-  },
-  "scripts": {
-    "test": "grunt"
-  },
   "files": [
     "lib"
   ],
+  "engines": {
+    "node": ">=6"
+  },
+  "repository": "github:nwoltman/node-mysql-plus",
+  "homepage": "https://github.com/nwoltman/node-mysql-plus#readme",
+  "bugs": "https://github.com/nwoltman/node-mysql-plus/issues",
   "keywords": [
     "mysql",
     "plus",
@@ -56,5 +26,30 @@
     "define",
     "sql",
     "query"
-  ]
+  ],
+  "dependencies": {
+    "mysql": "^2.17.1"
+  },
+  "devDependencies": {
+    "@nwoltman/eslint-config": "~0.5.1",
+    "coveralls": "^3.0.7",
+    "es6-callback-manager": "^2.0.1",
+    "eslint": "^6.6.0",
+    "grunt": "^1.0.4",
+    "grunt-env": "^1.0.1",
+    "grunt-eslint": "^22.0.0",
+    "grunt-jsdoc-to-markdown": "^5.0.0",
+    "grunt-mocha-istanbul": "^5.0.2",
+    "grunt-mocha-test": "^0.13.3",
+    "istanbul": "^0.4.5",
+    "jit-grunt": "^0.10.0",
+    "mocha": "^6.2.2",
+    "semver": "^6.3.0",
+    "should": "~13.2.3",
+    "should-sinon": "0.0.6",
+    "sinon": "~7.5.0"
+  },
+  "scripts": {
+    "test": "grunt"
+  }
 }
