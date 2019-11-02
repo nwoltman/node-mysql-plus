@@ -1,9 +1,9 @@
-dist: xenial
+dist: bionic
 language: node_js
 node_js:
-  - '12'
-  - '10'
-  - '8'
+  - 13
+  - 12
+  - 10
 services:
   - mysql
 stages:
