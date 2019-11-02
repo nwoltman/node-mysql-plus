@@ -61,6 +61,11 @@ module.exports = function(grunt) {
         },
       },
       options: {
+        check: {
+          branches: 100,
+          lines: 100,
+          statements: 100,
+        },
         mochaOptions: ['--colors', '--reporter', 'dot'],
         require: ['should', 'should-sinon'],
       },
