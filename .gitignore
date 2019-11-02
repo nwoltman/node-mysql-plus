@@ -2,4 +2,6 @@ coverage
 node_modules
 .DS_Store
 *.log
-*.sublime-workspace
+*.sublime-*
+package-lock.json
+yarn.lock
