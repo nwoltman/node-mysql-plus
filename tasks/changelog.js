@@ -13,7 +13,7 @@ module.exports = function(grunt) {
       grunt.fail.fatal('Invalid release type: ' + releaseType);
     }
 
-    const repoUrl = pkg.repository.url.slice(0, -4); // Slice off '.git'
+    const repoUrl = pkg.repository.replace('github:', 'https://github.com/');
     const getCommitLog =
       `git --no-pager log v${curVersion}... --reverse --pretty=format:"+ %s ([\`%h\`](${repoUrl}/commit/%H))"`;
     const commitLog = execSync(getCommitLog).toString();
