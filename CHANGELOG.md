@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.16.1 (2020-02-13)
+
+### Improvements
++ chore: Fix typo in CHANGELOG ([`a821775`](https://github.com/nwoltman/node-mysql-plus/commit/a8217756f8775fd6f394e548d845890d6b5e1f1a))
++ refactor: Use `Array.isArray()` instead of `instanceof Array` ([`4e73a2e`](https://github.com/nwoltman/node-mysql-plus/commit/4e73a2ea6e03b4c65cd2f9d3ca7002be27da54ca))
++ chore(ci): Remove Node 8 and add Node 13 ([`0e7511a`](https://github.com/nwoltman/node-mysql-plus/commit/0e7511a08abcca9b4725224ca9b0b14bb56b9bdd))
++ chore(deps): [`mysql@2.18.1`](https://github.com/mysqljs/mysql/blob/master/Changes.md#v2181-2020-01-23) ([`1f5571d`](https://github.com/nwoltman/node-mysql-plus/commit/1f5571da8b70a4d532fb61cb8df8af45126b14d7))
+
 ## 0.16.0 (2019-05-09)
 
 ### Breaking Changes
