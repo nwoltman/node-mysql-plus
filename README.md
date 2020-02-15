@@ -30,7 +30,9 @@ This module extends the popular [`mysql`](https://www.npmjs.com/package/mysql) m
 ## Installation
 
 ```sh
-npm install mysql-plus --save
+npm install mysql-plus
+# or
+yarn add mysql-plus
 ```
 
 ## Usage Example
@@ -142,8 +144,8 @@ an instance, use <a href="#PoolPlus+defineTable"><code>poolPlus.defineTable()</c
 ## mysql-plus ⇐ <code>mysql</code>
 This module.
 
-**Extends**: <code>mysql</code>  
-**See**: [mysql](https://github.com/mysqljs/mysql#mysql)  
+**Extends**: <code>mysql</code>
+**See**: [mysql](https://github.com/mysqljs/mysql#mysql)
 
 * [mysql-plus](#module_mysql-plus) ⇐ <code>mysql</code>
     * [~ColTypes](#module_mysql-plus..ColTypes)
@@ -250,7 +252,7 @@ A function called with the results of a query.
 | results | <code>Array</code> &#124; <code>Object</code> | The results of the query. |
 | fields | <code>Array.&lt;Object&gt;</code> | Information about the returned results' fields (if any). |
 
-**See**: [https://github.com/mysqljs/mysql#performing-queries](https://github.com/mysqljs/mysql#performing-queries)  
+**See**: [https://github.com/mysqljs/mysql#performing-queries](https://github.com/mysqljs/mysql#performing-queries)
 
 ---
 
@@ -260,8 +262,8 @@ A function called with the results of a query.
 A class that extends the `mysql` module's `Pool` class with the ability to define tables
 and perform queries and transactions using promises.
 
-**Extends**: <code>Pool</code>  
-**See**: [Pool](https://github.com/mysqljs/mysql#pooling-connections)  
+**Extends**: <code>Pool</code>
+**See**: [Pool](https://github.com/mysqljs/mysql#pooling-connections)
 
 * [PoolPlus](#PoolPlus) ⇐ <code>Pool</code>
     * _instance_
@@ -344,7 +346,7 @@ when it is used as a data-object value or `?` placeholder replacement.
 |:--- |:--- |:--- |
 | sql | <code>string</code> | SQL that should not be escaped. |
 
-**Returns**: <code>Object</code> - An object that is turned into the provided `sql` string when `mysql` attempts to escape it.  
+**Returns**: <code>Object</code> - An object that is turned into the provided `sql` string when `mysql` attempts to escape it.
 **See**: [(mysql) Escaping query values](https://github.com/mysqljs/mysql#escaping-query-values)
 
 **Example**: Inserting a geometry Point
@@ -377,7 +379,7 @@ for querying the table with the given `name`.
 |:--- |:--- |:--- |
 | name | <code>string</code> | The name of the table. |
 
-**Returns**: <code>[MySQLTable](#MySQLTable)</code> - A `MySQLTable` instance.  
+**Returns**: <code>[MySQLTable](#MySQLTable)</code> - A `MySQLTable` instance.
 
 ---
 
@@ -393,7 +395,7 @@ Defines a table to be created or updated in the database.
 | schema | <code>Object</code> | An object that defines the table's schema.     See the [Defining Table Schemas](#defining-table-schemas) section. |
 | [migrationStrategy] | <code>string</code> | One of `safe`, `alter`, or `drop`. This will override     the `migrationStrategy` value from the [`config`](#module_mysql-plus..createPool)     (but is still subject to the same restrictions in production environments). |
 
-**Returns**: <code>[MySQLTable](#MySQLTable)</code> - A `MySQLTable` instance that has methods for performing queries on the table.  
+**Returns**: <code>[MySQLTable](#MySQLTable)</code> - A `MySQLTable` instance that has methods for performing queries on the table.
 **See**: [Defining Table Schemas](#defining-table-schemas)
 
 **Example**:
@@ -463,7 +465,7 @@ callback it returns a promise that resolves with the results of the query.
 | [cb] | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | An optional callback that gets called with     the results of the query. |
 
 **Returns**: <code>?Promise</code> - If the `cb` parameter is omitted, a promise that will resolve with the results
-    of the query is returned.  
+    of the query is returned.
 **See**: [https://github.com/mysqljs/mysql#performing-queries](https://github.com/mysqljs/mysql#performing-queries)
 
 **Example**:
@@ -549,7 +551,7 @@ A function that will make queries during a transaction.
     If the promise resolves, the transaction will be committed, and if it rejects, the
     transaction will be rolled back. If this function does not return a promise, the
     `done` callback must be used or else the transaction will not be committed and
-    the transaction connection will never be released.  
+    the transaction connection will never be released.
 **See**: [`poolPlus.transaction()`](#PoolPlus+transaction)
 
 **Example**: To fail a transaction using the `done` callback
@@ -611,7 +613,7 @@ a promise that resolves with the results of the query.
 | [cb] | <code>[queryCallback](#module_mysql-plus..queryCallback)</code> | An optional callback that gets called with     the results of the query. |
 
 **Returns**: <code>?Promise</code> - If the `cb` parameter is omitted, a promise that will resolve with the results
-    of the query is returned.  
+    of the query is returned.
 **See**: [https://github.com/mysqljs/mysql#performing-queries](https://github.com/mysqljs/mysql#performing-queries)
 
 **Example**:
@@ -635,7 +637,7 @@ A class that provides convenient methods for performing queries.<br>To create
 an instance, use [`poolPlus.defineTable()`](#PoolPlus+defineTable) or
 [`poolPlus.basicTable()`](#PoolPlus+basicTable).
 
-**See**: [https://github.com/mysqljs/mysql#performing-queries](https://github.com/mysqljs/mysql#performing-queries)  
+**See**: [https://github.com/mysqljs/mysql#performing-queries](https://github.com/mysqljs/mysql#performing-queries)
 
 * [MySQLTable](#MySQLTable)
     * [.name](#MySQLTable+name) : <code>string</code>
@@ -1037,7 +1039,7 @@ Returns a new `MySQLTable` instance that will perform queries using the provided
 | trxn | <code>[Connection](#Connection)</code> | The transaction connection that will be used to perform queries. |
 
 **Returns**: <code>[MySQLTable](#MySQLTable)</code> - A new `MySQLTable` instance that will perform queries using the provided transaction
-    connection instead of the `PoolPlus` instance that was used to create the original instance.  
+    connection instead of the `PoolPlus` instance that was used to create the original instance.
 **See**: [`pool.transaction()`](#PoolPlus+transaction)
 
 **Example**:
