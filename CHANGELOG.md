@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.16.2 (2020-06-29)
+
+### Improvements
++ improvement: Support MariaDB's CURRENT_TIMESTAMP format ([`5c6d3c7`](https://github.com/nwoltman/node-mysql-plus/commit/5c6d3c711f304ee97d3a2c790dab353594936ce9))
+
+### Documentation
++ docs: Remove "--save" from npm install command ([`ed932c9`](https://github.com/nwoltman/node-mysql-plus/commit/ed932c99e19c14aca479234fbb90618b295b225d))
+
 ## 0.16.1 (2020-02-13)
 
 ### Improvements
