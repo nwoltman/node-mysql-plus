@@ -1,7 +1,7 @@
 'use strict';
 
 const config = require('../config');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const sinon = require('sinon');
 
 describe('Connection', () => {

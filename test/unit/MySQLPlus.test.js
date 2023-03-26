@@ -5,7 +5,7 @@ const KeyDefinitions = require('../../lib/KeyDefinitions');
 const MySQLPlus = require('../../lib/MySQLPlus');
 const PoolPlus = require('../../lib/PoolPlus');
 
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 describe('MySQLPlus', () => {
 
