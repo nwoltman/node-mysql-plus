@@ -3,10 +3,10 @@
 /* eslint-disable no-console, padding-line-between-statements */
 
 const ColumnDefinitions = require('../../lib/ColumnDefinitions');
-const Connection = require('mysql/lib/Connection');
+const {Connection} = require('mysql2');
 const KeyDefinitions = require('../../lib/KeyDefinitions');
 const MySQLTable = require('../../lib/MySQLTable');
-const Pool = require('mysql/lib/Pool');
+const {Pool} = require('mysql2');
 const PoolPlus = require('../../lib/PoolPlus');
 const TableDefinition = require('../../lib/TableDefinition');
 
@@ -570,7 +570,6 @@ describe('PoolPlus', () => {
   describe('when defining tables', () => {
 
     var PoolStub;
-    var PoolConfigStub;
     var MySQLTableStub;
 
     var MockPool;
@@ -582,8 +581,8 @@ describe('PoolPlus', () => {
 
       // Stub some classes
       class MockClass {}
-      PoolStub = sinon.stub(require.cache[require.resolve('mysql/lib/Pool')], 'exports').value(MockClass);
-      PoolConfigStub = sinon.stub(require.cache[require.resolve('mysql/lib/PoolConfig')], 'exports').value(MockClass);
+      const mockFunction = options => options;
+      PoolStub = sinon.stub(require.cache[require.resolve('mysql2')], 'exports').value({Pool: MockClass, createPool: mockFunction});
       MySQLTableStub = sinon.stub(require.cache[require.resolve('../../lib/MySQLTable')], 'exports').value(MockClass);
       sinon.stub(require.cache[require.resolve('../../lib/TableDefinition')], 'exports');
 
@@ -601,7 +600,6 @@ describe('PoolPlus', () => {
     after(() => {
       // Restore stubs
       PoolStub.restore();
-      PoolConfigStub.restore();
       MySQLTableStub.restore();
       require.cache[require.resolve('../../lib/TableDefinition')].exports.restore();
       Map.prototype.has.restore();
