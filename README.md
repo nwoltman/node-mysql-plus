@@ -8,7 +8,7 @@
 
 A MySQL client for Node.js that makes defining tables easy and automatically migrates table schemas.
 
-This module extends the popular [`mysql`](https://www.npmjs.com/package/mysql) module, so it is recommended that you read the [`mysql` documentation](https://github.com/mysqljs/mysql#introduction), especially the sections on [connection options](https://github.com/mysqljs/mysql#connection-options), [performing queries](https://github.com/mysqljs/mysql#performing-queries), [escaping query values](https://github.com/mysqljs/mysql#escaping-query-values), and [escaping query identifiers](https://github.com/mysqljs/mysql#escaping-query-identifiers).
+This module extends the popular [`mysql2`](https://www.npmjs.com/package/mysql2) module, so it is recommended that you read the [`mysql` documentation](https://github.com/mysqljs/mysql#introduction), especially the sections on [connection options](https://github.com/mysqljs/mysql#connection-options), [performing queries](https://github.com/mysqljs/mysql#performing-queries), [escaping query values](https://github.com/mysqljs/mysql#escaping-query-values), and [escaping query identifiers](https://github.com/mysqljs/mysql#escaping-query-identifiers).
 
 ## Table of Contents
 
@@ -259,7 +259,7 @@ A function called with the results of a query.
 <a name="PoolPlus"></a>
 
 ## PoolPlus ⇐ <code>Pool</code>
-A class that extends the `mysql` module's `Pool` class with the ability to define tables
+A class that extends the `mysql2` module's `Pool` class with the ability to define tables
 and perform queries and transactions using promises.
 
 **Extends**: <code>Pool</code>
@@ -591,7 +591,7 @@ function trxnHandler(trxn, done) {
 <a name="Connection"></a>
 
 ## Connection
-The `mysql` module's `Connection` class extended with one extra method. Returned by
+The `mysql2` module's `Connection` class extended with one extra method. Returned by
   [`mysql.createConnection()`](https://github.com/mysqljs/mysql#establishing-connections)
   and [`pool.getConnection()`](https://github.com/mysqljs/mysql#pooling-connections) and
   passed to [`transactionHandler`](#PoolPlus..transactionHandler).
