@@ -42,11 +42,11 @@
     "grunt-mocha-test": "^0.13.3",
     "istanbul": "^0.4.5",
     "jit-grunt": "^0.10.0",
-    "mocha": "^7.0.1",
+    "mocha": "^10.2.0",
     "semver": "^7.3.8",
     "should": "~13.2.3",
     "should-sinon": "0.0.6",
-    "sinon": "~8.1.1"
+    "sinon": "^15.0.3"
   },
   "scripts": {
     "test": "grunt"
