@@ -49,10 +49,10 @@ describe('when removing or adding the AUTO_INCREMENT attribute from a column', f
 
         rows[0]['Create Table'].should.equal(
           'CREATE TABLE `alter_auto_inc_column` (\n' +
-          '  `a` int(10) unsigned DEFAULT NULL,\n' +
-          '  `b` int(10) unsigned NOT NULL AUTO_INCREMENT,\n' +
+          '  `a` int unsigned DEFAULT NULL,\n' +
+          '  `b` int unsigned NOT NULL AUTO_INCREMENT,\n' +
           '  KEY `idx_b` (`b`)\n' +
-          ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
+          ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci'
         );
         done();
       });

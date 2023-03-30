@@ -52,12 +52,12 @@ describe('when adding new columns', function() {
 
         rows[0]['Create Table'].should.equal(
           'CREATE TABLE `new_columns_positioning_test` (\n' +
-          '  `preA` smallint(6) DEFAULT NULL,\n' +
-          '  `a` int(11) DEFAULT NULL,\n' +
-          '  `preB` smallint(6) DEFAULT NULL,\n' +
-          '  `b` int(11) DEFAULT NULL,\n' +
-          '  `c` smallint(6) DEFAULT NULL\n' +
-          ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
+          '  `preA` smallint DEFAULT NULL,\n' +
+          '  `a` int DEFAULT NULL,\n' +
+          '  `preB` smallint DEFAULT NULL,\n' +
+          '  `b` int DEFAULT NULL,\n' +
+          '  `c` smallint DEFAULT NULL\n' +
+          ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci'
         );
         done();
       });

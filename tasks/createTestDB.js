@@ -19,7 +19,7 @@ module.exports = function(grunt) {
         throw err;
       }
 
-      db.query('CREATE DATABASE ?? CHARACTER SET utf8 COLLATE utf8_general_ci', [database], (err) => {
+      db.query('CREATE DATABASE ?? CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci', [database], (err) => {
         if (err) {
           throw err;
         }

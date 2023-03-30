@@ -245,6 +245,18 @@ describe('KeyDefinitions', () => {
     b = KeyDefinitions.foreignKey('a').references('t', 'id').onDelete('CASCADE').onUpdate('CASCADE');
     a.$equals(b).should.be.true();
 
+    a = KeyDefinitions.foreignKey('a').references('t', 'id').onDelete('RESTRICT').onUpdate('RESTRICT');
+    b = KeyDefinitions.foreignKey('a').references('t', 'id').onDelete('NO ACTION').onUpdate('NO ACTION');
+    a.$equals(b).should.be.true();
+
+    a = KeyDefinitions.foreignKey('a').references('t', 'id');
+    b = KeyDefinitions.foreignKey('a').references('t', 'id').onDelete('NO ACTION').onUpdate('NO ACTION');
+    a.$equals(b).should.be.true();
+
+    a = KeyDefinitions.foreignKey('a').references('t', 'id').onDelete('RESTRICT').onUpdate('RESTRICT');
+    b = KeyDefinitions.foreignKey('a').references('t', 'id');
+    a.$equals(b).should.be.true();
+
     a = KeyDefinitions.foreignKey('a', 'b').references('t', ['a', 'b']);
     b = KeyDefinitions.foreignKey('a', 'b').references('t', ['a', 'c']);
     a.$equals(b).should.be.false();
@@ -339,14 +351,20 @@ describe('KeyDefinitions', () => {
       KeyDefinitions.foreignKey('a').references('t', 'id').onDelete('CASCADE').$toSQL()
         .should.equal('CONSTRAINT `fk_a_`\n  FOREIGN KEY (`a`) REFERENCES `t` (`id`) ON DELETE CASCADE');
 
-      KeyDefinitions.foreignKey('a').references('t', 'id').onUpdate('NO ACTION').$toSQL()
-        .should.equal('CONSTRAINT `fk_a_`\n  FOREIGN KEY (`a`) REFERENCES `t` (`id`) ON UPDATE NO ACTION');
+      KeyDefinitions.foreignKey('a').references('t', 'id').onUpdate('SET NULL').$toSQL()
+        .should.equal('CONSTRAINT `fk_a_`\n  FOREIGN KEY (`a`) REFERENCES `t` (`id`) ON UPDATE SET NULL');
 
       KeyDefinitions.foreignKey('a').references('t', 'id').onDelete('CASCADE').onUpdate('SET NULL').$toSQL()
         .should.equal('CONSTRAINT `fk_a_`\n  FOREIGN KEY (`a`) REFERENCES `t` (`id`) ON DELETE CASCADE ON UPDATE SET NULL');
 
       KeyDefinitions.foreignKey('a').references('t', 'id').onDelete('cascade').onUpdate('set null').$toSQL()
         .should.equal('CONSTRAINT `fk_a_`\n  FOREIGN KEY (`a`) REFERENCES `t` (`id`) ON DELETE CASCADE ON UPDATE SET NULL');
+
+      KeyDefinitions.foreignKey('a').references('t', 'id').onDelete('RESTRICT').onUpdate('RESTRICT').$toSQL()
+        .should.equal('CONSTRAINT `fk_a_`\n  FOREIGN KEY (`a`) REFERENCES `t` (`id`)');
+
+      KeyDefinitions.foreignKey('a').references('t', 'id').onDelete('NO ACTION').onUpdate('NO ACTION').$toSQL()
+        .should.equal('CONSTRAINT `fk_a_`\n  FOREIGN KEY (`a`) REFERENCES `t` (`id`)');
 
       KeyDefinitions.foreignKey('a').references('t', 'id').cascade().$toSQL()
         .should.equal('CONSTRAINT `fk_a_`\n  FOREIGN KEY (`a`) REFERENCES `t` (`id`) ON DELETE CASCADE ON UPDATE CASCADE');

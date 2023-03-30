@@ -50,10 +50,10 @@ describe('when migrating a table with supported keys not defined in the schema',
 
         rows[0]['Create Table'].should.equal(
           'CREATE TABLE `other_keys` (\n' +
-          '  `id` int(11) DEFAULT NULL,\n' +
+          '  `id` int DEFAULT NULL,\n' +
           '  `p` point NOT NULL,\n' +
           '  KEY `idx_id` (`id`)\n' +
-          ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
+          ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci'
         );
         done();
       });

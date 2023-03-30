@@ -9,7 +9,7 @@ describe('sqlToSchema', () => {
   it('should still work if the SQL contains unknown key types', () => {
     sqlToSchema(`
       CREATE TABLE \`test\` (
-        \`id\` bigint(20) NOT NULL,
+        \`id\` bigint NOT NULL,
         UNKNOWN KEY \`un_key\` (\`id\`)
       ) ENGINE=InnoDB
     `).should.be.an.Object()

@@ -39,7 +39,7 @@ describe('MySQLPlus', function() {
   };
   const bigTableExpectedSQL =
     'CREATE TABLE `big_table` (\n' +
-    '  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,\n' +
+    '  `id` bigint unsigned NOT NULL AUTO_INCREMENT,\n' +
     '  `name` varchar(63) DEFAULT NULL,\n' +
     '  `email` varchar(255) NOT NULL,\n' +
     '  `password` char(40) NOT NULL,\n' +
@@ -61,7 +61,7 @@ describe('MySQLPlus', function() {
     '  KEY `idx_letter` (`letter`),\n' +
     '  SPATIAL KEY `sptl_location` (`location`),\n' +
     '  FULLTEXT KEY `fltxt_description` (`description`)\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci';
 
   const autoIncTableName = 'auto_inc_table';
   const autoIncTableSchema = {
@@ -76,11 +76,11 @@ describe('MySQLPlus', function() {
   };
   const autoIncTableExpectedSQL =
     'CREATE TABLE `auto_inc_table` (\n' +
-    '  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,\n' +
-    '  `number` mediumint(9) DEFAULT NULL,\n' +
+    '  `id` bigint unsigned NOT NULL AUTO_INCREMENT,\n' +
+    '  `number` mediumint DEFAULT NULL,\n' +
     '  PRIMARY KEY (`id`),\n' +
     '  KEY `idx_number` (`number`)\n' +
-    ') ENGINE=InnoDB AUTO_INCREMENT=5000000000 DEFAULT CHARSET=utf8';
+    ') ENGINE=InnoDB AUTO_INCREMENT=5000000000 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci';
 
   const autoIncTableMigratedSchema = {
     columns: {
@@ -94,11 +94,11 @@ describe('MySQLPlus', function() {
   };
   const autoIncTableMigratedExpectedSQL =
     'CREATE TABLE `auto_inc_table` (\n' +
-    '  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,\n' +
-    '  `number` mediumint(9) DEFAULT NULL,\n' +
+    '  `id` bigint unsigned NOT NULL AUTO_INCREMENT,\n' +
+    '  `number` mediumint DEFAULT NULL,\n' +
     '  PRIMARY KEY (`id`),\n' +
     '  KEY `idx_number` (`number`)\n' +
-    ') ENGINE=InnoDB AUTO_INCREMENT=6000000000 DEFAULT CHARSET=utf8';
+    ') ENGINE=InnoDB AUTO_INCREMENT=6000000000 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci';
 
   const pivotTableName = 'pivot_table';
   const pivotTableSchema = {
@@ -117,16 +117,16 @@ describe('MySQLPlus', function() {
   };
   const pivotTableExpectedSQL =
     'CREATE TABLE `pivot_table` (\n' +
-    '  `autoID` bigint(20) unsigned NOT NULL,\n' +
-    '  `autoNumber` mediumint(9) NOT NULL,\n' +
-    '  `bigID` bigint(20) unsigned DEFAULT NULL,\n' +
+    '  `autoID` bigint unsigned NOT NULL,\n' +
+    '  `autoNumber` mediumint NOT NULL,\n' +
+    '  `bigID` bigint unsigned DEFAULT NULL,\n' +
     '  PRIMARY KEY (`autoID`,`autoNumber`),\n' +
     '  KEY `idx_autoNumber` (`autoNumber`),\n' +
     '  KEY `idx_bigID` (`bigID`),\n' +
     '  CONSTRAINT `fk_autoID_pivot_table` FOREIGN KEY (`autoID`) REFERENCES `auto_inc_table` (`id`),\n' +
     '  CONSTRAINT `fk_autoNumber_pivot_table` FOREIGN KEY (`autoNumber`) REFERENCES `auto_inc_table` (`number`),\n' +
     '  CONSTRAINT `fk_bigID_pivot_table` FOREIGN KEY (`bigID`) REFERENCES `big_table` (`id`) ON DELETE CASCADE ON UPDATE SET NULL\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci';
 
   const columnsTableName = 'columns_table';
   const columnsTableSchema = {
@@ -148,19 +148,19 @@ describe('MySQLPlus', function() {
   };
   const columnsTableExpectedSQL =
     'CREATE TABLE `columns_table` (\n' +
-    '  `id` int(10) unsigned NOT NULL DEFAULT \'1\',\n' +
+    '  `id` int unsigned NOT NULL DEFAULT \'1\',\n' +
     '  `uuid` char(44) DEFAULT NULL,\n' +
     '  `email` char(255) DEFAULT NULL,\n' +
     '  `fp` float(7,4) DEFAULT NULL,\n' +
     '  `dropme` blob,\n' +
-    '  `renameme` tinyint(4) DEFAULT NULL,\n' +
-    '  `changeme` tinyint(4) DEFAULT NULL,\n' +
-    '  `neverchange` tinyint(4) DEFAULT NULL,\n' +
-    '  `norename` tinyint(4) DEFAULT NULL,\n' +
+    '  `renameme` tinyint DEFAULT NULL,\n' +
+    '  `changeme` tinyint DEFAULT NULL,\n' +
+    '  `neverchange` tinyint DEFAULT NULL,\n' +
+    '  `norename` tinyint DEFAULT NULL,\n' +
     '  UNIQUE KEY `uniq_uuid` (`uuid`),\n' +
     '  KEY `idx_email` (`email`),\n' +
     '  KEY `idx_id_email` (`id`,`email`)\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci';
 
   const columnsTableMigratedSchema = {
     columns: {
@@ -181,20 +181,20 @@ describe('MySQLPlus', function() {
   };
   const columnsTableMigratedExpectedSQL =
     'CREATE TABLE `columns_table` (\n' +
-    '  `id` bigint(5) unsigned NOT NULL DEFAULT \'2\',\n' +
+    '  `id` bigint unsigned NOT NULL DEFAULT \'2\',\n' +
     '  `uuid` char(44) DEFAULT NULL,\n' +
     '  `email` varchar(255) NOT NULL,\n' +
     '  `fp` float(8,3) DEFAULT NULL,\n' +
-    '  `renamed` tinyint(4) DEFAULT NULL,\n' +
-    '  `changed` smallint(6) DEFAULT NULL,\n' +
-    '  `neverchange` tinyint(4) DEFAULT NULL,\n' +
-    '  `norename` smallint(6) DEFAULT NULL,\n' +
+    '  `renamed` tinyint DEFAULT NULL,\n' +
+    '  `changed` smallint DEFAULT NULL,\n' +
+    '  `neverchange` tinyint DEFAULT NULL,\n' +
+    '  `norename` smallint DEFAULT NULL,\n' +
     '  `added` text,\n' +
     '  PRIMARY KEY (`id`),\n' +
     '  UNIQUE KEY `uniq_email` (`email`),\n' +
     '  UNIQUE KEY `uniq_uuid` (`uuid`),\n' +
     '  KEY `idx_id_email` (`id`,`email`)\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci';
 
   const primaryKeyTableName = 'pk_table';
   const primaryKeyTableSchema = {
@@ -206,10 +206,10 @@ describe('MySQLPlus', function() {
   };
   const primaryKeyTableExpectedSQL =
     'CREATE TABLE `pk_table` (\n' +
-    '  `a` int(11) NOT NULL,\n' +
+    '  `a` int NOT NULL,\n' +
     '  `b` char(1) NOT NULL,\n' +
     '  PRIMARY KEY (`a`,`b`)\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci';
 
   const primaryKeyTableMigratedSchema = {
     columns: {
@@ -220,10 +220,10 @@ describe('MySQLPlus', function() {
   };
   const primaryKeyTableMigratedExpectedSQL =
     'CREATE TABLE `pk_table` (\n' +
-    '  `a` int(11) NOT NULL,\n' +
+    '  `a` int NOT NULL,\n' +
     '  `b` char(1) DEFAULT NULL,\n' +
     '  PRIMARY KEY (`a`)\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci';
 
   const uniqueKeysTableName = 'unique_table';
   const uniqueKeysTableSchema = {
@@ -239,12 +239,12 @@ describe('MySQLPlus', function() {
   };
   const uniqueKeysTableExpectedSQL =
     'CREATE TABLE `unique_table` (\n' +
-    '  `a` int(11) DEFAULT NULL,\n' +
-    '  `b` bigint(20) DEFAULT NULL,\n' +
+    '  `a` int DEFAULT NULL,\n' +
+    '  `b` bigint DEFAULT NULL,\n' +
     '  `c` char(1) DEFAULT NULL,\n' +
     '  UNIQUE KEY `uniq_a_b` (`a`,`b`),\n' +
     '  UNIQUE KEY `uniq_c` (`c`)\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci';
 
   const uniqueKeysTableMigragedSchema = {
     columns: {
@@ -259,12 +259,12 @@ describe('MySQLPlus', function() {
   };
   const uniqueKeysTableMigratedExpectedSQL =
     'CREATE TABLE `unique_table` (\n' +
-    '  `a` int(11) DEFAULT NULL,\n' +
-    '  `b` bigint(20) DEFAULT NULL,\n' +
+    '  `a` int DEFAULT NULL,\n' +
+    '  `b` bigint DEFAULT NULL,\n' +
     '  `c` char(1) DEFAULT NULL,\n' +
     '  UNIQUE KEY `uniq_a_c` (`a`,`c`),\n' +
     '  UNIQUE KEY `uniq_b` (`b`)\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci';
 
   const indexesTableName = 'indexes_table';
   const indexesTableSchema = {
@@ -280,12 +280,12 @@ describe('MySQLPlus', function() {
   };
   const indexesTableExpectedSQL =
     'CREATE TABLE `indexes_table` (\n' +
-    '  `a` int(11) DEFAULT NULL,\n' +
-    '  `b` bigint(20) DEFAULT NULL,\n' +
+    '  `a` int DEFAULT NULL,\n' +
+    '  `b` bigint DEFAULT NULL,\n' +
     '  `c` char(1) DEFAULT NULL,\n' +
     '  KEY `idx_a_b` (`a`,`b`),\n' +
     '  KEY `idx_c` (`c`)\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci';
 
   const indexesTableMigragedSchema = {
     columns: {
@@ -300,12 +300,12 @@ describe('MySQLPlus', function() {
   };
   const indexesTableMigratedExpectedSQL =
     'CREATE TABLE `indexes_table` (\n' +
-    '  `a` int(11) DEFAULT NULL,\n' +
-    '  `b` bigint(20) DEFAULT NULL,\n' +
+    '  `a` int DEFAULT NULL,\n' +
+    '  `b` bigint DEFAULT NULL,\n' +
     '  `c` char(1) DEFAULT NULL,\n' +
     '  KEY `idx_a_c` (`a`,`c`),\n' +
     '  KEY `idx_b` (`b`)\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci';
 
   const spatialIndexesTableName = 'spatial_table';
   const spatialIndexesTableSchema = {
@@ -326,7 +326,7 @@ describe('MySQLPlus', function() {
     '  `c` multipolygon NOT NULL,\n' +
     '  SPATIAL KEY `sptl_a` (`a`),\n' +
     '  SPATIAL KEY `sptl_b` (`b`)\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci';
 
   const spatialIndexesTableMigragedSchema = {
     columns: {
@@ -346,7 +346,7 @@ describe('MySQLPlus', function() {
     '  `c` multipolygon NOT NULL,\n' +
     '  SPATIAL KEY `sptl_a` (`a`),\n' +
     '  SPATIAL KEY `sptl_c` (`c`)\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci';
 
   const fulltextIndexesTableName = 'fulltext_table';
   const fulltextIndexesTableSchema = {
@@ -367,7 +367,7 @@ describe('MySQLPlus', function() {
     '  `c` text NOT NULL,\n' +
     '  FULLTEXT KEY `fltxt_a` (`a`),\n' +
     '  FULLTEXT KEY `fltxt_b` (`b`)\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci';
 
   const fulltextIndexesTableMigragedSchema = {
     columns: {
@@ -387,7 +387,7 @@ describe('MySQLPlus', function() {
     '  `c` text NOT NULL,\n' +
     '  FULLTEXT KEY `fltxt_a` (`a`),\n' +
     '  FULLTEXT KEY `fltxt_c` (`c`)\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci';
 
   const foreignKeysTableName = 'fk_table';
   const foreignKeysTableSchema = {
@@ -412,7 +412,7 @@ describe('MySQLPlus', function() {
       KeyTypes.index('gc', 'hc'),
       KeyTypes.foreignKey('ai', 'bi').references('indexes_table', ['a', 'b']),
       KeyTypes.foreignKey('b').references('big_table', ['id']),
-      KeyTypes.foreignKey('c').references('big_table', 'id').onDelete('CASCADE').onUpdate('NO ACTION'),
+      KeyTypes.foreignKey('c').references('big_table', 'id').onDelete('CASCADE').onUpdate('SET NULL'),
       KeyTypes.foreignKey('d').references('columns_table', 'id'),
       KeyTypes.foreignKey('eb').references('big_table', 'name').onDelete('NO ACTION').onUpdate('NO ACTION'),
       KeyTypes.foreignKey('eb', 'fb').references('big_table', ['name', 'letter']),
@@ -422,15 +422,15 @@ describe('MySQLPlus', function() {
   };
   const foreignKeysTableExpectedSQL =
     'CREATE TABLE `fk_table` (\n' +
-    '  `a` bigint(20) unsigned DEFAULT NULL,\n' +
-    '  `b` bigint(20) unsigned DEFAULT NULL,\n' +
-    '  `c` bigint(20) unsigned DEFAULT NULL,\n' +
-    '  `d` int(10) unsigned NOT NULL,\n' +
-    '  `ai` int(11) DEFAULT NULL,\n' +
-    '  `bi` bigint(20) DEFAULT NULL,\n' +
+    '  `a` bigint unsigned DEFAULT NULL,\n' +
+    '  `b` bigint unsigned DEFAULT NULL,\n' +
+    '  `c` bigint unsigned DEFAULT NULL,\n' +
+    '  `d` int unsigned NOT NULL,\n' +
+    '  `ai` int DEFAULT NULL,\n' +
+    '  `bi` bigint DEFAULT NULL,\n' +
     '  `eb` varchar(63) DEFAULT NULL,\n' +
     '  `fb` char(1) DEFAULT \'a\',\n' +
-    '  `gc` int(10) unsigned NOT NULL,\n' +
+    '  `gc` int unsigned NOT NULL,\n' +
     '  `hc` char(255) DEFAULT NULL,\n' +
     '  KEY `idx_b` (`b`),\n' +
     '  KEY `idx_c` (`c`),\n' +
@@ -440,13 +440,13 @@ describe('MySQLPlus', function() {
     '  KEY `idx_gc_hc` (`gc`,`hc`),\n' +
     '  CONSTRAINT `fk_ai_bi_fk_table` FOREIGN KEY (`ai`, `bi`) REFERENCES `indexes_table` (`a`, `b`),\n' +
     '  CONSTRAINT `fk_b_fk_table` FOREIGN KEY (`b`) REFERENCES `big_table` (`id`),\n' +
-    '  CONSTRAINT `fk_c_fk_table` FOREIGN KEY (`c`) REFERENCES `big_table` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,\n' +
+    '  CONSTRAINT `fk_c_fk_table` FOREIGN KEY (`c`) REFERENCES `big_table` (`id`) ON DELETE CASCADE ON UPDATE SET NULL,\n' +
     '  CONSTRAINT `fk_d_fk_table` FOREIGN KEY (`d`) REFERENCES `columns_table` (`id`),\n' +
     '  CONSTRAINT `fk_eb_fb_fk_table` FOREIGN KEY (`eb`, `fb`) REFERENCES `big_table` (`name`, `letter`),\n' +
-    '  CONSTRAINT `fk_eb_fk_table` FOREIGN KEY (`eb`) REFERENCES `big_table` (`name`) ON DELETE NO ACTION ON UPDATE NO ACTION,\n' +
+    '  CONSTRAINT `fk_eb_fk_table` FOREIGN KEY (`eb`) REFERENCES `big_table` (`name`),\n' +
     '  CONSTRAINT `fk_gc_fk_table` FOREIGN KEY (`gc`) REFERENCES `columns_table` (`id`),\n' +
     '  CONSTRAINT `fk_gc_hc_fk_table` FOREIGN KEY (`gc`, `hc`) REFERENCES `columns_table` (`id`, `email`)\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci';
 
   const foreignKeysTableMigratedSchema = {
     columns: {
@@ -479,15 +479,15 @@ describe('MySQLPlus', function() {
   };
   const foreignKeysTableMigratedExpectedSQL =
     'CREATE TABLE `fk_table` (\n' +
-    '  `a` bigint(20) unsigned DEFAULT NULL,\n' +
-    '  `b` bigint(20) unsigned DEFAULT NULL,\n' +
-    '  `c` bigint(20) unsigned DEFAULT NULL,\n' +
-    '  `d` bigint(5) unsigned NOT NULL,\n' +
-    '  `ai` int(11) DEFAULT NULL,\n' +
+    '  `a` bigint unsigned DEFAULT NULL,\n' +
+    '  `b` bigint unsigned DEFAULT NULL,\n' +
+    '  `c` bigint unsigned DEFAULT NULL,\n' +
+    '  `d` bigint unsigned NOT NULL,\n' +
+    '  `ai` int DEFAULT NULL,\n' +
     '  `ci` char(1) DEFAULT NULL,\n' +
     '  `eb` varchar(63) DEFAULT NULL,\n' +
     '  `fb` char(1) DEFAULT \'a\',\n' +
-    '  `gc` bigint(5) unsigned NOT NULL,\n' +
+    '  `gc` bigint unsigned NOT NULL,\n' +
     '  `hc` varchar(255) NOT NULL,\n' +
     '  UNIQUE KEY `uniq_eb_fb` (`eb`,`fb`),\n' +
     '  KEY `idx_c` (`c`),\n' +
@@ -502,7 +502,7 @@ describe('MySQLPlus', function() {
     '  CONSTRAINT `fk_eb_fb_fk_table` FOREIGN KEY (`eb`, `fb`) REFERENCES `big_table` (`name`, `letter`),\n' +
     '  CONSTRAINT `fk_gc_fk_table` FOREIGN KEY (`gc`) REFERENCES `columns_table` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,\n' +
     '  CONSTRAINT `fk_gc_hc_fk_table` FOREIGN KEY (`gc`, `hc`) REFERENCES `columns_table` (`id`, `email`)\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci';
 
   const optionsTableName = 'options_table';
   const optionsTableSchema = {
@@ -518,7 +518,7 @@ describe('MySQLPlus', function() {
   };
   const optionsTableExpectedSQL =
     'CREATE TABLE `options_table` (\n' +
-    '  `id` int(11) DEFAULT NULL\n' +
+    '  `id` int DEFAULT NULL\n' +
     ') ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=ascii COLLATE=ascii_bin ROW_FORMAT=REDUNDANT COMPRESSION=\'zlib\'';
 
   const optionsTableMigratedSchema = {
@@ -528,34 +528,37 @@ describe('MySQLPlus', function() {
     engine: 'InnoDB',
     charset: 'latin1',
     collate: 'latin1_bin',
-    compression: 'LZ4',
+    compression: 'NONE',
     rowFormat: 'DEFAULT',
   };
   const optionsTableMigratedExpectedSQL =
     'CREATE TABLE `options_table` (\n' +
-    '  `id` int(11) DEFAULT NULL\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_bin COMPRESSION=\'LZ4\'';
+    '  `id` int DEFAULT NULL\n' +
+    ') ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_bin COMPRESSION=\'NONE\'';
 
   const textTableName = 'text_table';
   const textTableSchema = {
     columns: {
       a: ColTypes.char(1),
-      b: ColTypes.char(1).charset('utf8mb4'),
-      c: ColTypes.char(1).charset('utf8mb4').collate('utf8mb4_unicode_520_ci'),
-      d: ColTypes.char(1).collate('utf8mb4_unicode_520_ci'),
-      e: ColTypes.char(1).collate('utf8mb4_bin'),
+      // This is no longer safe in MySQL 8 since it uses the charset's default collation instead of the table's
+      // b: ColTypes.char(1).charset('utf8mb3'),
+      c: ColTypes.char(1).charset('utf8mb3').collate('utf8mb3_unicode_520_ci'),
+      d: ColTypes.char(1).collate('utf8mb3_unicode_520_ci'),
+      e: ColTypes.char(1).collate('utf8mb3_bin'),
+      f: ColTypes.char(1).collate('utf8mb4_bin'),
     },
-    charset: 'utf8mb4',
-    collate: 'utf8mb4_unicode_520_ci',
+    charset: 'utf8mb3',
+    collate: 'utf8mb3_unicode_520_ci',
   };
   const textTableExpectedSQL =
     'CREATE TABLE `text_table` (\n' +
-    '  `a` char(1) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,\n' +
-    '  `b` char(1) CHARACTER SET utf8mb4 DEFAULT NULL,\n' +
-    '  `c` char(1) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,\n' +
-    '  `d` char(1) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,\n' +
-    '  `e` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci';
+    '  `a` char(1) COLLATE utf8mb3_unicode_520_ci DEFAULT NULL,\n' +
+    // '  `b` char(1) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,\n' +
+    '  `c` char(1) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_520_ci DEFAULT NULL,\n' +
+    '  `d` char(1) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_520_ci DEFAULT NULL,\n' +
+    '  `e` char(1) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,\n' +
+    '  `f` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL\n' +
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_520_ci';
 
   const keyPartsTableName = 'key_parts_table';
   const keyPartsTableSchema = {
@@ -578,7 +581,7 @@ describe('MySQLPlus', function() {
     '  PRIMARY KEY (`a`(5)),\n' +
     '  UNIQUE KEY `uniq_c` (`c`(42)),\n' +
     '  KEY `idx_b` (`b`(20))\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci';
 
   const timestampTableName = 'timestamp_table';
   const timestampTableSchema = {
@@ -597,7 +600,7 @@ describe('MySQLPlus', function() {
     '  `c` timestamp NULL DEFAULT NULL,\n' +
     '  `d` timestamp NULL DEFAULT NULL,\n' +
     "  `e` timestamp NULL DEFAULT '2017-03-25 12:46:05'\n" +
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci';
 
   const synonymTableName = 'synonym_table';
   const synonymTableSchema = {
@@ -612,13 +615,13 @@ describe('MySQLPlus', function() {
   };
   const synonymTableExpectedSQL =
     'CREATE TABLE `synonym_table` (\n' +
-    '  `a` int(11) DEFAULT NULL,\n' +
+    '  `a` int DEFAULT NULL,\n' +
     '  `b` decimal(10,0) DEFAULT NULL,\n' +
     '  `c` decimal(10,0) DEFAULT NULL,\n' +
     '  `d` decimal(10,0) DEFAULT NULL,\n' +
     '  `e` tinyint(1) DEFAULT NULL,\n' +
     '  `f` tinyint(1) DEFAULT NULL\n' +
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci';
 
 
   describe('when creating new tables', () => {

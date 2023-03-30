@@ -169,8 +169,8 @@ describe('PoolPlus', () => {
           if (err) throw err;
           result[0]['Create Table'].should.equal(
             'CREATE TABLE `' + TEST_TABLE_NAME + '` (\n' +
-            '  `id` bigint(20) unsigned DEFAULT NULL\n' +
-            ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
+            '  `id` bigint unsigned DEFAULT NULL\n' +
+            ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci'
           );
           done();
         });
