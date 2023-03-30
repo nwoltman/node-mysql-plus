@@ -33,10 +33,10 @@
   "devDependencies": {
     "@nwoltman/eslint-config": "~0.6.0",
     "es6-callback-manager": "^2.0.1",
-    "eslint": "^6.8.0",
-    "grunt": "^1.0.4",
+    "eslint": "^8.37.0",
+    "grunt": "^1.6.1",
     "grunt-env": "^1.0.1",
-    "grunt-eslint": "^22.0.0",
+    "grunt-eslint": "^24.0.1",
     "grunt-jsdoc-to-markdown": "^5.0.0",
     "grunt-mocha-istanbul": "^5.0.2",
     "grunt-mocha-test": "^0.13.3",
