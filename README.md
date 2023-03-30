@@ -3,8 +3,6 @@
 [![NPM Version](https://img.shields.io/npm/v/mysql-plus.svg)](https://www.npmjs.com/package/mysql-plus)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/nwoltman/node-mysql-plus/ci.yml?branch=master)](https://github.com/nwoltman/node-mysql-plus/actions/workflows/ci.yml?query=branch%3A+master)
 [![Coverage Status](https://coveralls.io/repos/github/nwoltman/node-mysql-plus/badge.svg?branch=master)](https://coveralls.io/github/nwoltman/node-mysql-plus?branch=master)
-[![dependencies Status](https://david-dm.org/nwoltman/node-mysql-plus/status.svg)](https://david-dm.org/nwoltman/node-mysql-plus)
-[![devDependencies Status](https://david-dm.org/nwoltman/node-mysql-plus/dev-status.svg)](https://david-dm.org/nwoltman/node-mysql-plus?type=dev)
 
 A MySQL client for Node.js that makes defining tables easy and automatically migrates table schemas.
 
