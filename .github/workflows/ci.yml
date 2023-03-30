@@ -13,6 +13,9 @@ jobs:
     strategy:
       matrix:
         node-version: [16, 18, 19]
+        include:
+          - node-version: 18
+            coverage: true
     runs-on: ubuntu-latest
     steps:
       - name: Start MySQL
@@ -27,3 +30,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm install
       - run: npm test
+      - name: Upload coverage
+        if: matrix.coverage
+        uses: coverallsapp/github-action@v2
