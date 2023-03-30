@@ -37,7 +37,7 @@
     "grunt": "^1.6.1",
     "grunt-env": "^1.0.1",
     "grunt-eslint": "^24.0.1",
-    "grunt-jsdoc-to-markdown": "^5.0.0",
+    "grunt-jsdoc-to-markdown": "^6.0.0",
     "grunt-mocha-istanbul": "^5.0.2",
     "grunt-mocha-test": "^0.13.3",
     "istanbul": "^0.4.5",

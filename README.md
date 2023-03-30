@@ -64,8 +64,8 @@ const userTable = db.defineTable('user', {
 
 const User = {
   async insertAndSelectExample() {
-    const result = await userTable.insert({email: 'newuser@email.com', name: 'newuser'})
-    const rows = await userTable.select('*', 'WHERE `id` = ?', [result.insertId]))
+    const result = await userTable.insert({email: 'newuser@email.com', name: 'newuser'});
+    const rows = await userTable.select('*', 'WHERE `id` = ?', [result.insertId]);
     console.log(rows); // [ { id: 1, email: 'newuser@email.com', name: 'newuser' } ]
     return rows[0];
   }
