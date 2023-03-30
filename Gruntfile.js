@@ -47,19 +47,7 @@ module.exports = function(grunt) {
     },
 
     mocha_istanbul: {
-      coverage: {
-        src: 'test/@(unit|integration)/*.js',
-        options: {
-          reportFormats: ['html'],
-        },
-      },
-      coveralls: {
-        src: 'test/@(unit|integration)/*.js',
-        options: {
-          coverage: true,
-          reportFormats: ['lcovonly'],
-        },
-      },
+      src: 'test/@(unit|integration)/*.js',
       options: {
         check: {
           branches: 100,
@@ -68,6 +56,7 @@ module.exports = function(grunt) {
         },
         mochaOptions: ['--colors', '--reporter', 'dot'],
         require: ['should', 'should-sinon'],
+        reportFormats: [process.env.CI ? 'lcovonly' : 'html'],
       },
     },
 
@@ -94,17 +83,13 @@ module.exports = function(grunt) {
     },
   });
 
-  grunt.event.on('coverage', (lcov, done) => {
-    require('coveralls').handleInput(lcov, done);
-  });
-
   // Register tasks
   grunt.registerTask('lint', ['eslint']);
   grunt.registerTask('testSetup', ['env', 'createTestDB']);
   grunt.registerTask('test:unit', ['testSetup', 'mochaTest:unit']);
   grunt.registerTask('test:integration', ['testSetup', 'mochaTest:integration']);
-  grunt.registerTask('test', ['testSetup', process.env.CI ? 'mocha_istanbul:coveralls' : 'mochaTest']);
-  grunt.registerTask('coverage', ['env', 'createTestDB', 'mocha_istanbul:coverage']);
+  grunt.registerTask('test', ['testSetup', process.env.CI ? 'mocha_istanbul' : 'mochaTest']);
+  grunt.registerTask('coverage', ['env', 'createTestDB', 'mocha_istanbul']);
   grunt.registerTask('doc', ['jsdoc2md', 'fixdocs']);
   grunt.registerTask('default', ['lint', 'test']);
 };
