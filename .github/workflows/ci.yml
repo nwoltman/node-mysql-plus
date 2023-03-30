@@ -1,0 +1,29 @@
+name: CI
+
+on: [push]
+
+env:
+  MYSQL_HOST: 127.0.0.1
+  MYSQL_USER: root
+  MYSQL_PASSWORD: root
+  MYSQL_DATABASE: test_db
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        node-version: [16, 18, 19]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PASSWORD }} -e "ALTER USER '${{ env.MYSQL_USER }}'@'localhost' IDENTIFIED WITH mysql_native_password BY '${{ env.MYSQL_PASSWORD }}';"
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      - run: npm test
